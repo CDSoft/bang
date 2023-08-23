@@ -42,7 +42,7 @@ rule "luax" {
 }
 
 local has_ext = F.curry(function(ext, name)
-    return F.snd{fs.splitext(name)} == ext
+    return fs.ext(name) == ext
 end)
 
 local sources = fs.walk "src"

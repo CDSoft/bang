@@ -145,15 +145,15 @@ end
 
 local function run(args)
     log.info("load ", args.input)
-    local input, error_message = fs.read(args.input)
-    if not input then
-        log.error(error_message)
+    if not fs.is_file(args.input) then
+        log.error(args.input, ": file not found")
     end
     assert(loadfile(args.input, "t"))()
     local ninja = tokens:flatten():str()
     log.info(nbvars, " variables")
     log.info(nbrules, " rules")
     log.info(nbbuilds, " build statements")
+    log.info(#ninja:lines(), " lines")
     log.info(#ninja, " bytes")
     return ninja
 end
