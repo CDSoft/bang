@@ -39,6 +39,7 @@ Arguments:
 
 Options:
    -h, --help            Show this help message and exit.
+   -q                    Quiet mode (no output on stdout)
    -o output             Output file (default: build.ninja)
 
 For more information, see https://github.com/CDSoft/bang
