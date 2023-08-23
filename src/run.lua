@@ -33,7 +33,11 @@ function emit(...)
 end
 
 function comment(txt)
-    emit(txt:lines():map(F.prefix "# "):map(string.rtrim):unlines())
+    emit(txt
+        : lines()
+        : map(F.prefix "# ")
+        : map(string.rtrim) ---@diagnostic disable-line: undefined-field
+        : unlines())
 end
 
 function nl()
@@ -99,6 +103,7 @@ local nbrules = 0
 
 function rule(name)
     return function(opt)
+        nl()
         emit("rule ", name, "\n")
         emit_block_variables(rule_special_variables, opt)
         nl()
@@ -149,7 +154,12 @@ local function run(args)
         log.error(args.input, ": file not found")
     end
     assert(loadfile(args.input, "t"))()
-    local ninja = tokens:flatten():str()
+    local ninja = tokens
+        : flatten()
+        : str()
+        : lines()
+        : map(string.rtrim)     ---@diagnostic disable-line: undefined-field
+        : unlines()
     log.info(nbvars, " variables")
     log.info(nbrules, " rules")
     log.info(nbbuilds, " build statements")
