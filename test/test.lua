@@ -55,3 +55,5 @@ build "foo2.o" {"cc", {"foo2.c", "foo.h"},
     order_only_deps = {"x.dat"},
     myvar = "myval",
 }
+
+phony "all" { "foo1.c", "foo2.c" }

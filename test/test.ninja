@@ -30,3 +30,4 @@ rule cc
 build foo1.o: cc foo1.c foo.h
 build foo2.o | a.log b.log: cc foo2.c foo.h | a.dat b.dat || x.dat
   myvar = myval
+build all: phony foo1.c foo2.c

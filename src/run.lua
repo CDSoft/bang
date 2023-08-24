@@ -142,6 +142,12 @@ function default(targets)
     nl()
 end
 
+function phony(outputs)
+    return function(inputs)
+        return build(outputs) {"phony", inputs}
+    end
+end
+
 local function run(args)
     log.info("load ", args.input)
     if not fs.is_file(args.input) then

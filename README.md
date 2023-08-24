@@ -130,6 +130,16 @@ default "target1"
 default {"target2", "target3"}
 ```
 
+## Phony targets
+
+`phony` is a shortcut to `build` that uses the `phony` rule:
+
+``` lua
+phony "all" {"target1", "target2"}
+-- same as
+build "all" {"phony", "target1", "target2"}
+```
+
 Examples
 ========
 
