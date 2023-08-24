@@ -64,7 +64,7 @@ rule "diff" {
     command = "diff $in && touch $out",
 }
 
-build "$test/test.ninja" {"run_test", "test/test.lua"} {
+build "$test/test.ninja" {"run_test", "test/test.lua",
     implicit_in = "$bin/bang",
 }
 build "$test/test.ok" {"diff", {"$test/test.ninja", "test/test.ninja"}}

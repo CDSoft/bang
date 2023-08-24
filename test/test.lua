@@ -49,7 +49,7 @@ rule "cc" {
 
 build "foo1.o" {"cc", {"foo1.c", "foo.h"}}
 
-build "foo2.o" {"cc", {"foo2.c", "foo.h"}} {
+build "foo2.o" {"cc", {"foo2.c", "foo.h"},
     implicit_in = {"a.dat", "b.dat"},
     implicit_out = {"a.log", "b.log"},
     order_only_deps = {"x.dat"},

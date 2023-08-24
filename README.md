@@ -101,10 +101,10 @@ build "outputs" "inputs"
 generates the build statement `build outputs: inputs`.
 The first word of `inputs` shall be the rule name applied by the build statement.
 
-The build statement can be added some variable definitions:
+The build statement can be added some variable definitions in the `inputs` table:
 
 ``` lua
-build "outputs" "inputs" {
+build "outputs" { "inputs",
     varname = "value",
     ...
 }
@@ -113,7 +113,7 @@ build "outputs" "inputs" {
 There are reserved variable names for bang to specify implicit inputs and outputs and dependency orders:
 
 ``` lua
-build "outputs" "inputs" {
+build "outputs" { "inputs",
     implicit_out = "implicit outputs",
     implicit_in = "implicit inputs",
     order_only_deps = "order-only dependencies",

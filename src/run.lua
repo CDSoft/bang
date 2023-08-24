@@ -121,24 +121,18 @@ local nbbuilds = 0
 
 function build(outputs)
     return function(inputs)
-        -- emit a simplified block that will be discarded if options are later given
-        emit("build ", stringify(outputs), ": ", stringify(inputs), "\n")
+        local opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
+        emit("build ",
+            stringify(outputs),
+            opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
+            ": ",
+            stringify(inputs),
+            opt.implicit_in and {" | ", stringify(opt.implicit_in)} or {},
+            opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
+            "\n"
+        )
+        emit_block_variables(F{}, F.without_keys(opt, build_special_bang_variables))
         nbbuilds = nbbuilds + 1
-        local simplified_build_block_position = #tokens
-        return function(opt)
-            -- options given => the simplified block definition is obsolete
-            tokens[simplified_build_block_position] = {}
-            emit("build ",
-                stringify(outputs),
-                opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
-                ": ",
-                stringify(inputs),
-                opt.implicit_in and {" | ", stringify(opt.implicit_in)} or {},
-                opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
-                "\n"
-            )
-            emit_block_variables(F{}, F.without_keys(opt, build_special_bang_variables))
-        end
     end
 end
 
