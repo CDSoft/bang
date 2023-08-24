@@ -8,4 +8,5 @@ return {
     ar = {"zig ar"},
     ld = {"zig cc", "-target", target},
     ldflags = {},
+    ext = ".exe",
 }

@@ -1,14 +1,16 @@
 Bang example
 ============
 
-This example show how to:
+This example shows how to:
 
 - discover source files actually present in the repository
     - no redundant hard coded file lists (redundancy means painful maintenance)
-- multiplatform compilation
-    - compilation for several platform without any dirty copy/paste
-- in the `lib` directory, each sub-directory is a library compiled and archived in its own `.a` file
-- in the `bin` directory, each C source file is the main file of a binary containing this C file
+- cross-compile the same sources for multiple platforms
+    - compilation for several platforms without any dirty copy/paste
+- describe static libraries:
+  in the `lib` directory, each sub-directory is a library compiled and archived in its own `.a` file
+- describe executables:
+  in the `bin` directory, each C source file is the main file of a binary containing this C file
   as well as libraries from the `lib` directory.
 
 [`build.lua`](build.lua) contains Lua code that produces [`build.ninja`](build.ninja)

@@ -15,7 +15,7 @@
 builddir = .build
 
 ######################################################################
-# Targets
+# Common compilation options
 ######################################################################
 
 cflags = -O3 -Wall -Werror -Ilib -Iarch
@@ -29,16 +29,16 @@ cflags_linux = -DTARGET="x86_64-linux-musl"
 ldflags_linux =
 
 rule cc_linux
-  description = CC linux: $out
+  description = [linux] CC $out
   command = zig cc -target x86_64-linux-musl -c $cflags $cflags_linux -MD -MF $out.d  $in -o $out
   depfile = $out.d
 
 rule ar_linux
-  description = AR linux: $out
+  description = [linux] AR $out
   command = zig ar -crs $out $in
 
 rule ld_linux
-  description = LD linux: $out
+  description = [linux] LD $out
   command = zig cc -target x86_64-linux-musl $ldflags $ldflags_linux -o $out $in
 
 build $builddir/arch/linux/ask.o: cc_linux arch/linux/ask.c
@@ -54,16 +54,16 @@ cflags_macos = -DTARGET="x86_64-macos-none"
 ldflags_macos =
 
 rule cc_macos
-  description = CC macos: $out
+  description = [macos] CC $out
   command = zig cc -target x86_64-macos-none -c $cflags $cflags_macos -MD -MF $out.d  $in -o $out
   depfile = $out.d
 
 rule ar_macos
-  description = AR macos: $out
+  description = [macos] AR $out
   command = zig ar -crs $out $in
 
 rule ld_macos
-  description = LD macos: $out
+  description = [macos] LD $out
   command = zig cc -target x86_64-macos-none $ldflags $ldflags_macos -o $out $in
 
 build $builddir/arch/macos/ask.o: cc_macos arch/macos/ask.c
@@ -79,16 +79,16 @@ cflags_windows = -DTARGET="x86_64-windows-gnu"
 ldflags_windows =
 
 rule cc_windows
-  description = CC windows: $out
+  description = [windows] CC $out
   command = zig cc -target x86_64-windows-gnu -c $cflags $cflags_windows -MD -MF $out.d  $in -o $out
   depfile = $out.d
 
 rule ar_windows
-  description = AR windows: $out
+  description = [windows] AR $out
   command = zig ar -crs $out $in
 
 rule ld_windows
-  description = LD windows: $out
+  description = [windows] LD $out
   command = zig cc -target x86_64-windows-gnu $ldflags $ldflags_windows -o $out $in
 
 build $builddir/arch/windows/ask.o: cc_windows arch/windows/ask.c
@@ -174,14 +174,14 @@ build $builddir/macos/bin/hi: ld_macos $builddir/macos/bin/hi.o $builddir/macos/
 ######################################################################
 
 build $builddir/windows/bin/hi-repl.o: cc_windows bin/hi-repl.c
-build $builddir/windows/bin/hi-repl: ld_windows $builddir/windows/bin/hi-repl.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
+build $builddir/windows/bin/hi-repl.exe: ld_windows $builddir/windows/bin/hi-repl.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
 
 ######################################################################
 # hi for windows
 ######################################################################
 
 build $builddir/windows/bin/hi.o: cc_windows bin/hi.c
-build $builddir/windows/bin/hi: ld_windows $builddir/windows/bin/hi.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
+build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/bin/hi.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
 
 ######################################################################
 # Project structure

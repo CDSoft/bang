@@ -36,7 +36,6 @@ function comment(txt)
     emit(txt
         : lines()
         : map(F.prefix "# ")
-        : map(string.rtrim) ---@diagnostic disable-line: undefined-field
         : unlines())
 end
 
