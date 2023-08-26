@@ -25,9 +25,9 @@ Section comments can have multiple lines.
 
 section "Atomic variables"
 
-var "var1" "string"
-var "var2" (42)
-var "var3" (true)
+var "var1" "string"                 assert(vars.var1 == "string")
+var "var2" (42)                     assert(vars.var2 == "42")
+var "var3" (true)                   assert(vars.var3 == "true")
 
 section "Compound variables"
 
@@ -41,6 +41,7 @@ var "var4" {
         "bar",
     },
 }
+assert(vars.var4 == "string 42 true foo bar")
 
 section "Rules"
 

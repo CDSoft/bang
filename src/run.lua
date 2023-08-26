@@ -66,9 +66,13 @@ end
 
 local nbvars = 0
 
+vars = {}
+
 function var(name)
     return function(value)
-        emit(name, " = ", stringify(value), "\n")
+        value = stringify(value)
+        emit(name, " = ", value, "\n")
+        vars[name] = value
         nbvars = nbvars + 1
     end
 end
