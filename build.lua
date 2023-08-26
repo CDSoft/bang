@@ -64,7 +64,7 @@ section "Tests"
 
 rule "run_test" {
     description = "BANG $in",
-    command = "$bin/bang -q $in -o $out",
+    command = "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
 }
 
 rule "diff" {

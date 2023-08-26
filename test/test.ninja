@@ -95,3 +95,9 @@ build all: phony foo1.c foo2.c
 ######################################################################
 
 # .build/test/tmp/new_file.txt should be created
+
+######################################################################
+# Command line arguments
+######################################################################
+
+# The command line arguments are: {"arg1", "arg2", "-x=y"}

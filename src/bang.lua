@@ -29,7 +29,11 @@ local versionned, version = pcall(require, "version")
 local function parse_args()
     local parser = require "argparse"()
         : name "bang"
-        : description "Ninja file generator"
+        : description(F.unlines {
+            "Ninja file generator",
+            "",
+            "Arguments after \"--\" are given to the input script",
+        } : rtrim())
         : epilog "For more information, see https://github.com/CDSoft/bang"
 
     parser : flag "-v"
@@ -49,9 +53,12 @@ local function parse_args()
         : description "Lua script (default: build.lua)"
         : args "0-1"
 
+    local bang_arg, script_arg = F.break_(F.partial(F.op.eq, "--"), arg)
+    _G.arg = script_arg : drop(1)
+
     return F.merge{
         { input="build.lua", output="build.ninja" },
-        parser:parse(),
+        parser:parse(bang_arg),
     }
 end
 

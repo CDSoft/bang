@@ -34,6 +34,8 @@ Usage: bang [-h] [-v] [-q] [-o output] [<input>]
 
 Ninja file generator
 
+Arguments after "--" are given to the input script
+
 Arguments:
    input                 Lua script (default: build.lua)
 
