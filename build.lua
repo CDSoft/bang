@@ -34,6 +34,10 @@ F"bin test doc" : words() : foreach(function(dir)
     var (dir) (fs.join("$builddir", dir))
 end)
 
+---------------------------------------------------------------------
+-- Compilation
+---------------------------------------------------------------------
+
 section "Compilation"
 
 rule "luax" {
@@ -41,8 +45,20 @@ rule "luax" {
     command = "luax -q -o $out $in",
 }
 
-build "$bin/bang" {"luax", ls "src/*.lua"}
+rule "version" {
+    description = "GIT $version",
+    command = "echo \"return [[$$(git describe --tags || echo undefined)]]\" > $out",
+}
+
+build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version.lua"}
+build "$builddir/version.lua" {"version",
+    implicit_in = ".git/refs/tags .git/index",
+}
 default "$bin/bang"
+
+---------------------------------------------------------------------
+-- Tests
+---------------------------------------------------------------------
 
 section "Tests"
 

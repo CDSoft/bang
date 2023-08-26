@@ -23,7 +23,7 @@ local log = {}
 local quiet = false
 
 function log.quiet(args)
-    quiet = args.q
+    quiet = args.quiet
 end
 
 function log.error(...)

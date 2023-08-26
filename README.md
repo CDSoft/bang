@@ -30,7 +30,7 @@ Usage
 
 ```
 $ bang -h
-Usage: bang [-h] [-o output] [<input>]
+Usage: bang [-h] [-v] [-q] [-o output] [<input>]
 
 Ninja file generator
 
@@ -39,6 +39,7 @@ Arguments:
 
 Options:
    -h, --help            Show this help message and exit.
+   -v                    Print Bang version
    -q                    Quiet mode (no output on stdout)
    -o output             Output file (default: build.ninja)
 

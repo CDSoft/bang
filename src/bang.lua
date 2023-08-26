@@ -24,6 +24,7 @@ local fs = require "fs"
 local run = require "run"
 local log = require "log"
 local atexit = require "atexit"
+local versionned, version = pcall(require, "version")
 
 local function parse_args()
     local parser = require "argparse"()
@@ -31,8 +32,13 @@ local function parse_args()
         : description "Ninja file generator"
         : epilog "For more information, see https://github.com/CDSoft/bang"
 
+    parser : flag "-v"
+        : description(('Print Bang version ("%s")'):format(versionned and version))
+        : action(function() print(versionned and version); os.exit() end)
+
     parser : flag "-q"
         : description "Quiet mode (no output on stdout)"
+        : target "quiet"
 
     parser : option "-o"
         : description "Output file (default: build.ninja)"

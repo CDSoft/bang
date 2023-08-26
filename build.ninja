@@ -42,7 +42,12 @@ rule luax
   description = LUAX $out
   command = luax -q -o $out $in
 
-build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua
+rule version
+  description = GIT $version
+  command = echo "return [[$$(git describe --tags || echo undefined)]]" > $out
+
+build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua $builddir/version.lua
+build $builddir/version.lua: version | .git/refs/tags .git/index
 
 default $bin/bang
 
