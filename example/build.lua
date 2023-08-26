@@ -25,7 +25,7 @@ local cflags = F{
 local ldflags = F{
 }
 
-fs.write("compile_flags.txt", cflags:unlines())
+file "compile_flags.txt" : write(cflags:unlines())
 
 section "Common compilation options"
 

@@ -30,7 +30,7 @@ ldflags_linux =
 
 rule cc_linux
   description = [linux] CC $out
-  command = zig cc -target x86_64-linux-musl -c $cflags $cflags_linux -MD -MF $out.d  $in -o $out
+  command = zig cc -target x86_64-linux-musl -c $cflags $cflags_linux -MD -MF $out.d $in -o $out
   depfile = $out.d
 
 rule ar_linux
@@ -55,7 +55,7 @@ ldflags_macos =
 
 rule cc_macos
   description = [macos] CC $out
-  command = zig cc -target x86_64-macos-none -c $cflags $cflags_macos -MD -MF $out.d  $in -o $out
+  command = zig cc -target x86_64-macos-none -c $cflags $cflags_macos -MD -MF $out.d $in -o $out
   depfile = $out.d
 
 rule ar_macos
@@ -80,7 +80,7 @@ ldflags_windows =
 
 rule cc_windows
   description = [windows] CC $out
-  command = zig cc -target x86_64-windows-gnu -c $cflags $cflags_windows -MD -MF $out.d  $in -o $out
+  command = zig cc -target x86_64-windows-gnu -c $cflags $cflags_windows -MD -MF $out.d $in -o $out
   depfile = $out.d
 
 rule ar_windows

@@ -77,3 +77,9 @@ ls "test/**.c" : foreach(function(name) comment(name) end)
 
 section "ls test/**.lua"
 ls "test/**.lua" : foreach(function(name) comment(name) end)
+
+section "additional file"
+local f = file ".build/test/tmp/new_file.txt"
+f:write("Line", " ", 1, "\n")
+f:write("Line", " ", 2, "\n")
+comment ".build/test/tmp/new_file.txt should be created"

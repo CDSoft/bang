@@ -42,7 +42,7 @@ rule luax
   description = LUAX $out
   command = luax -q -o $out $in
 
-build $bin/bang: luax src/bang.lua src/log.lua src/ls.lua src/run.lua
+build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua
 
 default $bin/bang
 
@@ -58,9 +58,10 @@ rule diff
   description = DIFF $in
   command = diff $in && touch $out
 
-build $test/test.ninja: run_test test/test.lua | $bin/bang
+build $test/test.ninja | $test/tmp/new_file.txt: run_test test/test.lua | $bin/bang
 build $test/test.ok: diff $test/test.ninja test/test.ninja
-build test: phony $test/test.ok
+build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
+build test: phony $test/test.ok $test/new_file.ok
 
 default test
 

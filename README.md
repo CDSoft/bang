@@ -161,6 +161,27 @@ end)
 -- where md_to_pdf is a rule to convert Markdown file to PDF
 ```
 
+## Dynamic file creation
+
+The `file` function creates new files.
+It returns an object with a `write` method to add text to a file.
+The file is actually written when bang exits successfully.
+
+``` lua
+f = file "name" : write("content")
+```
+
+The file can be generated incrementally by calling `write` several times:
+
+``` lua
+f = file "name"
+...
+f:write "Line 1"
+...
+f:write "Line 2"
+...
+```
+
 Examples
 ========
 

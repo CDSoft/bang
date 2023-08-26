@@ -42,6 +42,7 @@ build all: phony foo1.c foo2.c
 
 # test/bar
 # test/foo
+# test/new_file.txt
 # test/test.lua
 # test/test.ninja
 
@@ -49,6 +50,7 @@ build all: phony foo1.c foo2.c
 # ls test/*
 ######################################################################
 
+# test/new_file.txt
 # test/test.lua
 # test/test.ninja
 
@@ -69,6 +71,7 @@ build all: phony foo1.c foo2.c
 # test/foo/sub
 # test/foo/sub/f3.c
 # test/foo/sub/f4.lua
+# test/new_file.txt
 # test/test.lua
 # test/test.ninja
 
@@ -86,3 +89,9 @@ build all: phony foo1.c foo2.c
 # test/foo/f2.lua
 # test/foo/sub/f4.lua
 # test/test.lua
+
+######################################################################
+# additional file
+######################################################################
+
+# .build/test/tmp/new_file.txt should be created

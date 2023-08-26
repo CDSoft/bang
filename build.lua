@@ -58,8 +58,10 @@ rule "diff" {
 
 build "$test/test.ninja" {"run_test", "test/test.lua",
     implicit_in = "$bin/bang",
+    implicit_out = "$test/tmp/new_file.txt",
 }
 build "$test/test.ok" {"diff", {"$test/test.ninja", "test/test.ninja"}}
+build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}}
 
-build "test" {"phony", "$test/test.ok"}
+phony "test" {"$test/test.ok", "$test/new_file.ok"}
 default "test"
