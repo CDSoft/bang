@@ -27,10 +27,13 @@ function file_mt.__index:write(...)
 end
 
 function file_mt.__index:close()
+    local new_content = self.chunks:flatten():str()
+    local old_content = fs.read(self.name)
+    if old_content == new_content then
+        return -- keep the old file untouched
+    end
     fs.mkdirs(fs.dirname(self.name))
-    local f = assert(io.open(self.name, "w"))
-    f:write(self.chunks:flatten():unpack())
-    f:close()
+    fs.write(self.name, new_content)
 end
 
 local function file(name)
