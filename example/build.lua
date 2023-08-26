@@ -32,13 +32,13 @@ section "Common compilation options"
 var "cflags" (cflags)
 var "ldflags" (ldflags)
 
-local architectures = fs.dir "arch"
-    : filter(function(arch_name) return fs.is_dir(fs.join("arch", arch_name)) end)
-    : sort()
-    : map(function(arch_name)
+local architectures = ls "arch"
+    : filter(fs.is_dir)
+    : map(function(path)
+        local arch_name = fs.basename(path)
         section(arch_name)
 
-        local arch = require(fs.join("arch", arch_name, "config"))
+        local arch = require(fs.join(path, "config"))
         arch.name = arch_name
 
         var("cflags_"..arch_name)(arch.cflags)
@@ -60,9 +60,7 @@ local architectures = fs.dir "arch"
             command = {arch.ld, "$ldflags $ldflags_"..arch_name, "-o $out $in"},
         }
 
-        local arch_lib = fs.walk(fs.join("arch", arch_name))
-            : filter(function(source) return fs.ext(source) == ".c" end)
-            : sort()
+        local arch_lib = ls(fs.join(path, "**.c"))
             : map(function(source)
                 local object = fs.join("$builddir", fs.splitext(source)..".o")
                 build(object) { "cc_"..arch_name, source }
@@ -76,16 +74,14 @@ local architectures = fs.dir "arch"
     end)
 
 architectures : foreach(function(arch)
-    arch.libraries = fs.dir "lib"
-        : filter(function(lib_name) return fs.is_dir(fs.join("lib", lib_name)) end)
-        : sort()
-        : map(function(lib_name)
+    arch.libraries = ls "lib"
+        : filter(fs.is_dir)
+        : map(function(path)
+            local lib_name = fs.basename(path)
             section(lib_name.." for "..arch.name)
-            local lib_objects = fs.walk(fs.join("lib", lib_name))
-                : filter(function(source) return fs.ext(source) == ".c" end)
-                : sort()
+            local lib_objects = ls(fs.join(path, "**.c"))
                 : map(function(source)
-                    local object = fs.join("$builddir", arch.name, (source:gsub("%.c$", ".o")))
+                    local object = fs.join("$builddir", arch.name, fs.splitext(source)..".o")
                     build(object) { "cc_"..arch.name, source }
                     return object
                 end)
@@ -96,13 +92,12 @@ architectures : foreach(function(arch)
 end)
 
 architectures : foreach(function(arch)
-    fs.dir "bin"
-    : filter(function(bin_name) return fs.ext(bin_name) == ".c" and fs.is_file(fs.join("bin", bin_name)) end)
-    : sort()
-    : foreach(function(bin_name)
+    ls "bin/*.c"
+    : foreach(function(path)
+        local bin_name = fs.basename(path)
         section(fs.splitext(bin_name).." for "..arch.name)
         local object = fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..".o")
-        build(object) { "cc_"..arch.name, fs.join("bin", bin_name) }
+        build(object) { "cc_"..arch.name, path }
         local bin_filename = fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..arch.ext)
         build(bin_filename) { "ld_"..arch.name, object, arch.libraries, arch.archive_file }
     end)

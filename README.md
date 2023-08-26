@@ -140,6 +140,27 @@ phony "all" {"target1", "target2"}
 build "all" {"phony", "target1", "target2"}
 ```
 
+## File listing
+
+The `ls` function lists files in a directory.
+It returns a list of filenames,
+with the metatable of [LuaX F lists](https://github.com/CDSoft/luax/blob/master/doc/F.md).
+
+- `ls "path"`: list of file names in `path`
+- `ls "path/*.c"`: list of file names matching the "`*.c`" pattern in `path`
+- `ls "path/**"`: recursive list of file names in `path`
+- `ls "path/**.c"`: recursive list of file names matching the "`*.c`" pattern in `path`
+
+E.g.:
+
+``` lua
+ls "doc/*.md"
+: foreach(function(doc)
+    build (fs.splitext(doc)..".pdf") { "md_to_pdf", doc }
+end)
+-- where md_to_pdf is a rule to convert Markdown file to PDF
+```
+
 Examples
 ========
 

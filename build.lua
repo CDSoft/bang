@@ -41,15 +41,7 @@ rule "luax" {
     command = "luax -q -o $out $in",
 }
 
-local has_ext = F.curry(function(ext, name)
-    return fs.ext(name) == ext
-end)
-
-local sources = fs.walk "src"
-    : filter(has_ext ".lua")
-    : sort()
-
-build "$bin/bang" {"luax", sources}
+build "$bin/bang" {"luax", ls "src/*.lua"}
 default "$bin/bang"
 
 section "Tests"

@@ -42,7 +42,7 @@ rule luax
   description = LUAX $out
   command = luax -q -o $out $in
 
-build $bin/bang: luax src/bang.lua src/log.lua src/run.lua
+build $bin/bang: luax src/bang.lua src/log.lua src/ls.lua src/run.lua
 
 default $bin/bang
 

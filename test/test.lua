@@ -47,6 +47,8 @@ rule "cc" {
     another_variable = {"foo", {"bar", {}, 42}},
 }
 
+section "Build statements"
+
 build "foo1.o" {"cc", {"foo1.c", "foo.h"}}
 
 build "foo2.o" {"cc", {"foo2.c", "foo.h"},
@@ -57,3 +59,21 @@ build "foo2.o" {"cc", {"foo2.c", "foo.h"},
 }
 
 phony "all" { "foo1.c", "foo2.c" }
+
+section "ls test"
+ls "test" : foreach(function(name) comment(name) end)
+
+section "ls test/*"
+ls "test/*.*" : foreach(function(name) comment(name) end)
+
+section "ls test/*.lua"
+ls "test/*.lua" : foreach(function(name) comment(name) end)
+
+section "ls test/**"
+ls "test/**" : foreach(function(name) comment(name) end)
+
+section "ls test/**.c"
+ls "test/**.c" : foreach(function(name) comment(name) end)
+
+section "ls test/**.lua"
+ls "test/**.lua" : foreach(function(name) comment(name) end)
