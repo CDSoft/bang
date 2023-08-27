@@ -84,6 +84,21 @@ phony "test" {"$test/test.ok", "$test/new_file.ok"}
 default "test"
 
 ---------------------------------------------------------------------
+-- Installation
+---------------------------------------------------------------------
+
+section "Installation"
+
+var "prefix" "$$HOME/.local"
+
+rule "install" {
+    description = "INSTALL $in",
+    command = "install -v -D -t $${PREFIX:-$prefix}/bin $in",
+}
+
+build "install" { "install", "$bin/bang" }
+
+---------------------------------------------------------------------
 -- Help
 ---------------------------------------------------------------------
 
@@ -97,13 +112,14 @@ Targets:
   help      show this help message
   compile   compile Bang
   test      test Bang
+  install   install Bang in $PREFIX/bin or ~/.local/bin
 
 Without any arguments, Ninja will compile and test Bang.
 ]]
 
-rule "print-help" {
-    description = "help",
+rule "help" {
+    description = "$in",
     command = "cat $in",
 }
 
-build "help" { "print-help", "help.txt" }
+build "help" { "help", "help.txt" }

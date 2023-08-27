@@ -3,8 +3,8 @@ Bang
 
 Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://cdelord.fr/luax).
 
-Compilation
-===========
+Installation
+============
 
 Bang is written in LuaX.
 It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://github.com/CDSoft/luax).
@@ -22,7 +22,13 @@ $ make install  # this should install LuaX to ~/.local/bin
 ``` sh
 $ git clone https://github.com/CDSoft/bang
 $ cd bang
-$ ./install.sh  # this should compile bang with Ninja and install it to ~/.local/bin
+$ ninja install  # this should compile bang with Ninja and install it to ~/.local/bin
+```
+
+or set `$PREFIX` to install `bang` to a custom directory (`$PREFIX/bin`):
+
+``` sh
+$ PREFIX=/path ninja install # installs bang to /path/bin
 ```
 
 Usage

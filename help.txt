@@ -4,5 +4,6 @@ Targets:
   help      show this help message
   compile   compile Bang
   test      test Bang
+  install   install Bang in $PREFIX/bin or ~/.local/bin
 
 Without any arguments, Ninja will compile and test Bang.

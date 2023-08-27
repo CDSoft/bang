@@ -72,11 +72,23 @@ build test: phony $test/test.ok $test/new_file.ok
 default test
 
 ######################################################################
+# Installation
+######################################################################
+
+prefix = $$HOME/.local
+
+rule install
+  description = INSTALL $in
+  command = install -v -D -t $${PREFIX:-$prefix}/bin $in
+
+build install: install $bin/bang
+
+######################################################################
 # Help
 ######################################################################
 
-rule print-help
-  description = help
+rule help
+  description = $in
   command = cat $in
 
-build help: print-help help.txt
+build help: help help.txt
