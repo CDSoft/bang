@@ -169,6 +169,7 @@ local function run(args)
         : str()
         : lines()
         : map(string.rtrim) ---@diagnostic disable-line: undefined-field
+        : drop_while_end(string.null) ---@diagnostic disable-line: undefined-field
         : unlines()
     log.info(nbvars, " variables")
     log.info(nbrules, " rules")

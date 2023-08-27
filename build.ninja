@@ -69,4 +69,3 @@ build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
 build test: phony $test/test.ok $test/new_file.ok
 
 default test
-
