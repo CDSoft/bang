@@ -54,7 +54,8 @@ build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version.lua"}
 build "$builddir/version.lua" {"version",
     implicit_in = ".git/refs/tags .git/index",
 }
-default "$bin/bang"
+phony "compile" { "$bin/bang" }
+default "compile"
 
 ---------------------------------------------------------------------
 -- Tests
@@ -81,3 +82,28 @@ build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt
 
 phony "test" {"$test/test.ok", "$test/new_file.ok"}
 default "test"
+
+---------------------------------------------------------------------
+-- Help
+---------------------------------------------------------------------
+
+section "Help"
+
+file "help.txt"
+: write [[
+Ninja file for building Bang
+
+Targets:
+  help      show this help message
+  compile   compile Bang
+  test      test Bang
+
+Without any arguments, Ninja will compile and test Bang.
+]]
+
+rule "print-help" {
+    description = "help",
+    command = "cat $in",
+}
+
+build "help" { "print-help", "help.txt" }

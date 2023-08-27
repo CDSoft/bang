@@ -1,0 +1,8 @@
+Ninja file for building Bang
+
+Targets:
+  help      show this help message
+  compile   compile Bang
+  test      test Bang
+
+Without any arguments, Ninja will compile and test Bang.

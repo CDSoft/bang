@@ -48,8 +48,9 @@ rule version
 
 build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua $builddir/version.lua
 build $builddir/version.lua: version | .git/refs/tags .git/index
+build compile: phony $bin/bang
 
-default $bin/bang
+default compile
 
 ######################################################################
 # Tests
@@ -69,3 +70,13 @@ build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
 build test: phony $test/test.ok $test/new_file.ok
 
 default test
+
+######################################################################
+# Help
+######################################################################
+
+rule print-help
+  description = help
+  command = cat $in
+
+build help: print-help help.txt
