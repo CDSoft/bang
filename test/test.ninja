@@ -43,6 +43,7 @@ build all: phony foo1.c foo2.c
 # test/bar
 # test/foo
 # test/new_file.txt
+# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
@@ -51,6 +52,7 @@ build all: phony foo1.c foo2.c
 ######################################################################
 
 # test/new_file.txt
+# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
@@ -72,6 +74,7 @@ build all: phony foo1.c foo2.c
 # test/foo/sub/f3.c
 # test/foo/sub/f4.lua
 # test/new_file.txt
+# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
