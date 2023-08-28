@@ -44,10 +44,10 @@ rule luax
 
 rule version
   description = GIT $version
-  command = echo "return [[$$(git describe --tags || echo undefined)]]" > $out
+  command = echo -n `git describe --tags` > $out
 
-build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua $builddir/version.lua
-build $builddir/version.lua: version | .git/refs/tags .git/index
+build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua $builddir/version
+build $builddir/version: version | .git/refs/tags .git/index
 build compile: phony $bin/bang
 
 default compile

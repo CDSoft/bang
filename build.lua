@@ -47,11 +47,11 @@ rule "luax" {
 
 rule "version" {
     description = "GIT $version",
-    command = "echo \"return [[$$(git describe --tags || echo undefined)]]\" > $out",
+    command = "echo -n `git describe --tags` > $out",
 }
 
-build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version.lua"}
-build "$builddir/version.lua" {"version",
+build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version"}
+build "$builddir/version" {"version",
     implicit_in = ".git/refs/tags .git/index",
 }
 phony "compile" { "$bin/bang" }
