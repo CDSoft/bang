@@ -46,7 +46,7 @@ rule version
   description = GIT $version
   command = echo -n `git describe --tags` > $out
 
-build $bin/bang: luax src/atexit.lua src/bang.lua src/file.lua src/log.lua src/ls.lua src/run.lua $builddir/version
+build $bin/bang: luax src/atexit.lua src/bang.lua src/clean.lua src/file.lua src/help.lua src/install.lua src/log.lua src/ls.lua src/run.lua $builddir/version
 build $builddir/version: version | .git/refs/tags .git/index
 build compile: phony $bin/bang
 
@@ -64,24 +64,37 @@ rule diff
   description = DIFF $in
   command = diff $in && touch $out
 
-build $test/test.ninja | $test/tmp/new_file.txt: run_test test/test.lua | $bin/bang
+build $test/test.ninja | $test/tmp/new_file.txt $test/help.txt: run_test test/test.lua | $bin/bang
 build $test/test.ok: diff $test/test.ninja test/test.ninja
 build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
-build test: phony $test/test.ok $test/new_file.ok
+build $test/help.txt.ok: diff $test/help.txt test/help.txt
+build test: phony $test/test.ok $test/new_file.ok $test/help.txt
 
 default test
 
 ######################################################################
-# Installation
+# Clean
+######################################################################
+
+rule clean-_builddir
+  description = CLEAN $builddir
+  command = rm -rf $builddir/*
+
+build clean-_builddir: clean-_builddir
+build clean: phony clean-_builddir
+
+######################################################################
+# Intallation
 ######################################################################
 
 prefix = $$HOME/.local
 
-rule install
-  description = INSTALL $in
+rule install-bin
+  description = INSTALL $in to bin
   command = install -v -D -t $${PREFIX:-$prefix}/bin $in
 
-build install: install $bin/bang
+build install-bin: install-bin $bin/bang
+build install: phony install-bin
 
 ######################################################################
 # Help
@@ -91,4 +104,4 @@ rule help
   description = $in
   command = cat $in
 
-build help: help help.txt
+build help: help build.hlp

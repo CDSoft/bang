@@ -18,8 +18,13 @@
 
 local F = require "F"
 local fs = require "fs"
+local atexit = require "atexit"
 
 local log = require "log"
+
+clean = require "clean"
+install = require "install"
+help = require "help"
 
 ls = require "ls"
 file = require "file"
@@ -164,6 +169,10 @@ local function run(args)
         log.error(args.input, ": file not found")
     end
     assert(loadfile(args.input, "t"))()
+    clean:gen()
+    install:gen()
+    help:gen(args) -- help shall be generated after clean and install
+    atexit.run()
     local ninja = tokens
         : flatten()
         : str()

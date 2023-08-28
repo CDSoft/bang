@@ -101,3 +101,55 @@ build all: phony foo1.c foo2.c
 ######################################################################
 
 # The command line arguments are: {"arg1", "arg2", "-x=y"}
+
+######################################################################
+# Clean
+######################################################################
+
+rule clean-_builddir
+  description = CLEAN $builddir
+  command = rm -rf $builddir/*
+
+build clean-_builddir: clean-_builddir
+
+rule clean-_builddir_foo
+  description = CLEAN $builddir/foo
+  command = rm -rf $builddir/foo
+
+build clean-_builddir_foo: clean-_builddir_foo
+
+rule clean-foo_bar
+  description = CLEAN foo/bar
+  command = rm -rf foo/bar
+
+build clean-foo_bar: clean-foo_bar
+build clean: phony clean-_builddir clean-_builddir_foo clean-foo_bar
+
+######################################################################
+# Intallation
+######################################################################
+
+prefix = $$HOME/.local/pub/bang_test
+
+rule install-bin
+  description = INSTALL $in to bin
+  command = install -v -D -t $${PREFIX:-$prefix}/bin $in
+
+build install-bin: install-bin foo1.bin foo2.bin foo3.bin
+
+rule install-lib
+  description = INSTALL $in to lib
+  command = install -v -D -t $${PREFIX:-$prefix}/lib $in
+
+build install-lib: install-lib foo1.lib
+build install: phony install-bin install-lib
+
+######################################################################
+# Help
+######################################################################
+
+rule help
+  description = $in
+  command = cat $in
+
+build help: help test.hlp

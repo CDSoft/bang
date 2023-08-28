@@ -2,8 +2,9 @@ Ninja file for building Bang
 
 Targets:
   help      show this help message
+  clean     clean generated files
   compile   compile Bang
   test      test Bang
-  install   install Bang in $PREFIX/bin or ~/.local/bin
+  install   install Bang in $PREFIX or $HOME/.local
 
 Without any arguments, Ninja will compile and test Bang.

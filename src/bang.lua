@@ -23,7 +23,6 @@ local fs = require "fs"
 
 local run = require "run"
 local log = require "log"
-local atexit = require "atexit"
 local _, version = pcall(require, "version")
 
 local function parse_args()
@@ -66,5 +65,4 @@ local args = parse_args()
 log.quiet(args)
 local ninja = run(args)
 log.info("write ", args.output)
-atexit.run()
 fs.write(args.output, ninja)

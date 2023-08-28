@@ -26,6 +26,14 @@ https://cdelord.fr/bang
 local F = require "F"
 local fs = require "fs"
 
+help.name "Bang"
+help.description [[Ninja file for building $name]]
+help.epilog [[Without any arguments, Ninja will compile and test $name.]]
+
+---------------------------------------------------------------------
+-- Build directories
+---------------------------------------------------------------------
+
 section "Build directories"
 
 var "builddir" ".build"
@@ -33,6 +41,8 @@ var "builddir" ".build"
 F"bin test doc" : words() : foreach(function(dir)
     var (dir) (fs.join("$builddir", dir))
 end)
+
+clean "$builddir"
 
 ---------------------------------------------------------------------
 -- Compilation
@@ -56,6 +66,9 @@ build "$builddir/version" {"version",
 }
 phony "compile" { "$bin/bang" }
 default "compile"
+help "compile" "compile $name"
+
+install "bin" "$bin/bang"
 
 ---------------------------------------------------------------------
 -- Tests
@@ -75,51 +88,12 @@ rule "diff" {
 
 build "$test/test.ninja" {"run_test", "test/test.lua",
     implicit_in = "$bin/bang",
-    implicit_out = "$test/tmp/new_file.txt",
+    implicit_out = { "$test/tmp/new_file.txt", "$test/help.txt" },
 }
 build "$test/test.ok" {"diff", {"$test/test.ninja", "test/test.ninja"}}
 build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}}
+build "$test/help.txt.ok" {"diff", {"$test/help.txt", "test/help.txt"}}
 
-phony "test" {"$test/test.ok", "$test/new_file.ok"}
+phony "test" {"$test/test.ok", "$test/new_file.ok", "$test/help.txt"}
 default "test"
-
----------------------------------------------------------------------
--- Installation
----------------------------------------------------------------------
-
-section "Installation"
-
-var "prefix" "$$HOME/.local"
-
-rule "install" {
-    description = "INSTALL $in",
-    command = "install -v -D -t $${PREFIX:-$prefix}/bin $in",
-}
-
-build "install" { "install", "$bin/bang" }
-
----------------------------------------------------------------------
--- Help
----------------------------------------------------------------------
-
-section "Help"
-
-file "help.txt"
-: write [[
-Ninja file for building Bang
-
-Targets:
-  help      show this help message
-  compile   compile Bang
-  test      test Bang
-  install   install Bang in $PREFIX/bin or ~/.local/bin
-
-Without any arguments, Ninja will compile and test Bang.
-]]
-
-rule "help" {
-    description = "$in",
-    command = "cat $in",
-}
-
-build "help" { "help", "help.txt" }
+help "test" "test $name"

@@ -89,3 +89,23 @@ comment ".build/test/tmp/new_file.txt should be created"
 
 section "Command line arguments"
 comment("The command line arguments are: "..F.show(arg))
+
+-- clean test
+clean "$builddir"
+clean "$builddir/foo"
+clean "foo/bar"
+
+-- install test
+install.prefix "$$HOME/.local/pub/bang_test"
+install "bin" "foo1.bin"
+install "lib" "foo1.lib"
+install "bin" { "foo2.bin", "foo3.bin" }
+
+-- help test
+help.name "Bang test"
+help.description "A short description of the Ninja file for building $name"
+help.epilog "More information at https://cdelord.fr/bang"
+help "target1" "description of target1"
+help "target2" "description of target2"
+help "target3-with-a-longer-name" "description of target3"
+help "target4" "description of target4"

@@ -57,7 +57,9 @@ For more information, see https://github.com/CDSoft/bang
 * `bang` reads `build.lua` and produces `build.ninja`.
 * `bang input.lua -o output.ninja` reads `input.lua` and produces `output.ninja`.
 
-## Comments
+## Ninja functions
+
+### Comments
 
 `bang` can add comments to the Ninja file:
 
@@ -74,7 +76,7 @@ that can run on several lines
 ]]
 ```
 
-## Variables
+### Variables
 
 `var` adds a new variable definition:
 
@@ -86,7 +88,7 @@ var "varname" {"word_1", "word_2", ...} -- will produce `varname = word_1 word_2
 
 The global variable `vars` is a table containing a copy of all the Ninja variables defined by the `var` function.
 
-## Rules
+### Rules
 
 `rule` adds a new rule definition:
 
@@ -94,14 +96,14 @@ The global variable `vars` is a table containing a copy of all the Ninja variabl
 rule "rule_name" {
     description = "...",
     command = "...",
-    ...
+    -- ...
 }
 ```
 
 Variable values can be strings or lists of strings.
 Lists of strings are flattened and concatenated (separated with spaces).
 
-## Build statements
+### Build statements
 
 `build` adds a new build statement:
 
@@ -117,7 +119,7 @@ The build statement can be added some variable definitions in the `inputs` table
 ``` lua
 build "outputs" { "inputs",
     varname = "value",
-    ...
+    -- ...
 }
 ```
 
@@ -128,11 +130,11 @@ build "outputs" { "inputs",
     implicit_out = "implicit outputs",
     implicit_in = "implicit inputs",
     order_only_deps = "order-only dependencies",
-    ...
+    -- ...
 }
 ```
 
-## Default targets
+### Default targets
 
 `default` adds targets to the default target:
 
@@ -141,7 +143,7 @@ default "target1"
 default {"target2", "target3"}
 ```
 
-## Phony targets
+### Phony targets
 
 `phony` is a shortcut to `build` that uses the `phony` rule:
 
@@ -151,7 +153,9 @@ phony "all" {"target1", "target2"}
 build "all" {"phony", "target1", "target2"}
 ```
 
-## File listing
+## Bang functions
+
+### File listing
 
 The `ls` function lists files in a directory.
 It returns a list of filenames,
@@ -172,7 +176,7 @@ end)
 -- where md_to_pdf is a rule to convert Markdown file to PDF
 ```
 
-## Dynamic file creation
+### Dynamic file creation
 
 The `file` function creates new files.
 It returns an object with a `write` method to add text to a file.
@@ -186,12 +190,78 @@ The file can be generated incrementally by calling `write` several times:
 
 ``` lua
 f = file "name"
-...
+-- ...
 f:write "Line 1"
-...
+-- ...
 f:write "Line 2"
-...
+-- ...
 ```
+
+### Clean
+
+Bang can generate targets to clean the generated files.
+The `clean` function takes a directory name that shall be deleted by `ninja clean`.
+
+``` lua
+clean "$builddir"   -- `ninja clean` cleans $builddir
+clean "tmp/foo"     -- `ninja clean` cleans /tmp/foo
+```
+
+`clean` defines the target `clean` (run by `ninja clean`)
+and a line in the help message (see `ninja help`).
+
+### Install
+
+Bang can generate targets to install files outside the build directories.
+The `install` function adds targets to be installed with `ninja install`
+
+The default installation prefix can be set by `install.prefix`:
+
+``` lua
+install.prefix "$$HOME/foo/bar"     -- `ninja install` installs to ~/foo/bar
+```
+
+The default prefix in `~/.local`.
+
+It can be overridden by the `PREFIX` environment variable when calling Ninja. E.g.:
+
+``` bash
+$ PREFIX=~/bar/foo ninja install
+```
+
+Artifacts are added to the list of files to be installed by the function `install`.
+This function takes the name of the destination directory, relative to the prefix and the file to be installed.
+
+``` lua
+install "bin" "$builddir/bang" -- installs bang to $prefix/bin/
+```
+
+`install` defines the target `install` (run by `ninja install`)
+and a line in the help message (see `ninja help`).
+
+### Help
+
+Bang can generate an help message (stored in a file next to the Ninja file) displayed by `ninja help`.
+
+The help message is composed of three parts:
+
+- a description of the Ninja file
+- a list of targets with their descriptions
+- an epilog
+
+The description and epilog are defined by the `help.description` and `help.epilog` functions.
+Targets can be added by the `help` function. It takes the name of a target and its description.
+
+``` lua
+help.description "A super useful Ninja file"
+help.epilog "See https://cdelord.fr/bang"
+-- ...
+help "compile" "Compile every thing"
+-- ...
+```
+
+Note: the `clean` and `install` target are automatically documented
+by the `clean` and `install` functions.
 
 Examples
 ========
