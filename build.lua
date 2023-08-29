@@ -78,7 +78,13 @@ section "Tests"
 
 rule "run_test" {
     description = "BANG $in",
-    command = "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
+    command = {
+        "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
+        -- also touch files created by the `file` function to ensure they are more recent than bang
+        -- (file recreate them only if their contents change)
+        "&& touch $test/tmp/new_file.txt",
+        "&& touch $test/test.hlp",
+    },
 }
 
 rule "diff" {

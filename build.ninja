@@ -58,7 +58,7 @@ default compile
 
 rule run_test
   description = BANG $in
-  command = $bin/bang -q $in -o $out -- arg1 arg2 -x=y
+  command = $bin/bang -q $in -o $out -- arg1 arg2 -x=y && touch $test/tmp/new_file.txt && touch $test/test.hlp
 
 rule diff
   description = DIFF $in
