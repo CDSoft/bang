@@ -155,6 +155,23 @@ build "all" {"phony", "target1", "target2"}
 
 ## Bang functions
 
+### Accumulations
+
+Bang can accumulate names (rules, targets, ...) in a list
+that can later be used to define other rules or build statements.
+
+A standard way to do this in Lua would use a Lua table and `table.concat` or the `list[#list+1]` pattern.
+Bang provides a simple function to simplify this usage:
+
+``` lua
+my_list = {}
+-- ...
+acc(my_list) "item1"
+acc(my_list) {"item2", "item3"}
+--...
+my_list -- contains {"item1", "item2", "item3"}
+```
+
 ### File listing
 
 The `ls` function lists files in a directory.

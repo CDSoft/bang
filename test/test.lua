@@ -63,23 +63,31 @@ build "foo2.o" {"cc", {"foo2.c", "foo.h"},
 
 phony "all" { "foo1.c", "foo2.c" }
 
+section "Accumulations"
+
+local xs = {}
+acc(xs) "item1"
+acc(xs) {"item2", "item3"}
+acc(xs) {}
+comment("xs = "..F.show(xs))
+
 section "ls test"
-ls "test" : foreach(function(name) comment(name) end)
+ls "test" : foreach(comment)
 
 section "ls test/*"
-ls "test/*.*" : foreach(function(name) comment(name) end)
+ls "test/*.*" : foreach(comment)
 
 section "ls test/*.lua"
-ls "test/*.lua" : foreach(function(name) comment(name) end)
+ls "test/*.lua" : foreach(comment)
 
 section "ls test/**"
-ls "test/**" : foreach(function(name) comment(name) end)
+ls "test/**" : foreach(comment)
 
 section "ls test/**.c"
-ls "test/**.c" : foreach(function(name) comment(name) end)
+ls "test/**.c" : foreach(comment)
 
 section "ls test/**.lua"
-ls "test/**.lua" : foreach(function(name) comment(name) end)
+ls "test/**.lua" : foreach(comment)
 
 section "additional file"
 local f = file ".build/test/tmp/new_file.txt"

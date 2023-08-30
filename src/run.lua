@@ -26,6 +26,7 @@ clean = require "clean"
 install = require "install"
 help = require "help"
 
+acc = require "acc"
 ls = require "ls"
 file = require "file"
 

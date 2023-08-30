@@ -46,7 +46,7 @@ rule version
   description = GIT $version
   command = echo -n `git describe --tags` > $out
 
-build $bin/bang: luax src/atexit.lua src/bang.lua src/clean.lua src/file.lua src/help.lua src/install.lua src/log.lua src/ls.lua src/run.lua $builddir/version
+build $bin/bang: luax src/acc.lua src/atexit.lua src/bang.lua src/clean.lua src/file.lua src/help.lua src/install.lua src/log.lua src/ls.lua src/run.lua $builddir/version
 build $builddir/version: version | .git/refs/tags .git/index
 build compile: phony $bin/bang
 
