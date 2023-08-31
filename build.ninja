@@ -76,11 +76,11 @@ default test
 # Clean
 ######################################################################
 
-rule clean-_builddir
+rule embedded_rule_e7c9fd42467ee7fb
   description = CLEAN $builddir
   command = rm -rf $builddir/*
 
-build clean-_builddir: clean-_builddir
+build clean-_builddir: embedded_rule_e7c9fd42467ee7fb
 build clean: phony clean-_builddir
 
 ######################################################################

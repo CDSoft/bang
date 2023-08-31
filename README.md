@@ -279,6 +279,8 @@ clean "tmp/foo"     -- `ninja clean` cleans /tmp/foo
 `clean` defines the target `clean` (run by `ninja clean`)
 and a line in the help message (see `ninja help`).
 
+In the same vein, `clean.mrproper` takes directories to clean with `ninja mrproper`.
+
 ### Install
 
 Bang can generate targets to install files outside the build directories.

@@ -23,14 +23,16 @@ local clean = {}
 local mt = {__index={}}
 
 local directories_to_clean = F{}
+local directories_to_clean_more = F{}
 
 local builddir = "$builddir"
 
 function mt.__call(_, dir)
-    if #directories_to_clean == 0 then
-        help "clean" "clean generated files"
-    end
     directories_to_clean[#directories_to_clean+1] = dir
+end
+
+function clean.mrproper(dir)
+    directories_to_clean_more[#directories_to_clean_more+1] = dir
 end
 
 function mt.__index:gen()
@@ -39,20 +41,33 @@ function mt.__index:gen()
 
         section("Clean")
 
-        local targets = directories_to_clean : map(function(dir)
-            local rule_name = "clean-"..(dir:gsub("[$/\\%.]+", "_"))
+        help "clean" "clean generated files"
 
-            rule(rule_name) {
+        local targets = directories_to_clean : map(function(dir)
+            return build("clean-"..(dir:gsub("[$/\\%.]+", "_"))) {
                 description = {"CLEAN ", dir},
                 command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
             }
-
-            build(rule_name) { rule_name }
-
-            return rule_name
         end)
 
         phony "clean" (targets)
+
+    end
+
+    if #directories_to_clean_more > 0 then
+
+        section("Clean (mrproper)")
+
+        help "mrproper" "clean generated files and more"
+
+        local targets = directories_to_clean_more : map(function(dir)
+            return build("mrproper-"..(dir:gsub("[$/\\%.]+", "_"))) {
+                description = {"CLEAN ", dir},
+                command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
+            }
+        end)
+
+        phony "mrproper" {"clean", targets}
 
     end
 
