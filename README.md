@@ -119,16 +119,16 @@ in the build statements that use this rule.
 `build` adds a new build statement:
 
 ``` lua
-build "outputs" "inputs"
+build "outputs" { "rule_name", "inputs" }
 ```
 
-generates the build statement `build outputs: inputs`.
-The first word of `inputs` shall be the rule name applied by the build statement.
+generates the build statement `build outputs: rule_name inputs`.
+The first word of the input list (`rule_name`) shall be the rule name applied by the build statement.
 
 The build statement can be added some variable definitions in the `inputs` table:
 
 ``` lua
-build "outputs" { "inputs",
+build "outputs" { "rule_name", "inputs",
     varname = "value",
     -- ...
 }
@@ -137,13 +137,48 @@ build "outputs" { "inputs",
 There are reserved variable names for bang to specify implicit inputs and outputs and dependency orders:
 
 ``` lua
-build "outputs" { "inputs",
+build "outputs" { "rule_name", "inputs",
     implicit_out = "implicit outputs",
     implicit_in = "implicit inputs",
     order_only_deps = "order-only dependencies",
     -- ...
 }
 ```
+
+### Rules embedded in build statements
+
+Some rules are specific to a single output and are used once.
+This leads to write pairs of rules and build statements.
+
+Bang can merge rules and build statements into a single build statement
+containing the definition of the associated rule.
+
+A build statement with a `command` variable is split into two parts:
+
+1. a rule with all rule variables found in the build statement definition
+2. a build statement with the remaining variables
+
+In this case, the build statement definition does not contain any rule name.
+
+E.g.:
+
+``` lua
+build "outputs" { "inputs",
+    command = "...",
+}
+```
+
+is internally translated into:
+
+``` lua
+rule "embedded_rule_XXX" {
+    command = "...",
+}
+
+build "outputs" { "embedded_rule_XXX", "inputs" }
+```
+
+Note: `XXX` is a hash computed from the original build statement.
 
 ### Default targets
 

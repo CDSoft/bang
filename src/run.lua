@@ -19,6 +19,7 @@
 local F = require "F"
 local fs = require "fs"
 local atexit = require "atexit"
+local crypt = require "crypt"
 
 local log = require "log"
 
@@ -150,6 +151,18 @@ function build(outputs)
     return function(inputs)
         -- variables defined in the current build statement
         local build_opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
+
+        if build_opt.command then
+            -- the build statement contains its own rule
+            -- => create a new rule for this build statement only
+            local rule_name = "embedded_rule_"..crypt.hash(F.show{outputs, inputs})
+            local rule_opt = F.restrict_keys(build_opt, rule_variables)
+            rule(rule_name)(rule_opt)
+            build_opt = F.without_keys(build_opt, rule_variables)
+
+            -- add the rule name to the actuel build statement
+            inputs = {rule_name, inputs}
+        end
 
         -- variables defined at the rule level and inherited by this statement
         local rule_name = F{inputs}:flatten():head():words():head()

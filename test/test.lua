@@ -91,6 +91,16 @@ build "b2" { "r2",
     implicit_out = {"o2"},
 }
 
+section "Embedded rules"
+
+build "special_target.txt" { "file1.txt", "file2.txt",
+    description = "a rule embedded inside a build statement",
+    command = "cat $in > $out",
+    implicit_in = "hidden_input",
+    implicit_out = "hidden_output",
+    depfile = "$out.d",
+}
+
 section "Accumulations"
 
 local xs = {}

@@ -105,9 +105,7 @@ end)
 
 section "Project structure"
 
-rule "graph" {
+build "doc/graph.svg" { "build.ninja",
     description = "GRAPH $out",
     command = "ninja -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out",
 }
-
-build "doc/graph.svg" {"graph", "build.ninja"}

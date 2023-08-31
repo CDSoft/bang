@@ -51,6 +51,17 @@ rule r2
 build b2 | o2: r2 | i4 i5
 
 ######################################################################
+# Embedded rules
+######################################################################
+
+rule embedded_rule_11780f2a6c4ef519
+  description = a rule embedded inside a build statement
+  command = cat $in > $out
+  depfile = $out.d
+
+build special_target.txt | hidden_output: embedded_rule_11780f2a6c4ef519 file1.txt file2.txt | hidden_input
+
+######################################################################
 # Accumulations
 ######################################################################
 
