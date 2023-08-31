@@ -42,7 +42,7 @@ function mt.__index:gen()
         return
     end
 
-    section "Intallation"
+    section "Installation"
 
     help "install" ("install $name in $PREFIX or "..(prefix:gsub("^~", "$HOME"):gsub("%$%$", "$")))
 
@@ -54,15 +54,10 @@ function mt.__index:gen()
     : map(function(target_group)
         local target_name = target_group[1].name
         local rule_name = "install-"..(target_name:gsub("[$/\\%.]+", "_"))
-        rule(rule_name) {
+        return build(rule_name) { target_group:map(function(target) return target.sources end),
             description = "INSTALL $in to "..target_name,
             command = { "install -v -D -t", fs.join("$${PREFIX:-$prefix}", target_name), "$in" },
         }
-        build(rule_name) {
-            rule_name,
-            target_group:map(function(target) return target.sources end),
-        }
-        return rule_name
     end)
 
     phony "install" {rule_names}

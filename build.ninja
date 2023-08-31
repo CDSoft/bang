@@ -73,28 +73,28 @@ build test: phony $test/test.ok $test/new_file.ok $test/test.hlp.ok
 default test
 
 ######################################################################
-# Clean
-######################################################################
-
-rule embedded_rule_e7c9fd42467ee7fb
-  description = CLEAN $builddir
-  command = rm -rf $builddir/*
-
-build clean-_builddir: embedded_rule_e7c9fd42467ee7fb
-build clean: phony clean-_builddir
-
-######################################################################
-# Intallation
+# Installation
 ######################################################################
 
 prefix = $$HOME/.local
 
-rule install-bin
+rule install-bin_c51941b95aca64c0
   description = INSTALL $in to bin
   command = install -v -D -t $${PREFIX:-$prefix}/bin $in
 
-build install-bin: install-bin $bin/bang
+build install-bin: install-bin_c51941b95aca64c0 $bin/bang
 build install: phony install-bin
+
+######################################################################
+# Clean
+######################################################################
+
+rule clean-_builddir_e7c9fd42467ee7fb
+  description = CLEAN $builddir
+  command = rm -rf $builddir/*
+
+build clean-_builddir: clean-_builddir_e7c9fd42467ee7fb
+build clean: phony clean-_builddir
 
 ######################################################################
 # Help

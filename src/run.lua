@@ -157,7 +157,9 @@ function build(outputs)
         if build_opt.command then
             -- the build statement contains its own rule
             -- => create a new rule for this build statement only
-            local rule_name = "embedded_rule_"..crypt.hash(F.show{outputs, inputs})
+            local rule_name = stringify(outputs) : gsub("[$/\\%.]+", "_")
+                           .. "_"
+                           .. crypt.hash(F.show{outputs, inputs})
             local rule_opt = F.restrict_keys(build_opt, rule_variables)
             rule(rule_name)(rule_opt)
             build_opt = F.without_keys(build_opt, rule_variables)
@@ -216,8 +218,8 @@ local function run(args)
         log.error(args.input, ": file not found")
     end
     assert(loadfile(args.input, "t"))()
-    clean:gen()
     install:gen()
+    clean:gen()
     help:gen(args) -- help shall be generated after clean and install
     atexit.run()
     local ninja = tokens

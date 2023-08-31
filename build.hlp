@@ -4,7 +4,7 @@ Targets:
   help      show this help message
   compile   compile Bang
   test      test Bang
-  clean     clean generated files
   install   install Bang in $PREFIX or $HOME/.local
+  clean     clean generated files
 
 Without any arguments, Ninja will compile and test Bang.
