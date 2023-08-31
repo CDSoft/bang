@@ -114,6 +114,8 @@ Bang allows some build statement variables to be defined at the rule level:
 These variables are added at the beginning of the corresponding variables
 in the build statements that use this rule.
 
+The `rule` function returns the name of the rule (`"rule_name"`).
+
 ### Build statements
 
 `build` adds a new build statement:
@@ -144,6 +146,10 @@ build "outputs" { "rule_name", "inputs",
     -- ...
 }
 ```
+
+The `build` function returns the outputs (`"outputs"`),
+as a string if `outputs` contains a single output
+or a list of string otherwise.
 
 ### Rules embedded in build statements
 

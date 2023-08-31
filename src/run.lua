@@ -142,6 +142,8 @@ function rule(name)
 
         nl()
         nbrules = nbrules + 1
+
+        return name
     end
 end
 
@@ -190,6 +192,9 @@ function build(outputs)
         end)
 
         nbbuilds = nbbuilds + 1
+
+        outputs = stringify(outputs):words()
+        return #outputs ~= 1 and outputs or outputs[1]
     end
 end
 

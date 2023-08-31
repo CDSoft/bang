@@ -27,6 +27,8 @@ rule cc
   description = CC $out
   command = gcc $cflags -c $in -o $out
 
+# cc = "cc"
+
 ######################################################################
 # Build statements
 ######################################################################
@@ -34,7 +36,11 @@ rule cc
 build foo1.o: cc foo1.c foo.h
 build foo2.o | a.log b.log: cc foo2.c foo.h | a.dat b.dat || x.dat
   myvar = myval
+# o1 = "foo1.o"
+# o2 = "foo2.o"
 build all: phony foo1.c foo2.c
+build foo3.o foo4.o foo5.o: cc foo3.c
+# o3 = {"foo3.o", "foo4.o", "foo5.o"}
 
 ######################################################################
 # Inheritance

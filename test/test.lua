@@ -45,7 +45,7 @@ assert(vars.var4 == "string 42 true foo bar")
 
 section "Rules"
 
-rule "cc" {
+local cc = rule "cc" {
     description = "CC $out",
     command = {
         "gcc",
@@ -55,18 +55,27 @@ rule "cc" {
     },
 }
 
+comment("cc = "..F.show(cc))
+
 section "Build statements"
 
-build "foo1.o" {"cc", {"foo1.c", "foo.h"}}
+local o1 = build "foo1.o" {"cc", {"foo1.c", "foo.h"}}
 
-build "foo2.o" {"cc", {"foo2.c", "foo.h"},
+local o2 = build "foo2.o" {"cc", {"foo2.c", "foo.h"},
     implicit_in = {"a.dat", "b.dat"},
     implicit_out = {"a.log", "b.log"},
     order_only_deps = {"x.dat"},
     myvar = "myval",
 }
 
+comment("o1 = "..F.show(o1))
+comment("o2 = "..F.show(o2))
+
 phony "all" { "foo1.c", "foo2.c" }
+
+local o3 = build {"foo3.o", "foo4.o foo5.o"} {"cc", {"foo3.c"}}
+
+comment("o3 = "..F.show(o3))
 
 section "Inheritance"
 

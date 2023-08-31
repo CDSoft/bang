@@ -44,13 +44,13 @@ local architectures = ls "arch"
         var("cflags_"..arch_name)(arch.cflags)
         var("ldflags_"..arch_name)(arch.ldflags)
 
-        rule("cc_"..arch_name) {
+        local cc = rule("cc_"..arch_name) {
             description = "["..arch_name.."] CC $out",
             command = {arch.cc, "-c", "$cflags $cflags_"..arch_name, "-MD -MF $out.d", " $in -o $out"},
             depfile = "$out.d",
         }
 
-        rule("ar_"..arch_name) {
+        local ar = rule("ar_"..arch_name) {
             description = "["..arch_name.."] AR $out",
             command = {arch.ar, "-crs", "$out $in"},
         }
@@ -62,13 +62,13 @@ local architectures = ls "arch"
 
         local arch_lib = ls(fs.join(path, "**.c"))
             : map(function(source)
-                local object = fs.join("$builddir", fs.splitext(source)..".o")
-                build(object) { "cc_"..arch_name, source }
-                return object
+                return build(fs.join("$builddir", fs.splitext(source)..".o")) {
+                    { cc, source }
+                }
             end)
 
         arch.archive_file = fs.join("$builddir", "arch", arch_name, "arch.a")
-        build(arch.archive_file) { "ar_"..arch_name, arch_lib }
+        build(arch.archive_file) { ar, arch_lib }
 
         return arch
     end)
@@ -85,9 +85,9 @@ architectures : foreach(function(arch)
                     build(object) { "cc_"..arch.name, source }
                     return object
                 end)
-            local lib_filename = fs.join("$builddir", arch.name, "lib", lib_name, lib_name..".a")
-            build(lib_filename) { "ar_"..arch.name, lib_objects }
-            return lib_filename
+            return build(fs.join("$builddir", arch.name, "lib", lib_name, lib_name..".a")) {
+                "ar_"..arch.name, lib_objects
+            }
         end)
 end)
 
@@ -96,10 +96,12 @@ architectures : foreach(function(arch)
     : foreach(function(path)
         local bin_name = fs.basename(path)
         section(fs.splitext(bin_name).." for "..arch.name)
-        local object = fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..".o")
-        build(object) { "cc_"..arch.name, path }
-        local bin_filename = fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..arch.ext)
-        build(bin_filename) { "ld_"..arch.name, object, arch.libraries, arch.archive_file }
+        local object = build(fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..".o")) {
+            "cc_"..arch.name, path
+        }
+        build(fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..arch.ext)) {
+            "ld_"..arch.name, object, arch.libraries, arch.archive_file
+        }
     end)
 end)
 
