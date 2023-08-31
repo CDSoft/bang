@@ -84,7 +84,7 @@ function var(name)
     end
 end
 
-local rule_special_variables = F{
+local rule_variables = F{
     "description",
     "command",
     "in",
@@ -100,44 +100,67 @@ local rule_special_variables = F{
     "rspfile_content",
 }
 
-local function emit_block_variables(block_variables, opt)
-    local is_block_variable = block_variables:from_set(F.const(true))
-    block_variables:foreach(function(varname)
-        local value = opt[varname]
-        if value ~= nil then
-            emit("  ", varname, " = ", stringify(value), "\n")
-        end
-    end)
-    F.foreachk(opt, function(varname, value)
-        if not is_block_variable[varname] then
-            emit("  ", varname, " = ", stringify(value), "\n")
-        end
-    end)
-end
-
-local nbrules = 0
-
-function rule(name)
-    return function(opt)
-        nl()
-        emit("rule ", name, "\n")
-        emit_block_variables(rule_special_variables, opt)
-        nl()
-        nbrules = nbrules + 1
-    end
-end
-
 local build_special_bang_variables = F{
     "implicit_in",
     "implicit_out",
     "order_only_deps",
 }
 
+-- { "rule_name" = {implicit_in=..., implicit_out=...}, ...}
+local inherited_variables = {
+    phony = {},
+}
+
+local nbrules = 0
+
+function rule(name)
+    return function(opt)
+        nl()
+
+        emit("rule ", name, "\n")
+
+        -- list of variables belonging to the rule definition
+        rule_variables : foreach(function(varname)
+            local value = opt[varname]
+            if value ~= nil then emit("  ", varname, " = ", stringify(value), "\n") end
+        end)
+
+        -- list of variables belonging to the associated build statements
+        inherited_variables[name] = {}
+        build_special_bang_variables : foreach(function(varname)
+            inherited_variables[name][varname] = opt[varname]
+        end)
+
+        -- other variables are unknown
+        local unknown_variables = F.keys(opt)
+            : difference(rule_variables)
+            : difference(build_special_bang_variables)
+        if #unknown_variables > 0 then
+            error("rule "..name..": unknown variables: "..unknown_variables:str", ")
+        end
+
+        nl()
+        nbrules = nbrules + 1
+    end
+end
+
 local nbbuilds = 0
 
 function build(outputs)
     return function(inputs)
-        local opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
+        -- variables defined in the current build statement
+        local build_opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
+
+        -- variables defined at the rule level and inherited by this statement
+        local rule_name = F{inputs}:flatten():head():words():head()
+        local rule_opt = inherited_variables[rule_name]
+
+        -- merge both variable sets
+        local opt = F.clone(rule_opt)
+        build_opt:foreachk(function(varname, value)
+            opt[varname] = opt[varname] and {opt[varname], value} or value
+        end)
+
         emit("build ",
             stringify(outputs),
             opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
@@ -147,7 +170,12 @@ function build(outputs)
             opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
             "\n"
         )
-        emit_block_variables(F{}, F.without_keys(opt, build_special_bang_variables))
+
+        F.without_keys(opt, build_special_bang_variables)
+        : foreachk(function(varname, value)
+            emit("  ", varname, " = ", stringify(value), "\n")
+        end)
+
         nbbuilds = nbbuilds + 1
     end
 end

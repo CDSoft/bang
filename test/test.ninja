@@ -24,8 +24,8 @@ var4 = string 42 true foo bar
 ######################################################################
 
 rule cc
+  description = CC $out
   command = gcc $cflags -c $in -o $out
-  another_variable = foo bar 42
 
 ######################################################################
 # Build statements
@@ -35,6 +35,20 @@ build foo1.o: cc foo1.c foo.h
 build foo2.o | a.log b.log: cc foo2.c foo.h | a.dat b.dat || x.dat
   myvar = myval
 build all: phony foo1.c foo2.c
+
+######################################################################
+# Inheritance
+######################################################################
+
+rule r1
+  command = cmd1
+
+build b1 | o1: r1 | i1 i2 i3
+
+rule r2
+  command = cmd2
+
+build b2 | o2: r2 | i4 i5
 
 ######################################################################
 # Accumulations

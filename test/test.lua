@@ -46,8 +46,13 @@ assert(vars.var4 == "string 42 true foo bar")
 section "Rules"
 
 rule "cc" {
-    command = "gcc $cflags -c $in -o $out",
-    another_variable = {"foo", {"bar", {}, 42}},
+    description = "CC $out",
+    command = {
+        "gcc",
+        "$cflags",
+        "-c",
+        "$in -o $out",
+    },
 }
 
 section "Build statements"
@@ -62,6 +67,29 @@ build "foo2.o" {"cc", {"foo2.c", "foo.h"},
 }
 
 phony "all" { "foo1.c", "foo2.c" }
+
+section "Inheritance"
+
+rule "r1" {
+    command = "cmd1",
+    -- this variable shall be moved to the build statements that use this rule
+    implicit_in = {"i1", "i2"},
+}
+
+build "b1" { "r1",
+    implicit_in = {"i3"},
+    implicit_out = {"o1"},
+}
+
+rule "r2" {
+    command = "cmd2",
+    -- this variable shall be moved to the build statements that use this rule
+    implicit_in = {"i4", "i5"},
+}
+
+build "b2" { "r2",
+    implicit_out = {"o2"},
+}
 
 section "Accumulations"
 

@@ -58,12 +58,12 @@ rule "luax" {
 rule "version" {
     description = "GIT $version",
     command = "echo -n `git describe --tags` > $out",
+    implicit_in = ".git/refs/tags .git/index",
 }
 
 build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version"}
-build "$builddir/version" {"version",
-    implicit_in = ".git/refs/tags .git/index",
-}
+build "$builddir/version" {"version"}
+
 phony "compile" { "$bin/bang" }
 default "compile"
 help "compile" "compile $name"
@@ -85,6 +85,8 @@ rule "run_test" {
         "&& touch $test/tmp/new_file.txt",
         "&& touch $test/test.hlp",
     },
+    implicit_in = "$bin/bang",
+    implicit_out = { "$test/tmp/new_file.txt", "$test/test.hlp" },
 }
 
 rule "diff" {
@@ -92,10 +94,7 @@ rule "diff" {
     command = "diff $in && touch $out",
 }
 
-build "$test/test.ninja" {"run_test", "test/test.lua",
-    implicit_in = "$bin/bang",
-    implicit_out = { "$test/tmp/new_file.txt", "$test/test.hlp" },
-}
+build "$test/test.ninja" {"run_test", "test/test.lua" }
 build "$test/test.ok" {"diff", {"$test/test.ninja", "test/test.ninja"}}
 build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}}
 build "$test/test.hlp.ok" {"diff", {"$test/test.hlp", "test/test.hlp"}}

@@ -103,6 +103,17 @@ rule "rule_name" {
 Variable values can be strings or lists of strings.
 Lists of strings are flattened and concatenated (separated with spaces).
 
+Rules can defined variables (see [Rule variables](https://ninja-build.org/manual.html#ref_rule)).
+
+Bang allows some build statement variables to be defined at the rule level:
+
+- `implicit_in`: list of implicit inputs common to all build statements
+- `implicit_out`: list of implicit outputs common to all build statements
+- `order_only_deps`: list of order-only dependencies common to all build statements
+
+These variables are added at the beginning of the corresponding variables
+in the build statements that use this rule.
+
 ### Build statements
 
 `build` adds a new build statement:
