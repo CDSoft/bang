@@ -12,12 +12,20 @@
 var1 = string
 var2 = 42
 var3 = true
+# v1        = $var1
+# vars.var1 = string
+# v2        = $var2
+# vars.var2 = 42
+# v3        = $var3
+# vars.var3 = true
 
 ######################################################################
 # Compound variables
 ######################################################################
 
 var4 = string 42 true foo bar
+# v4        = $var4
+# vars.var4 = string 42 true foo bar
 
 ######################################################################
 # Rules

@@ -88,6 +88,8 @@ var "varname" {"word_1", "word_2", ...} -- will produce `varname = word_1 word_2
 
 The global variable `vars` is a table containing a copy of all the Ninja variables defined by the `var` function.
 
+`var` returns the name of the variable (preffixed with `"$"`).
+
 ### Rules
 
 `rule` adds a new rule definition:

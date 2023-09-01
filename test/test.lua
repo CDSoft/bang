@@ -25,23 +25,31 @@ Section comments can have multiple lines.
 
 section "Atomic variables"
 
-var "var1" "string"                 assert(vars.var1 == "string")
-var "var2" (42)                     assert(vars.var2 == "42")
-var "var3" (true)                   assert(vars.var3 == "true")
+local v1 = var "var1" "string"
+local v2 = var "var2" (42)
+local v3 = var "var3" (true)
+
+comment("v1        = "..v1)
+comment("vars.var1 = "..vars.var1)
+comment("v2        = "..v2)
+comment("vars.var2 = "..vars.var2)
+comment("v3        = "..v3)
+comment("vars.var3 = "..vars.var3)
 
 section "Compound variables"
 
-var "var4" {
+local v4 = var "var4" {
     "string",
     42,
     true,
     {
-        "foo",
+        " foo  ",
         { },
-        "bar",
+        "  bar ",
     },
 }
-assert(vars.var4 == "string 42 true foo bar")
+comment("v4        = "..v4)
+comment("vars.var4 = "..vars.var4)
 
 section "Rules"
 

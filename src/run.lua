@@ -82,6 +82,7 @@ function var(name)
         emit(name, " = ", value, "\n")
         vars[name] = value
         nbvars = nbvars + 1
+        return "$"..name
     end
 end
 
