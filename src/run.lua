@@ -172,6 +172,9 @@ function build(outputs)
         -- variables defined at the rule level and inherited by this statement
         local rule_name = F{inputs}:flatten():head():words():head()
         local rule_opt = inherited_variables[rule_name]
+        if not rule_opt then
+            log.error(rule_name..": unknown rule")
+        end
 
         -- merge both variable sets
         local opt = F.clone(rule_opt)
