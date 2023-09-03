@@ -188,6 +188,18 @@ build "outputs" { "outputs_XXX", "inputs" }
 
 Note: `XXX` is a hash computed from the original build statement.
 
+### Pools
+
+`pool` adds a pool definition:
+
+``` lua
+pool "name" {
+    depth = pool_depth
+}
+```
+
+The `pool` function returns the name of the pool (`"pool_name"`).
+
 ### Default targets
 
 `default` adds targets to the default target:

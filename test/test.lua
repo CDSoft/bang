@@ -118,6 +118,18 @@ build "special_target.txt" { "file1.txt", "file2.txt",
     depfile = "$out.d",
 }
 
+section "Pools"
+
+
+rule "link" {
+    pool = pool "link_pool" { depth=4 },
+}
+
+build "link1" { "link" }
+build "link2" { "link",
+    pool = "",
+}
+
 section "Accumulations"
 
 local xs = {}

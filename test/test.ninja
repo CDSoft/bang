@@ -76,6 +76,20 @@ rule special_target_txt_11780f2a6c4ef519
 build special_target.txt | hidden_output: special_target_txt_11780f2a6c4ef519 file1.txt file2.txt | hidden_input
 
 ######################################################################
+# Pools
+######################################################################
+
+pool link_pool
+  depth = 4
+
+rule link
+  pool = link_pool
+
+build link1: link
+build link2: link
+  pool =
+
+######################################################################
 # Accumulations
 ######################################################################
 

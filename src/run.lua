@@ -95,6 +95,7 @@ local rule_variables = F{
     "depfile",
     "deps",
     "dyndep",
+    "pool",
     "msvc_deps_prefix",
     "generator",
     "restat",
@@ -201,6 +202,25 @@ function build(outputs)
 
         outputs = stringify(outputs):words()
         return #outputs ~= 1 and outputs or outputs[1]
+    end
+end
+
+local pool_variables = F{
+    "depth",
+}
+
+function pool(name)
+    return function(opt)
+        emit("pool ", name, "\n")
+        pool_variables : foreach(function(varname)
+            local value = opt[varname]
+            if value ~= nil then emit("  ", varname, " = ", stringify(value), "\n") end
+        end)
+        local unknown_variables = F.keys(opt) : difference(pool_variables)
+        if #unknown_variables > 0 then
+            error("pool "..name..": unknown variables: "..unknown_variables:str", ")
+        end
+        return name
     end
 end
 
