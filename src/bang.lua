@@ -21,7 +21,7 @@
 local F = require "F"
 local fs = require "fs"
 
-local run = require "run"
+local ninja = require "ninja"
 local log = require "log"
 local _, version = pcall(require, "version")
 
@@ -63,6 +63,6 @@ end
 
 local args = parse_args()
 log.quiet(args)
-local ninja = run(args)
+local ninja_file = ninja(args)
 log.info("write ", args.output)
-fs.write(args.output, ninja)
+fs.write(args.output, ninja_file)

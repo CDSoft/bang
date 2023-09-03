@@ -60,15 +60,15 @@ local architectures = ls "arch"
             command = {arch.ld, "$ldflags $ldflags_"..arch_name, "-o $out $in"},
         }
 
-        local arch_lib = ls(fs.join(path, "**.c"))
+        arch.archive_file = fs.join("$builddir", "arch", arch_name, "arch.a")
+        build(arch.archive_file) { ar,
+            ls(fs.join(path, "**.c"))
             : map(function(source)
                 return build(fs.join("$builddir", fs.splitext(source)..".o")) {
-                    { cc, source }
+                    cc, source
                 }
             end)
-
-        arch.archive_file = fs.join("$builddir", "arch", arch_name, "arch.a")
-        build(arch.archive_file) { ar, arch_lib }
+        }
 
         return arch
     end)
@@ -79,14 +79,13 @@ architectures : foreach(function(arch)
         : map(function(path)
             local lib_name = fs.basename(path)
             section(lib_name.." for "..arch.name)
-            local lib_objects = ls(fs.join(path, "**.c"))
+            return build(fs.join("$builddir", arch.name, "lib", lib_name, lib_name..".a")) {
+                "ar_"..arch.name,
+                ls(fs.join(path, "**.c"))
                 : map(function(source)
                     local object = fs.join("$builddir", arch.name, fs.splitext(source)..".o")
-                    build(object) { "cc_"..arch.name, source }
-                    return object
+                    return build(object) { "cc_"..arch.name, source }
                 end)
-            return build(fs.join("$builddir", arch.name, "lib", lib_name, lib_name..".a")) {
-                "ar_"..arch.name, lib_objects
             }
         end)
 end)

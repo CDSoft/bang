@@ -38,16 +38,17 @@ doc = $builddir/doc
 # Compilation
 ######################################################################
 
-rule luax
-  description = LUAX $out
-  command = luax -q -o $out $in
-
-rule version
+rule _builddir_version-7d78c855cbae9060
   description = GIT $version
   command = echo -n `git describe --tags` > $out
 
-build $bin/bang: luax src/acc.lua src/atexit.lua src/bang.lua src/clean.lua src/file.lua src/help.lua src/install.lua src/log.lua src/ls.lua src/run.lua $builddir/version
-build $builddir/version: version | .git/refs/tags .git/index
+build $builddir/version: _builddir_version-7d78c855cbae9060 | .git/refs/tags .git/index
+
+rule _bin_bang-8551aee15598a353
+  description = LUAX $out
+  command = luax -q -o $out $in
+
+build $bin/bang: _bin_bang-8551aee15598a353 src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua lib/acc.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua $builddir/version
 build compile: phony $bin/bang
 
 default compile
@@ -56,15 +57,16 @@ default compile
 # Tests
 ######################################################################
 
-rule run_test
+rule _test_test.ninja-c6c58dc43ce00494
   description = BANG $in
-  command = $bin/bang -q $in -o $out -- arg1 arg2 -x=y && touch $test/tmp/new_file.txt && touch $test/test.hlp
+  command = rm -f $test/tmp/new_file.txt $test/test.hlp ; $bin/bang -q $in -o $out -- arg1 arg2 -x=y
+
+build $test/test.ninja | $test/tmp/new_file.txt $test/test.hlp: _test_test.ninja-c6c58dc43ce00494 test/test.lua | $bin/bang
 
 rule diff
   description = DIFF $in
   command = diff $in && touch $out
 
-build $test/test.ninja | $test/tmp/new_file.txt $test/test.hlp: run_test test/test.lua | $bin/bang
 build $test/test.ok: diff $test/test.ninja test/test.ninja
 build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
 build $test/test.hlp.ok: diff $test/test.hlp test/test.hlp
@@ -78,22 +80,22 @@ default test
 
 prefix = $$HOME/.local
 
-rule install-bin_c51941b95aca64c0
+rule install-bin-c51941b95aca64c0
   description = INSTALL $in to bin
   command = install -v -D -t $${PREFIX:-$prefix}/bin $in
 
-build install-bin: install-bin_c51941b95aca64c0 $bin/bang
+build install-bin: install-bin-c51941b95aca64c0 $bin/bang
 build install: phony install-bin
 
 ######################################################################
 # Clean
 ######################################################################
 
-rule clean-_builddir_e7c9fd42467ee7fb
+rule clean-_builddir-e7c9fd42467ee7fb
   description = CLEAN $builddir
   command = rm -rf $builddir/*
 
-build clean-_builddir: clean-_builddir_e7c9fd42467ee7fb
+build clean-_builddir: clean-_builddir-e7c9fd42467ee7fb
 build clean: phony clean-_builddir
 
 ######################################################################

@@ -16,8 +16,11 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
+--@LOAD
+
 local F = require "F"
 local help = require "help"
+local ident = require "ident"
 
 local clean = {}
 local mt = {__index={}}
@@ -44,7 +47,7 @@ function mt.__index:gen()
         help "clean" "clean generated files"
 
         local targets = directories_to_clean : map(function(dir)
-            return build("clean-"..(dir:gsub("[$/\\%.]+", "_"))) {
+            return build("clean-"..ident(dir)) {
                 description = {"CLEAN ", dir},
                 command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
             }
@@ -61,7 +64,7 @@ function mt.__index:gen()
         help "mrproper" "clean generated files and more"
 
         local targets = directories_to_clean_more : map(function(dir)
-            return build("mrproper-"..(dir:gsub("[$/\\%.]+", "_"))) {
+            return build("mrproper-"..ident(dir)) {
                 description = {"CLEAN ", dir},
                 command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
             }

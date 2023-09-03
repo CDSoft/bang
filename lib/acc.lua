@@ -16,6 +16,8 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
+--@LOAD
+
 local F = require "F"
 
 local function acc(list)

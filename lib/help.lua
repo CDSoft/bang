@@ -16,7 +16,7 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
---@LIB
+--@LOAD
 
 local F = require "F"
 local fs = require "fs"

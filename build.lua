@@ -50,19 +50,18 @@ clean "$builddir"
 
 section "Compilation"
 
-rule "luax" {
+build "$bin/bang" {
     description = "LUAX $out",
     command = "luax -q -o $out $in",
-}
 
-rule "version" {
-    description = "GIT $version",
-    command = "echo -n `git describe --tags` > $out",
-    implicit_in = ".git/refs/tags .git/index",
+    ls "src/*.lua",
+    ls "lib/*.lua",
+    build "$builddir/version" {
+        description = "GIT $version",
+        command = "echo -n `git describe --tags` > $out",
+        implicit_in = ".git/refs/tags .git/index",
+    }
 }
-
-build "$bin/bang" {"luax", ls "src/*.lua", "$builddir/version"}
-build "$builddir/version" {"version"}
 
 phony "compile" { "$bin/bang" }
 default "compile"
@@ -76,14 +75,14 @@ install "bin" "$bin/bang"
 
 section "Tests"
 
-rule "run_test" {
+build "$test/test.ninja" { "test/test.lua",
     description = "BANG $in",
     command = {
+        "rm -f",
+            "$test/tmp/new_file.txt",
+            "$test/test.hlp",
+        ";",
         "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
-        -- also touch files created by the `file` function to ensure they are more recent than bang
-        -- (file recreate them only if their contents change)
-        "&& touch $test/tmp/new_file.txt",
-        "&& touch $test/test.hlp",
     },
     implicit_in = "$bin/bang",
     implicit_out = { "$test/tmp/new_file.txt", "$test/test.hlp" },
@@ -94,11 +93,11 @@ rule "diff" {
     command = "diff $in && touch $out",
 }
 
-build "$test/test.ninja" {"run_test", "test/test.lua" }
-build "$test/test.ok" {"diff", {"$test/test.ninja", "test/test.ninja"}}
-build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}}
-build "$test/test.hlp.ok" {"diff", {"$test/test.hlp", "test/test.hlp"}}
+phony "test" {
+    build "$test/test.ok"     {"diff", {"$test/test.ninja",       "test/test.ninja"}},
+    build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}},
+    build "$test/test.hlp.ok" {"diff", {"$test/test.hlp",         "test/test.hlp"}},
+}
 
-phony "test" {"$test/test.ok", "$test/new_file.ok", "$test/test.hlp.ok"}
 default "test"
 help "test" "test $name"

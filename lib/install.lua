@@ -16,10 +16,12 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
---@LIB
+--@LOAD
 
 local F = require "F"
 local fs = require "fs"
+
+local ident = require "ident"
 
 local prefix = "$$HOME/.local"
 local targets = F{}
@@ -53,7 +55,7 @@ function mt.__index:gen()
     : group(function(a, b) return a.name == b.name end)
     : map(function(target_group)
         local target_name = target_group[1].name
-        local rule_name = "install-"..(target_name:gsub("[$/\\%.]+", "_"))
+        local rule_name = "install-"..ident(target_name)
         return build(rule_name) { target_group:map(function(target) return target.sources end),
             description = "INSTALL $in to "..target_name,
             command = { "install -v -D -t", fs.join("$${PREFIX:-$prefix}", target_name), "$in" },

@@ -21,4 +21,11 @@
 # Use the Lua sources of bang to generate the build.ninja file
 # that will be used to compile and test bang...
 
-LUA_PATH="src/?.lua" luax src/bang.lua build.lua -o build.ninja
+set -e
+
+LUA_PATH="src/?.lua;lib/?.lua" luax \
+    $(find lib -name "*.lua" -exec basename {} .lua \; | sort | awk '{print "-l", $1}') \
+    src/bang.lua build.lua \
+    -o build.ninja
+
+ninja

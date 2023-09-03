@@ -187,8 +187,8 @@ build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/bin/hi.o $build
 # Project structure
 ######################################################################
 
-rule embedded_rule_769e2bc466366e1a
+rule doc_graph.svg-769e2bc466366e1a
   description = GRAPH $out
   command = ninja -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out
 
-build doc/graph.svg: embedded_rule_769e2bc466366e1a build.ninja
+build doc/graph.svg: doc_graph.svg-769e2bc466366e1a build.ninja

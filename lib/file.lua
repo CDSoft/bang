@@ -16,6 +16,8 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
+--@LOAD
+
 local atexit = require "atexit"
 local fs = require "fs"
 local F = require "F"
