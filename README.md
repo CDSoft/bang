@@ -179,11 +179,11 @@ build "outputs" { "inputs",
 is internally translated into:
 
 ``` lua
-rule "embedded_rule_XXX" {
+rule "outputs_XXX" {
     command = "...",
 }
 
-build "outputs" { "embedded_rule_XXX", "inputs" }
+build "outputs" { "outputs_XXX", "inputs" }
 ```
 
 Note: `XXX` is a hash computed from the original build statement.
