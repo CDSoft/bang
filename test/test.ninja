@@ -126,6 +126,7 @@ build link2: link
 ######################################################################
 
 # test/bar
+# test/bar/empty
 # test/foo
 # test/foo/f1.c
 # test/foo/f2.lua
