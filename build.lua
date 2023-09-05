@@ -57,7 +57,7 @@ build "$bin/bang" {
     ls "src/*.lua",
     ls "lib/*.lua",
     build "$builddir/version" {
-        description = "GIT $version",
+        description = "GIT version",
         command = "echo -n `git describe --tags` > $out",
         implicit_in = ".git/refs/tags .git/index",
     }

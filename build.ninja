@@ -38,11 +38,11 @@ doc = $builddir/doc
 # Compilation
 ######################################################################
 
-rule _builddir_version-7d78c855cbae9060
-  description = GIT $version
+rule _builddir_version-240841a796c4fe0b
+  description = GIT version
   command = echo -n `git describe --tags` > $out
 
-build $builddir/version: _builddir_version-7d78c855cbae9060 | .git/refs/tags .git/index
+build $builddir/version: _builddir_version-240841a796c4fe0b | .git/refs/tags .git/index
 
 rule _bin_bang-8551aee15598a353
   description = LUAX $out

@@ -13,16 +13,14 @@ It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://gith
 
 ``` sh
 $ git clone https://github.com/CDSoft/luax
-$ cd luax
-$ make install  # this should install LuaX to ~/.local/bin
+$ ninja -C luax install  # this should install LuaX to ~/.local/bin
 ```
 
 ## Bang
 
 ``` sh
 $ git clone https://github.com/CDSoft/bang
-$ cd bang
-$ ninja install  # this should compile bang with Ninja and install it to ~/.local/bin
+$ ninja -C bang install  # this should compile bang with Ninja and install it to ~/.local/bin
 ```
 
 or set `$PREFIX` to install `bang` to a custom directory (`$PREFIX/bin`):
