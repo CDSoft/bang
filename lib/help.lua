@@ -19,7 +19,6 @@
 --@LOAD
 
 local F = require "F"
-local fs = require "fs"
 
 local product_name = ""
 local description = F{}
@@ -55,45 +54,42 @@ function mt.__call(_, ...)
     return help.target(...)
 end
 
-function mt.__index:gen(args)
+function mt.__index:gen()
     if description:null() and epilog:null() and targets:null() then
         return
     end
 
-    local help_filename = fs.splitext(fs.basename(args.output))..".hlp"
-    local help_dir = fs.dirname(args.output)
-
-    local f = file(fs.join(help_dir, help_filename))
-    if not description:null() then
-        f:write(description:unlines())
-        if not targets:null() or not epilog:null() then
-            f:write("\n")
-        end
-    end
     if not targets:null() then
         table.insert(targets, 1, {name="help", txt="show this help message"})
-        local w = targets:map(function(t) return #t.name end):maximum()
-        local function justify(s) return s..(" "):rep(w-#s) end
-        f:write("Targets:\n")
-        targets:foreach(function(target)
-            f:write(("  %s   %s\n"):format(justify(target.name), target.txt))
-        end)
-        if not epilog:null() then
-            f:write("\n")
-        end
     end
-    if not epilog:null() then
-        f:write(epilog:unlines())
+
+    local w = targets:map(function(t) return #t.name end):maximum()
+    local function justify(s)
+        return s..(" "):rep(w-#s)
     end
 
     section "Help"
 
-    rule "help" {
-        description = "$in",
-        command = "cat $in",
+    build "help" {
+        description = "help",
+        command = F{
+            description:null() and {} or description:unlines(),
+            "",
+            targets:null() and {} or {
+                "Targets:",
+                targets : map(function(target)
+                    return F"  %s   %s":format(justify(target.name), target.txt)
+                end)
+            },
+            "",
+            epilog:null() and {} or epilog:unlines(),
+        } : flatten()
+          : unlines()
+          : trim()
+          : gsub("\n\n+", "\n\n")   -- remove duplicate blank lines
+          : lines()
+          : map(function(line) return ("echo %q;"):format(line) end)
     }
-
-    build "help" { "help", help_filename }
 
 end
 

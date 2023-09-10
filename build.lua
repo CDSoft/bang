@@ -80,12 +80,11 @@ build "$test/test.ninja" { "test/test.lua",
     command = {
         "rm -f",
             "$test/tmp/new_file.txt",
-            "$test/test.hlp",
         ";",
         "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
     },
     implicit_in = "$bin/bang",
-    implicit_out = { "$test/tmp/new_file.txt", "$test/test.hlp" },
+    implicit_out = { "$test/tmp/new_file.txt" },
 }
 
 rule "diff" {
@@ -96,7 +95,6 @@ rule "diff" {
 phony "test" {
     build "$test/test.ok"     {"diff", {"$test/test.ninja",       "test/test.ninja"}},
     build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}},
-    build "$test/test.hlp.ok" {"diff", {"$test/test.hlp",         "test/test.hlp"}},
 }
 
 default "test"

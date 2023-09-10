@@ -237,7 +237,7 @@ return function(args)
     assert(loadfile(args.input, "t"))()
     install:gen()
     clean:gen()
-    help:gen(args) -- help shall be generated after clean and install
+    help:gen() -- help shall be generated after clean and install
     atexit.run()
     local ninja = tokens
         : flatten()

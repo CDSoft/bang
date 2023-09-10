@@ -57,11 +57,11 @@ default compile
 # Tests
 ######################################################################
 
-rule _test_test.ninja-c6c58dc43ce00494
+rule _test_test.ninja-dec5e5a054433e40
   description = BANG $in
-  command = rm -f $test/tmp/new_file.txt $test/test.hlp ; $bin/bang -q $in -o $out -- arg1 arg2 -x=y
+  command = rm -f $test/tmp/new_file.txt ; $bin/bang -q $in -o $out -- arg1 arg2 -x=y
 
-build $test/test.ninja | $test/tmp/new_file.txt $test/test.hlp: _test_test.ninja-c6c58dc43ce00494 test/test.lua | $bin/bang
+build $test/test.ninja | $test/tmp/new_file.txt: _test_test.ninja-dec5e5a054433e40 test/test.lua | $bin/bang
 
 rule diff
   description = DIFF $in
@@ -69,8 +69,7 @@ rule diff
 
 build $test/test.ok: diff $test/test.ninja test/test.ninja
 build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
-build $test/test.hlp.ok: diff $test/test.hlp test/test.hlp
-build test: phony $test/test.ok $test/new_file.ok $test/test.hlp.ok
+build test: phony $test/test.ok $test/new_file.ok
 
 default test
 
@@ -102,8 +101,8 @@ build clean: phony clean-_builddir
 # Help
 ######################################################################
 
-rule help
-  description = $in
-  command = cat $in
+rule help-c40ebce391ee1633
+  description = help
+  command = echo "Ninja file for building Bang"; echo ""; echo "Targets:"; echo "  help      show this help message"; echo "  compile   compile Bang"; echo "  test      test Bang"; echo "  install   install Bang in $PREFIX or $HOME/.local"; echo "  clean     clean generated files"; echo ""; echo "Without any arguments, Ninja will compile and test Bang.";
 
-build help: help build.hlp
+build help: help-c40ebce391ee1633

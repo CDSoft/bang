@@ -102,7 +102,6 @@ build link2: link
 # test/bar
 # test/foo
 # test/new_file.txt
-# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
@@ -111,7 +110,6 @@ build link2: link
 ######################################################################
 
 # test/new_file.txt
-# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
@@ -134,7 +132,6 @@ build link2: link
 # test/foo/sub/f3.c
 # test/foo/sub/f4.lua
 # test/new_file.txt
-# test/test.hlp
 # test/test.lua
 # test/test.ninja
 
@@ -211,8 +208,8 @@ build clean: phony clean-_builddir clean-_builddir_foo clean-foo_bar
 # Help
 ######################################################################
 
-rule help
-  description = $in
-  command = cat $in
+rule help-bc64fb1153e165a2
+  description = help
+  command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in $PREFIX or $HOME/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
 
-build help: help test.hlp
+build help: help-bc64fb1153e165a2
