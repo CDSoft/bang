@@ -35,10 +35,10 @@ var "ldflags" (ldflags)
 local architectures = ls "arch"
     : filter(fs.is_dir)
     : map(function(path)
-        local arch_name = fs.basename(path)
+        local arch_name = path:basename()
         section(arch_name)
 
-        local arch = require(fs.join(path, "config"))
+        local arch = require(path / "config")
         arch.name = arch_name
 
         var("cflags_"..arch_name)(arch.cflags)
@@ -60,11 +60,11 @@ local architectures = ls "arch"
             command = {arch.ld, "$ldflags $ldflags_"..arch_name, "-o $out $in"},
         }
 
-        arch.archive_file = fs.join("$builddir", "arch", arch_name, "arch.a")
+        arch.archive_file = "$builddir" / "arch" / arch_name / "arch.a"
         build(arch.archive_file) { ar,
-            ls(fs.join(path, "**.c"))
+            ls(path/"**.c")
             : map(function(source)
-                return build(fs.join("$builddir", fs.splitext(source)..".o")) {
+                return build("$builddir" / source:splitext(source)..".o") {
                     cc, source
                 }
             end)
@@ -77,13 +77,13 @@ architectures : foreach(function(arch)
     arch.libraries = ls "lib"
         : filter(fs.is_dir)
         : map(function(path)
-            local lib_name = fs.basename(path)
+            local lib_name = path:basename()
             section(lib_name.." for "..arch.name)
-            return build(fs.join("$builddir", arch.name, "lib", lib_name, lib_name..".a")) {
+            return build("$builddir" / arch.name / "lib" / lib_name / lib_name..".a") {
                 "ar_"..arch.name,
-                ls(fs.join(path, "**.c"))
+                ls(path/"**.c")
                 : map(function(source)
-                    local object = fs.join("$builddir", arch.name, fs.splitext(source)..".o")
+                    local object = "$builddir" / arch.name / fs.splitext(source)..".o"
                     return build(object) { "cc_"..arch.name, source }
                 end)
             }
@@ -93,12 +93,12 @@ end)
 architectures : foreach(function(arch)
     ls "bin/*.c"
     : foreach(function(path)
-        local bin_name = fs.basename(path)
-        section(fs.splitext(bin_name).." for "..arch.name)
-        local object = build(fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..".o")) {
+        local bin_name = path:basename()
+        section(bin_name:splitext().." for "..arch.name)
+        local object = build("$builddir" / arch.name / "bin" / bin_name:splitext()..".o") {
             "cc_"..arch.name, path
         }
-        build(fs.join("$builddir", arch.name, "bin", fs.splitext(bin_name)..arch.ext)) {
+        build("$builddir" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
             "ld_"..arch.name, object, arch.libraries, arch.archive_file
         }
     end)

@@ -24,7 +24,6 @@ https://cdelord.fr/bang
 ]]
 
 local F = require "F"
-local fs = require "fs"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -39,7 +38,7 @@ section "Build directories"
 var "builddir" ".build"
 
 F"bin test doc" : words() : foreach(function(dir)
-    var (dir) (fs.join("$builddir", dir))
+    var (dir) ("$builddir" / dir)
 end)
 
 clean "$builddir"
