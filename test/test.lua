@@ -171,7 +171,7 @@ clean "$builddir/foo"
 clean "foo/bar"
 
 -- install test
-install.prefix "$$HOME/.local/pub/bang_test"
+install.prefix "~/.local/pub/bang_test"
 install "bin" "foo1.bin"
 install "lib" "foo1.lib"
 install "bin" { "foo2.bin", "foo3.bin" }

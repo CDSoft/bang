@@ -23,7 +23,7 @@ local fs = require "fs"
 
 local ident = require "ident"
 
-local prefix = "$$HOME/.local"
+local prefix = "~/.local"
 local targets = F{}
 
 local install = {}
@@ -46,7 +46,7 @@ function mt.__index:gen()
 
     section "Installation"
 
-    help "install" ("install $name in $PREFIX or "..(prefix:gsub("^~", "$HOME"):gsub("%$%$", "$")))
+    help "install" ("install $name in PREFIX or "..prefix)
 
     var "prefix" (prefix)
 

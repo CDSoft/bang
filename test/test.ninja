@@ -166,7 +166,7 @@ build link2: link
 # Installation
 ######################################################################
 
-prefix = $$HOME/.local/pub/bang_test
+prefix = ~/.local/pub/bang_test
 
 rule install-bin-78c1c207b965c154
   description = INSTALL $in to bin
@@ -208,8 +208,8 @@ build clean: phony clean-_builddir clean-_builddir_foo clean-foo_bar
 # Help
 ######################################################################
 
-rule help-bc64fb1153e165a2
+rule help-65f0c37312aeb98f
   description = help
-  command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in $PREFIX or $HOME/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
+  command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in PREFIX or ~/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
 
-build help: help-bc64fb1153e165a2
+build help: help-65f0c37312aeb98f

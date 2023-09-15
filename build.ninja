@@ -77,7 +77,7 @@ default test
 # Installation
 ######################################################################
 
-prefix = $$HOME/.local
+prefix = ~/.local
 
 rule install-bin-c51941b95aca64c0
   description = INSTALL $in to bin
@@ -101,8 +101,8 @@ build clean: phony clean-_builddir
 # Help
 ######################################################################
 
-rule help-c40ebce391ee1633
+rule help-c5aa50cda20952f5
   description = help
-  command = echo "Ninja file for building Bang"; echo ""; echo "Targets:"; echo "  help      show this help message"; echo "  compile   compile Bang"; echo "  test      test Bang"; echo "  install   install Bang in $PREFIX or $HOME/.local"; echo "  clean     clean generated files"; echo ""; echo "Without any arguments, Ninja will compile and test Bang.";
+  command = echo "Ninja file for building Bang"; echo ""; echo "Targets:"; echo "  help      show this help message"; echo "  compile   compile Bang"; echo "  test      test Bang"; echo "  install   install Bang in PREFIX or ~/.local"; echo "  clean     clean generated files"; echo ""; echo "Without any arguments, Ninja will compile and test Bang.";
 
-build help: help-c40ebce391ee1633
+build help: help-c5aa50cda20952f5
