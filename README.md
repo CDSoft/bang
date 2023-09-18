@@ -136,13 +136,15 @@ build "outputs" { "rule_name", "inputs",
 }
 ```
 
-There are reserved variable names for bang to specify implicit inputs and outputs and dependency orders:
+There are reserved variable names for bang to specify
+implicit inputs and outputs, dependency orders and validation statements:
 
 ``` lua
 build "outputs" { "rule_name", "inputs",
     implicit_out = "implicit outputs",
     implicit_in = "implicit inputs",
     order_only_deps = "order-only dependencies",
+    validations = "build statements used as validations",
     -- ...
 }
 ```

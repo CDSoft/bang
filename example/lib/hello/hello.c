@@ -6,10 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define HELLO_BUF_SIZE 2048
+
 char *greeting(const char *name)
 {
     const char *arch = get_arch();
-    char buf[2048];
-    snprintf(buf, sizeof(buf), "%s says: « Hello, %s! »", arch, name);
+    char buf[HELLO_BUF_SIZE];
+    (void)snprintf(buf, sizeof(buf), "%s says: « Hello, %s! »", arch, name);
     return strdup(buf);
 }

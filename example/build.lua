@@ -25,12 +25,39 @@ local cflags = F{
 local ldflags = F{
 }
 
+local validation = true
+
+local clang_tidy_checks = F{
+    "--checks=*",
+    "-llvmlibc-restrict-system-libc-headers",
+    "-llvm-header-guard",
+    "-modernize-macro-to-enum",
+    "-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling",
+    "-altera-id-dependent-backward-branch",
+    "-altera-unroll-loops",
+    "-readability-identifier-length",
+}:str","
+
 file "compile_flags.txt" : write(cflags:unlines())
 
 section "Common compilation options"
 
 var "cflags" (cflags)
 var "ldflags" (ldflags)
+
+rule "clang-tidy" {
+    command = {
+        "clang-tidy",
+        "--quiet",
+        "--use-color",
+        "--warnings-as-errors=*",
+        "-header-filter=.*",
+        clang_tidy_checks,
+        "$in",
+        "&> $out",
+        "|| (cat $out && false)",
+    }
+}
 
 local architectures = ls "arch"
     : filter(fs.is_dir)
@@ -65,7 +92,10 @@ local architectures = ls "arch"
             ls(path/"**.c")
             : map(function(source)
                 return build("$builddir" / source:splitext(source)..".o") {
-                    cc, source
+                    cc, source,
+                    validations = validation and {
+                        build("$builddir/clang-tidy"/source..".check") { "clang-tidy", source },
+                    },
                 }
             end)
         }
@@ -84,7 +114,11 @@ architectures : foreach(function(arch)
                 ls(path/"**.c")
                 : map(function(source)
                     local object = "$builddir" / arch.name / fs.splitext(source)..".o"
-                    return build(object) { "cc_"..arch.name, source }
+                    return build(object) { "cc_"..arch.name, source,
+                        validations = validation and {
+                            build("$builddir/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
+                        },
+                    }
                 end)
             }
         end)
@@ -96,7 +130,10 @@ architectures : foreach(function(arch)
         local bin_name = path:basename()
         section(bin_name:splitext().." for "..arch.name)
         local object = build("$builddir" / arch.name / "bin" / bin_name:splitext()..".o") {
-            "cc_"..arch.name, path
+            "cc_"..arch.name, path,
+            validations = validation and {
+                build("$builddir/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
+            },
         }
         build("$builddir" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
             "ld_"..arch.name, object, arch.libraries, arch.archive_file

@@ -120,7 +120,6 @@ build "special_target.txt" { "file1.txt", "file2.txt",
 
 section "Pools"
 
-
 rule "link" {
     pool = pool "link_pool" { depth=4 },
 }

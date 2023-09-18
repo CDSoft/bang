@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-int main(int argc, const char *argv[])
+int main(void)
 {
     while (true) {
         char *name = ask("Your name: ");

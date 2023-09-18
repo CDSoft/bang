@@ -9,4 +9,4 @@ echo ""
 
 echo "Compile the Bang example"
 ../.build/bin/bang
-ninja
+ninja -d explain

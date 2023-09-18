@@ -102,6 +102,7 @@ local build_special_bang_variables = F{
     "implicit_in",
     "implicit_out",
     "order_only_deps",
+    "validations",
 }
 
 -- { "rule_name" = {implicit_in=..., implicit_out=...}, ...}
@@ -183,6 +184,7 @@ function build(outputs)
             stringify(inputs),
             opt.implicit_in and {" | ", stringify(opt.implicit_in)} or {},
             opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
+            opt.validations and {" |@ ", stringify(opt.validations)} or {},
             "\n"
         )
 

@@ -21,6 +21,9 @@ builddir = .build
 cflags = -O3 -Wall -Werror -Ilib -Iarch
 ldflags =
 
+rule clang-tidy
+  command = clang-tidy --quiet --use-color --warnings-as-errors=* -header-filter=.* --checks=*,-llvmlibc-restrict-system-libc-headers,-llvm-header-guard,-modernize-macro-to-enum,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-altera-id-dependent-backward-branch,-altera-unroll-loops,-readability-identifier-length $in &> $out || (cat $out && false)
+
 ######################################################################
 # linux
 ######################################################################
@@ -41,9 +44,12 @@ rule ld_linux
   description = [linux] LD $out
   command = zig cc -target x86_64-linux-musl $ldflags $ldflags_linux -o $out $in
 
-build $builddir/arch/linux/ask.o: cc_linux arch/linux/ask.c
-build $builddir/arch/linux/get_arch.o: cc_linux arch/linux/get_arch.c
-build $builddir/arch/linux/say.o: cc_linux arch/linux/say.c
+build $builddir/clang-tidy/arch/linux/ask.c.check: clang-tidy arch/linux/ask.c
+build $builddir/arch/linux/ask.o: cc_linux arch/linux/ask.c |@ $builddir/clang-tidy/arch/linux/ask.c.check
+build $builddir/clang-tidy/arch/linux/get_arch.c.check: clang-tidy arch/linux/get_arch.c
+build $builddir/arch/linux/get_arch.o: cc_linux arch/linux/get_arch.c |@ $builddir/clang-tidy/arch/linux/get_arch.c.check
+build $builddir/clang-tidy/arch/linux/say.c.check: clang-tidy arch/linux/say.c
+build $builddir/arch/linux/say.o: cc_linux arch/linux/say.c |@ $builddir/clang-tidy/arch/linux/say.c.check
 build $builddir/arch/linux/arch.a: ar_linux $builddir/arch/linux/ask.o $builddir/arch/linux/get_arch.o $builddir/arch/linux/say.o
 
 ######################################################################
@@ -66,9 +72,12 @@ rule ld_macos
   description = [macos] LD $out
   command = zig cc -target x86_64-macos-none $ldflags $ldflags_macos -o $out $in
 
-build $builddir/arch/macos/ask.o: cc_macos arch/macos/ask.c
-build $builddir/arch/macos/get_arch.o: cc_macos arch/macos/get_arch.c
-build $builddir/arch/macos/say.o: cc_macos arch/macos/say.c
+build $builddir/clang-tidy/arch/macos/ask.c.check: clang-tidy arch/macos/ask.c
+build $builddir/arch/macos/ask.o: cc_macos arch/macos/ask.c |@ $builddir/clang-tidy/arch/macos/ask.c.check
+build $builddir/clang-tidy/arch/macos/get_arch.c.check: clang-tidy arch/macos/get_arch.c
+build $builddir/arch/macos/get_arch.o: cc_macos arch/macos/get_arch.c |@ $builddir/clang-tidy/arch/macos/get_arch.c.check
+build $builddir/clang-tidy/arch/macos/say.c.check: clang-tidy arch/macos/say.c
+build $builddir/arch/macos/say.o: cc_macos arch/macos/say.c |@ $builddir/clang-tidy/arch/macos/say.c.check
 build $builddir/arch/macos/arch.a: ar_macos $builddir/arch/macos/ask.o $builddir/arch/macos/get_arch.o $builddir/arch/macos/say.o
 
 ######################################################################
@@ -91,96 +100,114 @@ rule ld_windows
   description = [windows] LD $out
   command = zig cc -target x86_64-windows-gnu $ldflags $ldflags_windows -o $out $in
 
-build $builddir/arch/windows/ask.o: cc_windows arch/windows/ask.c
-build $builddir/arch/windows/get_arch.o: cc_windows arch/windows/get_arch.c
-build $builddir/arch/windows/say.o: cc_windows arch/windows/say.c
+build $builddir/clang-tidy/arch/windows/ask.c.check: clang-tidy arch/windows/ask.c
+build $builddir/arch/windows/ask.o: cc_windows arch/windows/ask.c |@ $builddir/clang-tidy/arch/windows/ask.c.check
+build $builddir/clang-tidy/arch/windows/get_arch.c.check: clang-tidy arch/windows/get_arch.c
+build $builddir/arch/windows/get_arch.o: cc_windows arch/windows/get_arch.c |@ $builddir/clang-tidy/arch/windows/get_arch.c.check
+build $builddir/clang-tidy/arch/windows/say.c.check: clang-tidy arch/windows/say.c
+build $builddir/arch/windows/say.o: cc_windows arch/windows/say.c |@ $builddir/clang-tidy/arch/windows/say.c.check
 build $builddir/arch/windows/arch.a: ar_windows $builddir/arch/windows/ask.o $builddir/arch/windows/get_arch.o $builddir/arch/windows/say.o
 
 ######################################################################
 # hello for linux
 ######################################################################
 
-build $builddir/linux/lib/hello/hello.o: cc_linux lib/hello/hello.c
+build $builddir/clang-tidy/linux/lib/hello/hello.c.check: clang-tidy lib/hello/hello.c
+build $builddir/linux/lib/hello/hello.o: cc_linux lib/hello/hello.c |@ $builddir/clang-tidy/linux/lib/hello/hello.c.check
 build $builddir/linux/lib/hello/hello.a: ar_linux $builddir/linux/lib/hello/hello.o
 
 ######################################################################
 # utils for linux
 ######################################################################
 
-build $builddir/linux/lib/utils/fib.o: cc_linux lib/utils/fib.c
-build $builddir/linux/lib/utils/utils.o: cc_linux lib/utils/utils.c
+build $builddir/clang-tidy/linux/lib/utils/fib.c.check: clang-tidy lib/utils/fib.c
+build $builddir/linux/lib/utils/fib.o: cc_linux lib/utils/fib.c |@ $builddir/clang-tidy/linux/lib/utils/fib.c.check
+build $builddir/clang-tidy/linux/lib/utils/utils.c.check: clang-tidy lib/utils/utils.c
+build $builddir/linux/lib/utils/utils.o: cc_linux lib/utils/utils.c |@ $builddir/clang-tidy/linux/lib/utils/utils.c.check
 build $builddir/linux/lib/utils/utils.a: ar_linux $builddir/linux/lib/utils/fib.o $builddir/linux/lib/utils/utils.o
 
 ######################################################################
 # hello for macos
 ######################################################################
 
-build $builddir/macos/lib/hello/hello.o: cc_macos lib/hello/hello.c
+build $builddir/clang-tidy/macos/lib/hello/hello.c.check: clang-tidy lib/hello/hello.c
+build $builddir/macos/lib/hello/hello.o: cc_macos lib/hello/hello.c |@ $builddir/clang-tidy/macos/lib/hello/hello.c.check
 build $builddir/macos/lib/hello/hello.a: ar_macos $builddir/macos/lib/hello/hello.o
 
 ######################################################################
 # utils for macos
 ######################################################################
 
-build $builddir/macos/lib/utils/fib.o: cc_macos lib/utils/fib.c
-build $builddir/macos/lib/utils/utils.o: cc_macos lib/utils/utils.c
+build $builddir/clang-tidy/macos/lib/utils/fib.c.check: clang-tidy lib/utils/fib.c
+build $builddir/macos/lib/utils/fib.o: cc_macos lib/utils/fib.c |@ $builddir/clang-tidy/macos/lib/utils/fib.c.check
+build $builddir/clang-tidy/macos/lib/utils/utils.c.check: clang-tidy lib/utils/utils.c
+build $builddir/macos/lib/utils/utils.o: cc_macos lib/utils/utils.c |@ $builddir/clang-tidy/macos/lib/utils/utils.c.check
 build $builddir/macos/lib/utils/utils.a: ar_macos $builddir/macos/lib/utils/fib.o $builddir/macos/lib/utils/utils.o
 
 ######################################################################
 # hello for windows
 ######################################################################
 
-build $builddir/windows/lib/hello/hello.o: cc_windows lib/hello/hello.c
+build $builddir/clang-tidy/windows/lib/hello/hello.c.check: clang-tidy lib/hello/hello.c
+build $builddir/windows/lib/hello/hello.o: cc_windows lib/hello/hello.c |@ $builddir/clang-tidy/windows/lib/hello/hello.c.check
 build $builddir/windows/lib/hello/hello.a: ar_windows $builddir/windows/lib/hello/hello.o
 
 ######################################################################
 # utils for windows
 ######################################################################
 
-build $builddir/windows/lib/utils/fib.o: cc_windows lib/utils/fib.c
-build $builddir/windows/lib/utils/utils.o: cc_windows lib/utils/utils.c
+build $builddir/clang-tidy/windows/lib/utils/fib.c.check: clang-tidy lib/utils/fib.c
+build $builddir/windows/lib/utils/fib.o: cc_windows lib/utils/fib.c |@ $builddir/clang-tidy/windows/lib/utils/fib.c.check
+build $builddir/clang-tidy/windows/lib/utils/utils.c.check: clang-tidy lib/utils/utils.c
+build $builddir/windows/lib/utils/utils.o: cc_windows lib/utils/utils.c |@ $builddir/clang-tidy/windows/lib/utils/utils.c.check
 build $builddir/windows/lib/utils/utils.a: ar_windows $builddir/windows/lib/utils/fib.o $builddir/windows/lib/utils/utils.o
 
 ######################################################################
 # hi-repl for linux
 ######################################################################
 
-build $builddir/linux/bin/hi-repl.o: cc_linux bin/hi-repl.c
+build $builddir/clang-tidy/linux/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
+build $builddir/linux/bin/hi-repl.o: cc_linux bin/hi-repl.c |@ $builddir/clang-tidy/linux/bin/hi-repl.c.check
 build $builddir/linux/bin/hi-repl: ld_linux $builddir/linux/bin/hi-repl.o $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a
 
 ######################################################################
 # hi for linux
 ######################################################################
 
-build $builddir/linux/bin/hi.o: cc_linux bin/hi.c
+build $builddir/clang-tidy/linux/bin/hi.c.check: clang-tidy bin/hi.c
+build $builddir/linux/bin/hi.o: cc_linux bin/hi.c |@ $builddir/clang-tidy/linux/bin/hi.c.check
 build $builddir/linux/bin/hi: ld_linux $builddir/linux/bin/hi.o $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a
 
 ######################################################################
 # hi-repl for macos
 ######################################################################
 
-build $builddir/macos/bin/hi-repl.o: cc_macos bin/hi-repl.c
+build $builddir/clang-tidy/macos/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
+build $builddir/macos/bin/hi-repl.o: cc_macos bin/hi-repl.c |@ $builddir/clang-tidy/macos/bin/hi-repl.c.check
 build $builddir/macos/bin/hi-repl: ld_macos $builddir/macos/bin/hi-repl.o $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a
 
 ######################################################################
 # hi for macos
 ######################################################################
 
-build $builddir/macos/bin/hi.o: cc_macos bin/hi.c
+build $builddir/clang-tidy/macos/bin/hi.c.check: clang-tidy bin/hi.c
+build $builddir/macos/bin/hi.o: cc_macos bin/hi.c |@ $builddir/clang-tidy/macos/bin/hi.c.check
 build $builddir/macos/bin/hi: ld_macos $builddir/macos/bin/hi.o $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a
 
 ######################################################################
 # hi-repl for windows
 ######################################################################
 
-build $builddir/windows/bin/hi-repl.o: cc_windows bin/hi-repl.c
+build $builddir/clang-tidy/windows/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
+build $builddir/windows/bin/hi-repl.o: cc_windows bin/hi-repl.c |@ $builddir/clang-tidy/windows/bin/hi-repl.c.check
 build $builddir/windows/bin/hi-repl.exe: ld_windows $builddir/windows/bin/hi-repl.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
 
 ######################################################################
 # hi for windows
 ######################################################################
 
-build $builddir/windows/bin/hi.o: cc_windows bin/hi.c
+build $builddir/clang-tidy/windows/bin/hi.c.check: clang-tidy bin/hi.c
+build $builddir/windows/bin/hi.o: cc_windows bin/hi.c |@ $builddir/clang-tidy/windows/bin/hi.c.check
 build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/bin/hi.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
 
 ######################################################################

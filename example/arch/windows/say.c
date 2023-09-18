@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-void say(const char *s)
+void say(const char *msg)
 {
-    fprintf(stdout, "%s\n", s);
+    (void)fprintf(stdout, "%s\n", msg);
 }

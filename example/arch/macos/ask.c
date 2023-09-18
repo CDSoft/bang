@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#define ASK_BUF_SIZE 1024
+
 char *ask(const char *prompt)
 {
-    fputs(prompt, stdout);
-    fflush(stdout);
-    char buf[1024];
-    fgets(buf, sizeof(buf), stdin);
+    (void)fputs(prompt, stdout);
+    (void)fflush(stdout);
+    char buf[ASK_BUF_SIZE];
+    (void)fgets(buf, sizeof(buf), stdin);
     return strdup(buf);
 }
