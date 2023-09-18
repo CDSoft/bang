@@ -57,19 +57,19 @@ default compile
 # Tests
 ######################################################################
 
-rule _test_test.ninja-dec5e5a054433e40
+rule diff
+  description = DIFF $in
+  command = diff $in > $out || (cat $out && false)
+
+build $test/test.diff: diff $test/test.ninja test/test.ninja
+build $test/new_file.diff: diff $test/tmp/new_file.txt test/new_file.txt
+
+rule _test_test.ninja-a6b2503eb1f14c82
   description = BANG $in
   command = rm -f $test/tmp/new_file.txt ; $bin/bang -q $in -o $out -- arg1 arg2 -x=y
 
-build $test/test.ninja | $test/tmp/new_file.txt: _test_test.ninja-dec5e5a054433e40 test/test.lua | $bin/bang
-
-rule diff
-  description = DIFF $in
-  command = diff $in && touch $out
-
-build $test/test.ok: diff $test/test.ninja test/test.ninja
-build $test/new_file.ok: diff $test/tmp/new_file.txt test/new_file.txt
-build test: phony $test/test.ok $test/new_file.ok
+build $test/test.ninja | $test/tmp/new_file.txt: _test_test.ninja-a6b2503eb1f14c82 test/test.lua | $bin/bang |@ $test/test.diff $test/new_file.diff
+build test: phony $test/test.ninja
 
 default test
 

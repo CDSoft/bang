@@ -74,26 +74,27 @@ install "bin" "$bin/bang"
 
 section "Tests"
 
-build "$test/test.ninja" { "test/test.lua",
-    description = "BANG $in",
-    command = {
-        "rm -f",
-            "$test/tmp/new_file.txt",
-        ";",
-        "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
-    },
-    implicit_in = "$bin/bang",
-    implicit_out = { "$test/tmp/new_file.txt" },
-}
-
 rule "diff" {
     description = "DIFF $in",
-    command = "diff $in && touch $out",
+    command = "diff $in > $out || (cat $out && false)",
 }
 
 phony "test" {
-    build "$test/test.ok"     {"diff", {"$test/test.ninja",       "test/test.ninja"}},
-    build "$test/new_file.ok" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}},
+    build "$test/test.ninja" { "test/test.lua",
+        description = "BANG $in",
+        command = {
+            "rm -f",
+                "$test/tmp/new_file.txt",
+            ";",
+            "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
+        },
+        implicit_in = "$bin/bang",
+        implicit_out = { "$test/tmp/new_file.txt" },
+        validations = {
+            build "$test/test.diff"     {"diff", {"$test/test.ninja",       "test/test.ninja"}},
+            build "$test/new_file.diff" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}},
+        },
+    },
 }
 
 default "test"
