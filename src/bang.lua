@@ -62,7 +62,7 @@ local function parse_args()
 end
 
 local args = parse_args()
-log.quiet(args)
+log.config(args)
 local ninja_file = ninja(args)
 log.info("write ", args.output)
 fs.write(args.output, ninja_file)

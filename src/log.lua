@@ -22,7 +22,7 @@ local log = {}
 
 local quiet = false
 
-function log.quiet(args)
+function log.config(args)
     quiet = args.quiet
 end
 
