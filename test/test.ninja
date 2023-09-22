@@ -76,6 +76,26 @@ rule special_target.txt-11780f2a6c4ef519
 build special_target.txt | hidden_output: special_target.txt-11780f2a6c4ef519 file1.txt file2.txt | hidden_input
 
 ######################################################################
+# Nested rules (pipe simulation)
+######################################################################
+
+rule ypp.md
+  command = ypp $in -o $out
+
+rule panda.html
+  command = panda $in -o $out
+
+rule wkhtmltopdf.pdf
+  command = wkhtmltopdf $in $out
+
+build $builddir/doc/file1.md: ypp.md doc/file1.md
+build $builddir/pipe/doc/file2-pipe-1.md: ypp.md doc/file2.md
+build $builddir/doc/file2.html: panda.html $builddir/pipe/doc/file2-pipe-1.md | foo.css
+build $builddir/pipe/doc/file3-pipe-1.md: ypp.md doc/file3.md
+build $builddir/pipe/doc/file3-pipe-2.html: panda.html $builddir/pipe/doc/file3-pipe-1.md | foo.css
+build $builddir/doc/file3.pdf: wkhtmltopdf.pdf $builddir/pipe/doc/file3-pipe-2.html | pdf.css
+
+######################################################################
 # Pools
 ######################################################################
 

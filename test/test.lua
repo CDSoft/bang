@@ -118,6 +118,20 @@ build "special_target.txt" { "file1.txt", "file2.txt",
     depfile = "$out.d",
 }
 
+section "Nested rules (pipe simulation)"
+
+rule "ypp.md" { command = "ypp $in -o $out" }
+rule "panda.html" { command = "panda $in -o $out", implicit_in = "foo.css" }
+rule "wkhtmltopdf.pdf" { command = "wkhtmltopdf $in $out", implicit_in = "pdf.css" }
+
+local pipe1 = pipe { "ypp.md" }
+local pipe2 = pipe { "ypp.md", "panda.html" }
+local pipe3 = pipe { "ypp.md", "panda.html", "wkhtmltopdf.pdf" }
+
+pipe1 "$builddir/doc/file1.md"   "doc/file1.md"
+pipe2 "$builddir/doc/file2.html" "doc/file2.md"
+pipe3 "$builddir/doc/file3.pdf"  "doc/file3.md"
+
 section "Pools"
 
 rule "link" {

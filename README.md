@@ -280,6 +280,45 @@ f:write "Line 2"
 -- ...
 ```
 
+### Pipes
+
+It is common in Makefiles to write commands with pipes.
+But pipes can be error prone since only the failure of the last process is captured by default.
+A simple solution (for Makefiles or Ninja files) is to chain several rules.
+
+The `pipe` function takes a list of rules and returns a function that applies all the rules,
+in the order of the list. This function takes two parameters: the output and the inputs of the pipe.
+
+Intermediate outputs are stored in `$builddir/pipe`.
+If a rule name contains a dot, its « extension » is used to name intermediate outputs.
+
+E.g.:
+
+``` lua
+rule "ypp.md"     { command = "ypp $in -o $out" }
+rule "panda.html" { command = "panda $in -o $out", implicit_in = "foo.css" }
+
+local ypp_then_panda = pipe { "ypp.md", "panda.md" }
+
+ypp_then_panda "$builddir/doc/mydoc.html" "doc/mydoc.md"
+```
+
+is equivalent to:
+
+``` lua
+build "$builddir/pipe/doc/mydoc.md" { "ypp.md", "doc/mydoc.md" }
+build "$builddir/doc/mydoc.html"    { "panda.html", "$builddir/pipe/doc/mydoc.md" }
+```
+
+Since `rule` returns the name of the rule, this can also be written as:
+
+``` lua
+local ypp_then_panda = pipe {
+    rule "ypp.md"     { command = "ypp $in -o $out" },
+    rule "panda.html" { command = "panda $in -o $out", implicit_in = "foo.css" },
+}
+```
+
 ### Clean
 
 Bang can generate targets to clean the generated files.
