@@ -214,8 +214,18 @@ build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/bin/hi.o $build
 # Project structure
 ######################################################################
 
-rule doc_graph.svg
-  description = GRAPH $out
-  command = ninja -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out
+rule graph
+  description = GRAPH $in
+  command = ninja -f $in -t graph > $out
 
-build doc/graph.svg: doc_graph.svg build.ninja
+rule rename_ids
+  description = RENAME IDs
+  command = doc/rename_random_ids.lua < $in > $out
+
+rule render_graph
+  description = DOT $out
+  command = dot -Tsvg -o$out $in
+
+build $builddir/pipe/doc/graph-pipe-1: graph build.ninja
+build $builddir/pipe/doc/graph-pipe-2: rename_ids $builddir/pipe/doc/graph-pipe-1
+build doc/graph.svg: render_graph $builddir/pipe/doc/graph-pipe-2

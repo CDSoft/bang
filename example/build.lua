@@ -143,7 +143,18 @@ end)
 
 section "Project structure"
 
+local make_graph = pipe {
+    rule "graph"        { description="GRAPH $in",  command="ninja -f $in -t graph > $out" },
+    rule "rename_ids"   { description="RENAME IDs", command="doc/rename_random_ids.lua < $in > $out" },
+    rule "render_graph" { description="DOT $out",   command="dot -Tsvg -o$out $in" },
+}
+
+make_graph "doc/graph.svg" "build.ninja"
+
+-- this is equivalent to the following statement, without pipe issues:
+--[[
 build "doc/graph.svg" { "build.ninja",
     description = "GRAPH $out",
-    command = "ninja -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out",
+    command = "ninja -f $in -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out",
 }
+--]]
