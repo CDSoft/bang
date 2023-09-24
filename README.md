@@ -171,7 +171,7 @@ In this case, the build statement definition does not contain any rule name.
 E.g.:
 
 ``` lua
-build "outputs" { "inputs",
+build "output" { "inputs",
     command = "...",
 }
 ```
@@ -179,14 +179,14 @@ build "outputs" { "inputs",
 is internally translated into:
 
 ``` lua
-rule "outputs_XXX" {
+rule "output" {
     command = "...",
 }
 
-build "outputs" { "outputs_XXX", "inputs" }
+build "output" { "output", "inputs" }
 ```
 
-Note: `XXX` is a hash computed from the original build statement.
+Note: the rule name is the output name where special characters are replaced with underscores.
 
 ### Pools
 

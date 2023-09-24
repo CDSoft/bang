@@ -68,12 +68,12 @@ build b2 | o2: r2 | i4 i5
 # Embedded rules
 ######################################################################
 
-rule special_target.txt-11780f2a6c4ef519
+rule special_target.txt
   description = a rule embedded inside a build statement
   command = cat $in > $out
   depfile = $out.d
 
-build special_target.txt | hidden_output: special_target.txt-11780f2a6c4ef519 file1.txt file2.txt | hidden_input
+build special_target.txt | hidden_output: special_target.txt file1.txt file2.txt | hidden_input
 
 ######################################################################
 # Nested rules (pipe simulation)
@@ -188,48 +188,48 @@ build link2: link
 
 prefix = ~/.local/pub/bang_test
 
-rule install-bin-78c1c207b965c154
+rule install-bin
   description = INSTALL $in to bin
   command = install -v -D -t $${PREFIX:-$prefix}/bin $in
 
-build install-bin: install-bin-78c1c207b965c154 foo1.bin foo2.bin foo3.bin
+build install-bin: install-bin foo1.bin foo2.bin foo3.bin
 
-rule install-lib-14cef9983f74141e
+rule install-lib
   description = INSTALL $in to lib
   command = install -v -D -t $${PREFIX:-$prefix}/lib $in
 
-build install-lib: install-lib-14cef9983f74141e foo1.lib
+build install-lib: install-lib foo1.lib
 build install: phony install-bin install-lib
 
 ######################################################################
 # Clean
 ######################################################################
 
-rule clean-_builddir-e7c9fd42467ee7fb
+rule clean-_builddir
   description = CLEAN $builddir
   command = rm -rf $builddir/*
 
-build clean-_builddir: clean-_builddir-e7c9fd42467ee7fb
+build clean-_builddir: clean-_builddir
 
-rule clean-_builddir_foo-f5937d122e3fb85e
+rule clean-_builddir_foo
   description = CLEAN $builddir/foo
   command = rm -rf $builddir/foo
 
-build clean-_builddir_foo: clean-_builddir_foo-f5937d122e3fb85e
+build clean-_builddir_foo: clean-_builddir_foo
 
-rule clean-foo_bar-3ddfce6c5a3c647b
+rule clean-foo_bar
   description = CLEAN foo/bar
   command = rm -rf foo/bar
 
-build clean-foo_bar: clean-foo_bar-3ddfce6c5a3c647b
+build clean-foo_bar: clean-foo_bar
 build clean: phony clean-_builddir clean-_builddir_foo clean-foo_bar
 
 ######################################################################
 # Help
 ######################################################################
 
-rule help-65f0c37312aeb98f
+rule help
   description = help
   command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in PREFIX or ~/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
 
-build help: help-65f0c37312aeb98f
+build help: help

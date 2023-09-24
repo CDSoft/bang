@@ -21,7 +21,6 @@
 local F = require "F"
 local fs = require "fs"
 local atexit = require "atexit"
-local crypt = require "crypt"
 
 local log = require "log"
 local ident = require "ident"
@@ -145,6 +144,16 @@ function rule(name)
     end
 end
 
+local function unique_rule_name(name)
+    local rule_name = name
+    local i = 0
+    while inherited_variables[rule_name] do
+        i = i + 1
+        rule_name = F{name, i}:str"-"
+    end
+    return rule_name
+end
+
 local nbbuilds = 0
 
 function build(outputs)
@@ -155,7 +164,7 @@ function build(outputs)
         if build_opt.command then
             -- the build statement contains its own rule
             -- => create a new rule for this build statement only
-            local rule_name = ident(stringify(outputs)) .. "-" .. crypt.hash(F.show{outputs, inputs})
+            local rule_name = unique_rule_name(ident(stringify(outputs)))
             local rule_opt = F.restrict_keys(build_opt, rule_variables)
             rule(rule_name)(rule_opt)
             build_opt = F.without_keys(build_opt, rule_variables)
