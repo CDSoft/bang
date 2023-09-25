@@ -70,7 +70,10 @@ function mt.__index:gen()
             }
         end)
 
-        phony "mrproper" {"clean", targets}
+        phony "mrproper" {
+            #directories_to_clean > 0 and "clean" or {},
+            targets,
+        }
 
     end
 
