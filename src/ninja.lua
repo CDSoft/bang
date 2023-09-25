@@ -138,7 +138,7 @@ function rule(name)
             : difference(rule_variables)
             : difference(build_special_bang_variables)
         if #unknown_variables > 0 then
-            error("rule "..name..": unknown variables: "..unknown_variables:str", ")
+            log.error("rule "..name..": unknown variables: "..unknown_variables:str", ")
         end
 
         nl()
@@ -187,7 +187,7 @@ function build(outputs)
         -- merge both variable sets
         local opt = F.clone(rule_opt)
         build_opt:foreachk(function(varname, value)
-            opt[varname] = opt[varname] and {opt[varname], value} or value
+            opt[varname] = opt[varname]~=nil and {opt[varname], value} or value
         end)
 
         emit("build ",
@@ -226,7 +226,7 @@ function pool(name)
         end)
         local unknown_variables = F.keys(opt) : difference(pool_variables)
         if #unknown_variables > 0 then
-            error("pool "..name..": unknown variables: "..unknown_variables:str", ")
+            log.error("pool "..name..": unknown variables: "..unknown_variables:str", ")
         end
         return name
     end

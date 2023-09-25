@@ -91,7 +91,7 @@ local architectures = ls "arch"
         build(arch.archive_file) { ar,
             ls(path/"**.c")
             : map(function(source)
-                return build("$builddir" / source:splitext(source)..".o") {
+                return build("$builddir" / source:splitext()..".o") {
                     cc, source,
                     validations = validation and {
                         build("$builddir/clang-tidy"/source..".check") { "clang-tidy", source },
@@ -113,7 +113,7 @@ architectures : foreach(function(arch)
                 "ar_"..arch.name,
                 ls(path/"**.c")
                 : map(function(source)
-                    local object = "$builddir" / arch.name / fs.splitext(source)..".o"
+                    local object = "$builddir" / arch.name / source:splitext()..".o"
                     return build(object) { "cc_"..arch.name, source,
                         validations = validation and {
                             build("$builddir/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
