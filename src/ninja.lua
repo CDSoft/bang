@@ -113,6 +113,10 @@ local nbrules = 0
 
 function rule(name)
     return function(opt)
+        if inherited_variables[name] then
+            log.error("rule "..name..": multiple definition")
+        end
+
         nl()
 
         emit("rule ", name, "\n")
