@@ -59,6 +59,11 @@ rule "clang-tidy" {
     }
 }
 
+-- cc/ar/ld rules for each architecture
+local cc = {}
+local ar = {}
+local ld = {}
+
 local architectures = ls "arch"
     : filter(fs.is_dir)
     : map(function(path)
@@ -68,31 +73,37 @@ local architectures = ls "arch"
         local arch = require(path / "config")
         arch.name = arch_name
 
-        var("cflags_"..arch_name)(arch.cflags)
-        var("ldflags_"..arch_name)(arch.ldflags)
-
-        local cc = rule("cc_"..arch_name) {
+        cc[arch_name] = rule("cc_"..arch_name) {
             description = "["..arch_name.."] CC $out",
-            command = {arch.cc, "-c", "$cflags $cflags_"..arch_name, "-MD -MF $out.d", " $in -o $out"},
+            command = {
+                arch.cc, "-c",
+                "$cflags", var("cflags_"..arch_name)(arch.cflags),
+                "-MD -MF $out.d",
+                " $in -o $out",
+            },
             depfile = "$out.d",
         }
 
-        local ar = rule("ar_"..arch_name) {
+        ar[arch_name] = rule("ar_"..arch_name) {
             description = "["..arch_name.."] AR $out",
             command = {arch.ar, "-crs", "$out $in"},
         }
 
-        rule("ld_"..arch_name) {
+        ld[arch_name] = rule("ld_"..arch_name) {
             description = "["..arch_name.."] LD $out",
-            command = {arch.ld, "$ldflags $ldflags_"..arch_name, "-o $out $in"},
+            command = {
+                arch.ld,
+                "$ldflags", var("ldflags_"..arch_name)(arch.ldflags),
+                "-o $out $in",
+            },
         }
 
         arch.archive_file = "$builddir" / "arch" / arch_name / "arch.a"
-        build(arch.archive_file) { ar,
+        build(arch.archive_file) { ar[arch_name],
             ls(path/"**.c")
             : map(function(source)
                 return build("$builddir" / source:splitext()..".o") {
-                    cc, source,
+                    cc[arch_name], source,
                     validations = validation and {
                         build("$builddir/clang-tidy"/source..".check") { "clang-tidy", source },
                     },
@@ -110,11 +121,11 @@ architectures : foreach(function(arch)
             local lib_name = path:basename()
             section(lib_name.." for "..arch.name)
             return build("$builddir" / arch.name / "lib" / lib_name / lib_name..".a") {
-                "ar_"..arch.name,
+                ar[arch.name],
                 ls(path/"**.c")
                 : map(function(source)
-                    local object = "$builddir" / arch.name / source:splitext()..".o"
-                    return build(object) { "cc_"..arch.name, source,
+                    return build("$builddir" / arch.name / source:splitext()..".o") {
+                        cc[arch.name], source,
                         validations = validation and {
                             build("$builddir/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
                         },
@@ -129,14 +140,14 @@ architectures : foreach(function(arch)
     : foreach(function(path)
         local bin_name = path:basename()
         section(bin_name:splitext().." for "..arch.name)
-        local object = build("$builddir" / arch.name / "bin" / bin_name:splitext()..".o") {
-            "cc_"..arch.name, path,
-            validations = validation and {
-                build("$builddir/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
-            },
-        }
         build("$builddir" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
-            "ld_"..arch.name, object, arch.libraries, arch.archive_file
+            ld[arch.name], arch.libraries, arch.archive_file,
+            build("$builddir" / arch.name / "bin" / bin_name:splitext()..".o") {
+                cc[arch.name], path,
+                validations = validation and {
+                    build("$builddir/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
+                },
+            }
         }
     end)
 end)

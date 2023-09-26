@@ -29,7 +29,6 @@ rule clang-tidy
 ######################################################################
 
 cflags_linux = -DTARGET="x86_64-linux-musl"
-ldflags_linux =
 
 rule cc_linux
   description = [linux] CC $out
@@ -39,6 +38,8 @@ rule cc_linux
 rule ar_linux
   description = [linux] AR $out
   command = zig ar -crs $out $in
+
+ldflags_linux =
 
 rule ld_linux
   description = [linux] LD $out
@@ -57,7 +58,6 @@ build $builddir/arch/linux/arch.a: ar_linux $builddir/arch/linux/ask.o $builddir
 ######################################################################
 
 cflags_macos = -DTARGET="x86_64-macos-none"
-ldflags_macos =
 
 rule cc_macos
   description = [macos] CC $out
@@ -67,6 +67,8 @@ rule cc_macos
 rule ar_macos
   description = [macos] AR $out
   command = zig ar -crs $out $in
+
+ldflags_macos =
 
 rule ld_macos
   description = [macos] LD $out
@@ -85,7 +87,6 @@ build $builddir/arch/macos/arch.a: ar_macos $builddir/arch/macos/ask.o $builddir
 ######################################################################
 
 cflags_windows = -DTARGET="x86_64-windows-gnu"
-ldflags_windows =
 
 rule cc_windows
   description = [windows] CC $out
@@ -95,6 +96,8 @@ rule cc_windows
 rule ar_windows
   description = [windows] AR $out
   command = zig ar -crs $out $in
+
+ldflags_windows =
 
 rule ld_windows
   description = [windows] LD $out
@@ -168,7 +171,7 @@ build $builddir/windows/lib/utils/utils.a: ar_windows $builddir/windows/lib/util
 
 build $builddir/clang-tidy/linux/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
 build $builddir/linux/bin/hi-repl.o: cc_linux bin/hi-repl.c |@ $builddir/clang-tidy/linux/bin/hi-repl.c.check
-build $builddir/linux/bin/hi-repl: ld_linux $builddir/linux/bin/hi-repl.o $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a
+build $builddir/linux/bin/hi-repl: ld_linux $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a $builddir/linux/bin/hi-repl.o
 
 ######################################################################
 # hi for linux
@@ -176,7 +179,7 @@ build $builddir/linux/bin/hi-repl: ld_linux $builddir/linux/bin/hi-repl.o $build
 
 build $builddir/clang-tidy/linux/bin/hi.c.check: clang-tidy bin/hi.c
 build $builddir/linux/bin/hi.o: cc_linux bin/hi.c |@ $builddir/clang-tidy/linux/bin/hi.c.check
-build $builddir/linux/bin/hi: ld_linux $builddir/linux/bin/hi.o $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a
+build $builddir/linux/bin/hi: ld_linux $builddir/linux/lib/hello/hello.a $builddir/linux/lib/utils/utils.a $builddir/arch/linux/arch.a $builddir/linux/bin/hi.o
 
 ######################################################################
 # hi-repl for macos
@@ -184,7 +187,7 @@ build $builddir/linux/bin/hi: ld_linux $builddir/linux/bin/hi.o $builddir/linux/
 
 build $builddir/clang-tidy/macos/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
 build $builddir/macos/bin/hi-repl.o: cc_macos bin/hi-repl.c |@ $builddir/clang-tidy/macos/bin/hi-repl.c.check
-build $builddir/macos/bin/hi-repl: ld_macos $builddir/macos/bin/hi-repl.o $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a
+build $builddir/macos/bin/hi-repl: ld_macos $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a $builddir/macos/bin/hi-repl.o
 
 ######################################################################
 # hi for macos
@@ -192,7 +195,7 @@ build $builddir/macos/bin/hi-repl: ld_macos $builddir/macos/bin/hi-repl.o $build
 
 build $builddir/clang-tidy/macos/bin/hi.c.check: clang-tidy bin/hi.c
 build $builddir/macos/bin/hi.o: cc_macos bin/hi.c |@ $builddir/clang-tidy/macos/bin/hi.c.check
-build $builddir/macos/bin/hi: ld_macos $builddir/macos/bin/hi.o $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a
+build $builddir/macos/bin/hi: ld_macos $builddir/macos/lib/hello/hello.a $builddir/macos/lib/utils/utils.a $builddir/arch/macos/arch.a $builddir/macos/bin/hi.o
 
 ######################################################################
 # hi-repl for windows
@@ -200,7 +203,7 @@ build $builddir/macos/bin/hi: ld_macos $builddir/macos/bin/hi.o $builddir/macos/
 
 build $builddir/clang-tidy/windows/bin/hi-repl.c.check: clang-tidy bin/hi-repl.c
 build $builddir/windows/bin/hi-repl.o: cc_windows bin/hi-repl.c |@ $builddir/clang-tidy/windows/bin/hi-repl.c.check
-build $builddir/windows/bin/hi-repl.exe: ld_windows $builddir/windows/bin/hi-repl.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
+build $builddir/windows/bin/hi-repl.exe: ld_windows $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a $builddir/windows/bin/hi-repl.o
 
 ######################################################################
 # hi for windows
@@ -208,7 +211,7 @@ build $builddir/windows/bin/hi-repl.exe: ld_windows $builddir/windows/bin/hi-rep
 
 build $builddir/clang-tidy/windows/bin/hi.c.check: clang-tidy bin/hi.c
 build $builddir/windows/bin/hi.o: cc_windows bin/hi.c |@ $builddir/clang-tidy/windows/bin/hi.c.check
-build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/bin/hi.o $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a
+build $builddir/windows/bin/hi.exe: ld_windows $builddir/windows/lib/hello/hello.a $builddir/windows/lib/utils/utils.a $builddir/arch/windows/arch.a $builddir/windows/bin/hi.o
 
 ######################################################################
 # Project structure
