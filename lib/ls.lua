@@ -18,29 +18,6 @@
 
 --@LOAD
 
-local F = require "F"
 local fs = require "fs"
 
-local function ls(dir)
-    local base = fs.basename(dir)
-    local path = fs.dirname(dir)
-    local recursive = base:match"%*%*"
-    local pattern = base:match"%*" and base:gsub("%.", "%%."):gsub("%*%*", "*"):gsub("%*", ".*")
-
-    if recursive then
-        return fs.walk(path)
-            : filter(function(name) return fs.basename(name):match("^"..pattern.."$") end)
-            : sort()
-    elseif pattern then
-        return fs.dir(path)
-            : filter(function(name) return name:match("^"..pattern.."$") end)
-            : map(F.partial(fs.join, path))
-            : sort()
-    else
-        return fs.dir(dir)
-            : map(F.partial(fs.join, dir))
-            : sort()
-    end
-end
-
-return ls
+return fs.ls
