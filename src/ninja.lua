@@ -72,6 +72,9 @@ vars = {}
 
 function var(name)
     return function(value)
+        if vars[name] then
+            log.error("var "..name..": multiple definition")
+        end
         value = stringify(value)
         emit(name, " = ", value, "\n")
         vars[name] = value
@@ -104,18 +107,28 @@ local build_special_bang_variables = F{
     "validations",
 }
 
--- { "rule_name" = {implicit_in=..., implicit_out=...}, ...}
-local inherited_variables = {
-    phony = {},
+local rules = {
+--  "rule_name" = {
+--      inherited_variables = {implicit_in=..., implicit_out=...}
+--  }
 }
+
+local function new_rule(name)
+    rules[name] = { inherited_variables = {} }
+end
+
+new_rule "phony"
 
 local nbrules = 0
 
 function rule(name)
     return function(opt)
-        if inherited_variables[name] then
+        if rules[name] then
             log.error("rule "..name..": multiple definition")
         end
+
+        new_rule(name)
+        nbrules = nbrules + 1
 
         nl()
 
@@ -128,9 +141,8 @@ function rule(name)
         end)
 
         -- list of variables belonging to the associated build statements
-        inherited_variables[name] = {}
         build_special_bang_variables : foreach(function(varname)
-            inherited_variables[name][varname] = opt[varname]
+            rules[name].inherited_variables[varname] = opt[varname]
         end)
 
         -- other variables are unknown
@@ -142,7 +154,6 @@ function rule(name)
         end
 
         nl()
-        nbrules = nbrules + 1
 
         return name
     end
@@ -151,12 +162,14 @@ end
 local function unique_rule_name(name)
     local rule_name = name
     local i = 0
-    while inherited_variables[rule_name] do
+    while rules[rule_name] do
         i = i + 1
         rule_name = F{name, i}:str"-"
     end
     return rule_name
 end
+
+local builds = {}
 
 local nbbuilds = 0
 
@@ -165,10 +178,12 @@ function build(outputs)
         -- variables defined in the current build statement
         local build_opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
 
+        outputs = stringify(outputs)
+
         if build_opt.command then
             -- the build statement contains its own rule
             -- => create a new rule for this build statement only
-            local rule_name = unique_rule_name(ident(stringify(outputs)))
+            local rule_name = unique_rule_name(ident(outputs))
             local rule_opt = F.restrict_keys(build_opt, rule_variables)
             rule(rule_name)(rule_opt)
             build_opt = F.without_keys(build_opt, rule_variables)
@@ -179,10 +194,10 @@ function build(outputs)
 
         -- variables defined at the rule level and inherited by this statement
         local rule_name = F{inputs}:flatten():head():words():head()
-        local rule_opt = inherited_variables[rule_name]
-        if not rule_opt then
+        if not rules[rule_name] then
             log.error(rule_name..": unknown rule")
         end
+        local rule_opt = rules[rule_name].inherited_variables
 
         -- merge both variable sets
         local opt = F.clone(rule_opt)
@@ -191,7 +206,7 @@ function build(outputs)
         end)
 
         emit("build ",
-            stringify(outputs),
+            outputs,
             opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
             ": ",
             stringify(inputs),
@@ -208,7 +223,13 @@ function build(outputs)
 
         nbbuilds = nbbuilds + 1
 
-        outputs = stringify(outputs):words()
+        outputs = outputs:words()
+        outputs : foreach(function(output)
+            if builds[output] then
+                log.error("build "..output..": multiple definition")
+            end
+            builds[output] = true
+        end)
         return #outputs ~= 1 and outputs or outputs[1]
     end
 end
@@ -217,8 +238,14 @@ local pool_variables = F{
     "depth",
 }
 
+local pools = {}
+
 function pool(name)
     return function(opt)
+        if pools[name] then
+            log.error("pool "..name..": multiple definition")
+        end
+        pools[name] = true
         emit("pool ", name, "\n")
         pool_variables : foreach(function(varname)
             local value = opt[varname]

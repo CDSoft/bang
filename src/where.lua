@@ -16,31 +16,24 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
-local F = require "F"
+--@LIB
 
-local where = require "where"
-
-local log = {}
-
-local quiet = false
-
-function log.config(args)
-    quiet = args.quiet
-end
-
-function log.error(...)
-    io.stderr:write(F.flatten{where(), "ERROR: ", {...}, "\n"}:unpack())
-    os.exit(1)
-end
-
-function log.warning(...)
-    io.stderr:write(F.flatten{where(), "WARNING: ", {...}, "\n"}:unpack())
-end
-
-function log.info(...)
-    if not quiet then
-        io.stdout:write(F.flatten{{...}, "\n"}:unpack())
+return function()
+    -- get the current location in the first user script in the call stack
+    local i = 2
+    while true do
+        local info_S = debug.getinfo(i, 'S')
+        local info_l = debug.getinfo(i, 'l')
+        if not info_S then
+            return ""
+        end
+        local file = info_S.source
+        local line = info_l.currentline
+        if not file then error "Can not locate the current source file" end
+        file = file:match "^@(.*)"
+        if file and not file:has_prefix "$" and file:is_file() then
+            return ("[%s:%d] "):format(file, line)
+        end
+        i = i+1
     end
 end
-
-return log
