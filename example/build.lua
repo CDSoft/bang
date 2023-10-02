@@ -155,9 +155,10 @@ end)
 section "Project structure"
 
 local make_graph = pipe {
-    rule "graph"        { description="GRAPH $in",  command="ninja -f $in -t graph > $out" },
-    rule "rename_ids"   { description="RENAME IDs", command="doc/rename_random_ids.lua < $in > $out" },
-    rule "render_graph" { description="DOT $out",   command="dot -Tsvg -o$out $in" },
+    rule "graph.dot"        { description="GRAPH $in",  command="ninja -f $in -t graph > $out" },
+    --rule "rename_ids.dot"   { description="RENAME IDs", command="doc/rename_random_ids.lua < $in > $out" },
+    rule "render_graph.svg" { description="DOT $out",   command="dot -Tsvg -o$out $in" },
+    rule "svgtidy.svg"      { description="TIDY $out",  command="doc/svgtidy.lua < $in > $out" },
 }
 
 make_graph "doc/graph.svg" "build.ninja"
@@ -166,6 +167,6 @@ make_graph "doc/graph.svg" "build.ninja"
 --[[
 build "doc/graph.svg" { "build.ninja",
     description = "GRAPH $out",
-    command = "ninja -f $in -t graph | doc/rename_random_ids.lua | dot -Tsvg -o$out",
+    command = "ninja -f $in -t graph | doc/rename_random_ids.lua | dot -Tsvg | doc/svgtidy.lua > $out",
 }
 --]]
