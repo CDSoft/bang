@@ -21,6 +21,7 @@
 local F = require "F"
 local fs = require "fs"
 local atexit = require "atexit"
+local where = require "where"
 
 local log = require "log"
 local ident = require "ident"
@@ -66,11 +67,21 @@ local function stringify(value)
     : unwords()
 end
 
+local function check_at_exit(predicate, error_message)
+    local loc = where()
+    atexit(function()
+        if not predicate() then
+            log.error_at(loc, error_message)
+        end
+    end)
+end
+
 local nbvars = 0
 
 vars = {}
 
 function var(name)
+    check_at_exit(function() return vars[name] ~= nil end, "var "..name..": incomplete definition")
     return function(value)
         if vars[name] then
             log.error("var "..name..": multiple definition")
@@ -122,6 +133,7 @@ new_rule "phony"
 local nbrules = 0
 
 function rule(name)
+    check_at_exit(function() return rules[name] ~= nil end, "rule "..name..": incomplete definition")
     return function(opt)
         if rules[name] then
             log.error("rule "..name..": multiple definition")
@@ -174,11 +186,13 @@ local builds = {}
 local nbbuilds = 0
 
 function build(outputs)
+    outputs = stringify(outputs)
+    check_at_exit(function()
+        return F(outputs):words():all(function(output) return builds[output] ~= nil end)
+    end, "build "..outputs..": incomplete definition")
     return function(inputs)
         -- variables defined in the current build statement
         local build_opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
-
-        outputs = stringify(outputs)
 
         if build_opt.command then
             -- the build statement contains its own rule
@@ -223,14 +237,14 @@ function build(outputs)
 
         nbbuilds = nbbuilds + 1
 
-        outputs = outputs:words()
-        outputs : foreach(function(output)
+        local output_list = outputs:words()
+        output_list : foreach(function(output)
             if builds[output] then
                 log.error("build "..output..": multiple definition")
             end
             builds[output] = true
         end)
-        return #outputs ~= 1 and outputs or outputs[1]
+        return #output_list ~= 1 and output_list or output_list[1]
     end
 end
 
@@ -241,6 +255,7 @@ local pool_variables = F{
 local pools = {}
 
 function pool(name)
+    check_at_exit(function() return pools[name] ~= nil end, "pool "..name..": incomplete definition")
     return function(opt)
         if pools[name] then
             log.error("pool "..name..": multiple definition")
