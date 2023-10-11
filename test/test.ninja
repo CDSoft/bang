@@ -233,3 +233,15 @@ rule help
   command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in PREFIX or ~/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
 
 build help: help
+
+######################################################################
+# Regenerate .build/test/test.ninja when test/test.lua changes
+######################################################################
+
+rule regenerate_ninja_file
+  command = bang $quiet $in -o $out -- $args
+  generator = true
+
+build .build/test/test.ninja: regenerate_ninja_file test/test.lua
+  args = arg1 arg2 -x=y
+  quiet = -q

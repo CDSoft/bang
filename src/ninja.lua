@@ -286,6 +286,29 @@ function phony(outputs)
     end
 end
 
+local regenerate_flag = true
+
+function regenerate(flag)
+    if flag == nil then flag = true end
+    regenerate_flag = flag
+end
+
+local function generator_rule(args)
+    if not regenerate_flag then return end
+
+    section(("Regenerate %s when %s changes"):format(args.output, args.input))
+
+    local gen = rule "regenerate_ninja_file" {
+        command = "bang $quiet $in -o $out -- $args",
+        generator = true,
+    }
+
+    build(args.output) { gen, args.input,
+        quiet = args.quiet and "-q" or nil,
+        args = #_G.arg > 0 and _G.arg or nil,
+    }
+end
+
 return function(args)
     log.info("load ", args.input)
     if not fs.is_file(args.input) then
@@ -295,6 +318,7 @@ return function(args)
     install:gen()
     clean:gen()
     help:gen() -- help shall be generated after clean and install
+    generator_rule(args)
     atexit.run()
     local ninja = tokens
         : flatten()

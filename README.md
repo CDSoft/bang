@@ -399,6 +399,16 @@ The [`example`](example) directory contains a larger example:
 - multiple libraries
 - multiple executables
 
+### Generator
+
+Bang generates a generator rule to update the Ninja file when the build description changes.
+This behaviour can be disabled with the `regenerate` function:
+
+- `regenerate(true)`{.lua}: bang adds a generator rule at the end of the ninja file (default behaviour)
+- `regenerate(false)`{.lua}: bang does not add a generator rule
+
+The generator rule runs bang with the same options than the initial bang command.
+
 License
 =======
 

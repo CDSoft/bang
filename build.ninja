@@ -106,3 +106,13 @@ rule help
   command = echo "Ninja file for building Bang"; echo ""; echo "Targets:"; echo "  help      show this help message"; echo "  compile   compile Bang"; echo "  test      test Bang"; echo "  install   install Bang in PREFIX or ~/.local"; echo "  clean     clean generated files"; echo ""; echo "Without any arguments, Ninja will compile and test Bang.";
 
 build help: help
+
+######################################################################
+# Regenerate build.ninja when build.lua changes
+######################################################################
+
+rule regenerate_ninja_file
+  command = bang $quiet $in -o $out -- $args
+  generator = true
+
+build build.ninja: regenerate_ninja_file build.lua
