@@ -298,7 +298,7 @@ local function generator_rule(args)
 
     section(("Regenerate %s when %s changes"):format(args.output, args.input))
 
-    local gen = rule "regenerate_ninja_file" {
+    local gen = rule(unique_rule_name "regenerate_ninja_file") {
         command = "bang $quiet $in -o $out -- $args",
         generator = true,
     }
