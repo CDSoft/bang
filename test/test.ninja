@@ -91,9 +91,12 @@ rule wkhtmltopdf.pdf
 build $builddir/doc/file1.md: ypp.md doc/file1.md
 build $builddir/pipe/doc/file2-pipe-1.md: ypp.md doc/file2.md
 build $builddir/doc/file2.html: panda.html $builddir/pipe/doc/file2-pipe-1.md | foo.css
-build $builddir/pipe/doc/file3-pipe-1.md: ypp.md doc/file3.md
+build $builddir/pipe/doc/file3-pipe-1.md: ypp.md doc/file3.md | foo.in
+  variable = baz
 build $builddir/pipe/doc/file3-pipe-2.html: panda.html $builddir/pipe/doc/file3-pipe-1.md | foo.css
-build $builddir/doc/file3.pdf: wkhtmltopdf.pdf $builddir/pipe/doc/file3-pipe-2.html | pdf.css
+  variable = baz
+build $builddir/doc/file3.pdf | bar.out: wkhtmltopdf.pdf $builddir/pipe/doc/file3-pipe-2.html | pdf.css
+  variable = baz
 
 ######################################################################
 # Pools

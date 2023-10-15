@@ -130,7 +130,11 @@ local pipe3 = pipe { "ypp.md", "panda.html", "wkhtmltopdf.pdf" }
 
 pipe1 "$builddir/doc/file1.md"   "doc/file1.md"
 pipe2 "$builddir/doc/file2.html" "doc/file2.md"
-pipe3 "$builddir/doc/file3.pdf"  "doc/file3.md"
+pipe3 "$builddir/doc/file3.pdf"  { "doc/file3.md",
+    implicit_in = "foo.in",
+    implicit_out = "bar.out",
+    variable = "baz",
+}
 
 section "Pools"
 

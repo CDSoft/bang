@@ -319,6 +319,33 @@ local ypp_then_panda = pipe {
 }
 ```
 
+The input list can contain variable definitions. These variables are added to
+**all** build statements, except for `implicit_in` and `implicit_out` that are
+added respectively to the first and last build statements only.
+
+e.g.:
+
+``` lua
+ypp_then_panda "out.html" { "in.md",
+    implicit_in = "foo.in",
+    implicit_out = "foo.out",
+    other_var = "42",
+}
+```
+
+is equivalent to:
+
+``` lua
+build "$builddir/pipe/doc/out-1.md" { "ypp.md", "doc/in.md",
+    implicit_in = "foo.in",
+    other_var = "42",
+}
+build "out.html" { "panda.html", "$builddir/pipe/doc/out-1.md",
+    implicit_out = "foo.out",
+    other_var = "42",
+}
+```
+
 ### Clean
 
 Bang can generate targets to clean the generated files.
