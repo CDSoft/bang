@@ -286,27 +286,43 @@ function phony(outputs)
     end
 end
 
-local regenerate_flag = true
+local generator_flag = {}
+local generator_called = false
 
-function regenerate(flag)
-    if flag == nil then flag = true end
-    regenerate_flag = flag
+function generator(flag)
+    if generator_called then
+        log.error("generator: multiple call")
+    end
+    generator_called = true
+
+    if flag == nil or flag == true then
+        flag = {}
+    end
+
+    if type(flag) ~= "boolean" and type(flag) ~= "table" then
+        log.error("generator: boolean or table expected")
+    end
+
+    generator_flag = flag
 end
 
 local function generator_rule(args)
-    if not regenerate_flag then return end
+    if not generator_flag then return end
 
     section(("Regenerate %s when %s changes"):format(args.output, args.input))
 
-    local gen = rule(unique_rule_name "regenerate_ninja_file") {
+    local bang = rule(unique_rule_name "bang") {
         command = "bang $quiet $in -o $out -- $args",
         generator = true,
     }
 
-    build(args.output) { gen, args.input,
-        quiet = args.quiet and "-q" or nil,
-        args = #_G.arg > 0 and _G.arg or nil,
-    }
+    build(args.output) (F.merge{
+        { bang, args.input,
+            quiet = args.quiet and "-q" or nil,
+            args = #_G.arg > 0 and _G.arg or nil,
+        },
+        generator_flag,
+    })
 end
 
 return function(args)

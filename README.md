@@ -429,12 +429,24 @@ The [`example`](example) directory contains a larger example:
 ### Generator
 
 Bang generates a generator rule to update the Ninja file when the build description changes.
-This behaviour can be disabled with the `regenerate` function:
+This behaviour can be customized or disabled with the `generator` function:
 
-- `regenerate(true)`{.lua}: bang adds a generator rule at the end of the ninja file (default behaviour)
-- `regenerate(false)`{.lua}: bang does not add a generator rule
+- `generator(true)`{.lua}: bang adds a generator rule at the end of the ninja file (default behaviour)
+- `generator(false)`{.lua}: bang does not add a generator rule
+- `generator(t)`{.lua}: if `t` is a table, bang adds a generator rule with the additional variables defined in `t`
 
 The generator rule runs bang with the same options than the initial bang command.
+
+E.g.:
+
+``` lua
+generator {
+    implicit_in = { "foo", "bar" },
+}
+```
+
+In this example, the generator statement will be executed if the Lua script has
+changed as well as `foo` and `bar`.
 
 License
 =======
