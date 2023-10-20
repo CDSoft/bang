@@ -97,5 +97,30 @@ phony "test" {
     },
 }
 
+section "Stress tests"
+
+phony "stress" {
+    build "$test/stress/main.c" { "test/stress-gen.lua",
+        description = "[stress test] Generate a HUGE C project",
+        command = "$in $out",
+        pool = "console",
+    },
+    build "$test/stress.ninja" { "test/stress.lua",
+        description = "[stress test] BANG $in",
+        command = "time $bin/bang $in -o $out -- $test/stress",
+        pool = "console",
+        implicit_in = {
+            "$bin/bang",
+            "$test/stress/main.c",
+        },
+    },
+    build "$test/stress.done" { "$test/stress.ninja",
+        description = "[stress test] NINJA $in",
+        command = "time ninja -f $in && touch $out",
+        pool = "console",
+        implicit_in = "$test/stress.ninja",
+    },
+}
+
 default "test"
 help "test" "test $name"

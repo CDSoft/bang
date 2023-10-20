@@ -71,6 +71,32 @@ rule _test_test.ninja
 build $test/test.ninja | $test/tmp/new_file.txt: _test_test.ninja test/test.lua | $bin/bang |@ $test/test.diff $test/new_file.diff
 build test: phony $test/test.ninja
 
+######################################################################
+# Stress tests
+######################################################################
+
+rule _test_stress_main.c
+  description = [stress test] Generate a HUGE C project
+  command = $in $out
+  pool = console
+
+build $test/stress/main.c: _test_stress_main.c test/stress-gen.lua
+
+rule _test_stress.ninja
+  description = [stress test] BANG $in
+  command = time $bin/bang $in -o $out -- $test/stress
+  pool = console
+
+build $test/stress.ninja: _test_stress.ninja test/stress.lua | $bin/bang $test/stress/main.c
+
+rule _test_stress.done
+  description = [stress test] NINJA $in
+  command = time ninja -f $in && touch $out
+  pool = console
+
+build $test/stress.done: _test_stress.done $test/stress.ninja | $test/stress.ninja
+build stress: phony $test/stress/main.c $test/stress.ninja $test/stress.done
+
 default test
 
 ######################################################################

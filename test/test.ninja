@@ -125,6 +125,8 @@ build link2: link
 # test/bar
 # test/foo
 # test/new_file.txt
+# test/stress-gen.lua
+# test/stress.lua
 # test/test.lua
 # test/test.ninja
 
@@ -133,6 +135,8 @@ build link2: link
 ######################################################################
 
 # test/new_file.txt
+# test/stress-gen.lua
+# test/stress.lua
 # test/test.lua
 # test/test.ninja
 
@@ -140,6 +144,8 @@ build link2: link
 # ls test/*.lua
 ######################################################################
 
+# test/stress-gen.lua
+# test/stress.lua
 # test/test.lua
 
 ######################################################################
@@ -155,6 +161,8 @@ build link2: link
 # test/foo/sub/f3.c
 # test/foo/sub/f4.lua
 # test/new_file.txt
+# test/stress-gen.lua
+# test/stress.lua
 # test/test.lua
 # test/test.ninja
 
@@ -171,6 +179,8 @@ build link2: link
 
 # test/foo/f2.lua
 # test/foo/sub/f4.lua
+# test/stress-gen.lua
+# test/stress.lua
 # test/test.lua
 
 ######################################################################
