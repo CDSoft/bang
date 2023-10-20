@@ -28,7 +28,11 @@ return setmetatable({}, {
     __index = {
         run = function()
             while #registered_functions > 0 do
-                table.remove(registered_functions, 1)()
+                local funcs = registered_functions
+                registered_functions = {}
+                for i = 1, #funcs do
+                    funcs[i]()
+                end
             end
         end,
     },
