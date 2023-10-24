@@ -33,8 +33,8 @@ local tokens = F{
 
 local nbnl = 1
 
-function emit(...)
-    tokens[#tokens+1] = {...}
+function emit(x)
+    tokens[#tokens+1] = x
     nbnl = 0
 end
 
@@ -54,16 +54,20 @@ end
 
 function section(...)
     nl()
-    emit(F"#":rep(70), "\n")
+    emit { F"#":rep(70), "\n" }
     comment(...)
-    emit(F"#":rep(70), "\n")
+    emit { F"#":rep(70), "\n" }
     nl()
 end
 
+local trim_word = F.compose {
+    string.trim, ---@diagnostic disable-line: undefined-field
+    tostring,
+}
+
 local function stringify(value)
     return F.flatten{value}
-    : map(tostring)
-    : map(string.trim) ---@diagnostic disable-line: undefined-field
+    : map(trim_word)
     : unwords()
 end
 
@@ -87,7 +91,7 @@ function var(name)
             log.error("var "..name..": multiple definition")
         end
         value = stringify(value)
-        emit(name, " = ", value, "\n")
+        emit { name, " = ", value, "\n" }
         vars[name] = value
         nbvars = nbvars + 1
         return "$"..name
@@ -144,12 +148,12 @@ function rule(name)
 
         nl()
 
-        emit("rule ", name, "\n")
+        emit { "rule ", name, "\n" }
 
         -- list of variables belonging to the rule definition
         rule_variables : foreach(function(varname)
             local value = opt[varname]
-            if value ~= nil then emit("  ", varname, " = ", stringify(value), "\n") end
+            if value ~= nil then emit { "  ", varname, " = ", stringify(value), "\n" } end
         end)
 
         -- list of variables belonging to the associated build statements
@@ -219,7 +223,7 @@ function build(outputs)
             opt[varname] = opt[varname]~=nil and {opt[varname], value} or value
         end)
 
-        emit("build ",
+        emit { "build ",
             outputs,
             opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
             ": ",
@@ -227,12 +231,12 @@ function build(outputs)
             opt.implicit_in and {" | ", stringify(opt.implicit_in)} or {},
             opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
             opt.validations and {" |@ ", stringify(opt.validations)} or {},
-            "\n"
-        )
+            "\n",
+        }
 
         F.without_keys(opt, build_special_bang_variables)
         : foreachk(function(varname, value)
-            emit("  ", varname, " = ", stringify(value), "\n")
+            emit { "  ", varname, " = ", stringify(value), "\n" }
         end)
 
         nbbuilds = nbbuilds + 1
@@ -261,10 +265,10 @@ function pool(name)
             log.error("pool "..name..": multiple definition")
         end
         pools[name] = true
-        emit("pool ", name, "\n")
+        emit { "pool ", name, "\n" }
         pool_variables : foreach(function(varname)
             local value = opt[varname]
-            if value ~= nil then emit("  ", varname, " = ", stringify(value), "\n") end
+            if value ~= nil then emit { "  ", varname, " = ", stringify(value), "\n" } end
         end)
         local unknown_variables = F.keys(opt) : difference(pool_variables)
         if #unknown_variables > 0 then
@@ -276,7 +280,7 @@ end
 
 function default(targets)
     nl()
-    emit("default ", stringify(targets), "\n")
+    emit { "default ", stringify(targets), "\n" }
     nl()
 end
 

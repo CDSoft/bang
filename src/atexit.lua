@@ -18,21 +18,21 @@
 
 --@LIB
 
-local registered_functions = {}
+local F = require "F"
+
+local registered_functions = F{}
 
 return setmetatable({}, {
     __call = function(_, f)
         if type(f) ~= "function" then error(tostring(f).." is not a function", 2) end
-        table.insert(registered_functions, f)
+        registered_functions[#registered_functions+1] = f
     end,
     __index = {
         run = function()
-            while #registered_functions > 0 do
+            while not registered_functions:null() do
                 local funcs = registered_functions
-                registered_functions = {}
-                for i = 1, #funcs do
-                    funcs[i]()
-                end
+                registered_functions = F{}
+                funcs:foreach(F.call)
             end
         end,
     },

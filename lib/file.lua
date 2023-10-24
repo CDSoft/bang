@@ -34,7 +34,7 @@ function file_mt.__index:close()
     if old_content == new_content then
         return -- keep the old file untouched
     end
-    fs.mkdirs(fs.dirname(self.name))
+    fs.mkdirs(self.name:dirname())
     fs.write(self.name, new_content)
 end
 

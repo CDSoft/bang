@@ -157,6 +157,10 @@ build "link2" { "link",
     pool = "",
 }
 
+section "Default"
+
+default { "foo", "bar" }
+
 section "Accumulations"
 
 local xs = {}

@@ -19,7 +19,6 @@
 --@LOAD
 
 local F = require "F"
-local fs = require "fs"
 
 local ident = require "ident"
 
@@ -58,7 +57,7 @@ function mt.__index:gen()
         local rule_name = "install-"..ident(target_name)
         return build(rule_name) { target_group:map(function(target) return target.sources end),
             description = "INSTALL $in to "..target_name,
-            command = { "install -v -D -t", fs.join("$${PREFIX:-$prefix}", target_name), "$in" },
+            command = { "install -v -D -t", "$${PREFIX:-$prefix}"/target_name, "$in" },
         }
     end)
 

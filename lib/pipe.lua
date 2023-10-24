@@ -22,7 +22,7 @@ local F = require "F"
 
 local function split_hybrid_table(t)
     local function is_numeric_key(k)
-        return type(k) == "number" and math.type(k) == "integer"
+        return math.type(k) == "integer"
     end
     return F.table_partition_with_key(is_numeric_key, t)
 end
@@ -44,7 +44,7 @@ local function pipe(rules)
         end)
         for i = 1, #rules do
             build(tmp[i] or output) (F.merge{
-                {rules[i], {tmp[i-1] or input_list}},
+                { rules[i], {tmp[i-1] or input_list} },
                 input_vars,
                 {
                     implicit_in  = i==1      and implicit_in  or nil,

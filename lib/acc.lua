@@ -23,7 +23,7 @@ local F = require "F"
 local function acc(list)
     return function(xs)
         F.flatten{xs} : foreach(function(x)
-            table.insert(list, x)
+            list[#list+1] = x
         end)
     end
 end
