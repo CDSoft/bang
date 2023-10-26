@@ -24,8 +24,15 @@ local F = require "F"
 
 local file_mt = {__index = {}}
 
-function file_mt.__index:write(...)
+function file_mt.__call(self, ...)
     self.chunks[#self.chunks+1] = {...}
+end
+
+-- TODO: remove the write method at the next major release
+function file_mt.__index:write(...)
+    local log = require "log"
+    log.warning("file:write(...) is deprecated, please use file(...) instead")
+    self(...)
 end
 
 function file_mt.__index:close()
@@ -39,7 +46,7 @@ function file_mt.__index:close()
 end
 
 local function file(name)
-    local f = setmetatable({name=name, chunks = F{}}, file_mt)
+    local f = setmetatable({name=name, chunks=F{}}, file_mt)
     atexit(function() f:close() end)
     return f
 end

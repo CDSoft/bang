@@ -189,8 +189,8 @@ ls "test/**.lua" : foreach(comment)
 
 section "additional file"
 local f = file ".build/test/tmp/new_file.txt"
-f:write("Line", " ", 1, "\n")
-f:write("Line", " ", 2, "\n")
+f("Line", " ", 1, "\n")
+f("Line", " ", 2, "\n")
 comment ".build/test/tmp/new_file.txt should be created"
 
 section "Command line arguments"

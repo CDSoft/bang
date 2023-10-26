@@ -262,21 +262,21 @@ end)
 ### Dynamic file creation
 
 The `file` function creates new files.
-It returns an object with a `write` method to add text to a file.
+It returns a callable object to add text to a file (note that the `write` method is deprecated).
 The file is actually written when bang exits successfully.
 
 ``` lua
-f = file "name" : write("content")
+file "name" "content"
 ```
 
-The file can be generated incrementally by calling `write` several times:
+The file can be generated incrementally by calling the file object several times:
 
 ``` lua
 f = file "name"
 -- ...
-f:write "Line 1"
+f "Line 1\n"
 -- ...
-f:write "Line 2"
+f "Line 2\n"
 -- ...
 ```
 
