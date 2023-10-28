@@ -232,3 +232,13 @@ rule svgtidy.svg
 build $builddir/pipe/doc/graph-pipe-1.dot: graph.dot build.ninja
 build $builddir/pipe/doc/graph-pipe-2.svg: render_graph.svg $builddir/pipe/doc/graph-pipe-1.dot
 build doc/graph.svg: svgtidy.svg $builddir/pipe/doc/graph-pipe-2.svg
+
+######################################################################
+# Regenerate build.ninja when build.lua changes
+######################################################################
+
+rule bang
+  command = bang $quiet $in -o $out -- $args
+  generator = true
+
+build build.ninja: bang build.lua

@@ -38,7 +38,7 @@ local clang_tidy_checks = F{
     "-readability-identifier-length",
 }:str","
 
-file "compile_flags.txt" : write(cflags:unlines())
+file "compile_flags.txt" (cflags:unlines())
 
 section "Common compilation options"
 
