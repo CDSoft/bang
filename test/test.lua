@@ -188,13 +188,17 @@ section "ls test/**.lua"
 ls "test/**.lua" : foreach(comment)
 
 section "additional file"
-local f = file ".build/test/tmp/new_file.txt"
+local new_file = bang.output:dirname()/"new_file.txt"
+local f = file(new_file)
 f("Line", " ", 1, "\n")
 f("Line", " ", 2, "\n")
-comment ".build/test/tmp/new_file.txt should be created"
+comment(new_file.." should be created")
 
 section "Command line arguments"
 comment("The command line arguments are: "..F.show(arg))
+
+section "Bang arguments"
+comment("bang = "..F.show(bang, {indent=4}))
 
 -- clean test
 clean "$builddir"

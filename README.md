@@ -219,6 +219,20 @@ phony "all" {"target1", "target2"}
 build "all" {"phony", "target1", "target2"}
 ```
 
+## Bang variables
+
+### Bang arguments
+
+The command line arguments of bang are stored in a global table named `bang`.
+This table contains:
+
+- `bang.input`: name of the Lua input script
+- `bang.output`: name of the output Ninja file
+
+### Build script arguments
+
+Arguments after "--" are given to the input script in the global `arg` table.
+
 ## Bang functions
 
 ### Accumulations

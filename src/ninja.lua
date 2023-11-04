@@ -334,6 +334,7 @@ return function(args)
     if not fs.is_file(args.input) then
         log.error(args.input, ": file not found")
     end
+    _G.bang = F.clone(args)
     assert(loadfile(args.input, "t"))()
     install:gen()
     clean:gen()
