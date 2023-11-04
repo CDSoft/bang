@@ -44,12 +44,14 @@ rule _builddir_version
 
 build $builddir/version: _builddir_version | .git/refs/tags .git/index
 
-rule _bin_bang
+rule luax
   description = LUAX $out
-  command = luax -q -o $out $in
+  command = luax $arg -q -o $out $in
 
-build $bin/bang: _bin_bang src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua src/where.lua lib/acc.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua lib/pipe.lua $builddir/version
-build compile: phony $bin/bang
+build $bin/bang: luax src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua src/where.lua lib/acc.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua lib/pipe.lua $builddir/version
+build $bin/bang.lua: luax src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua src/where.lua lib/acc.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua lib/pipe.lua $builddir/version
+  arg = -t lua
+build compile: phony $bin/bang $bin/bang.lua
 
 default compile
 
@@ -61,15 +63,30 @@ rule diff
   description = DIFF $in
   command = diff $in > $out || (cat $out && false)
 
-build $test/test.diff: diff $test/test.ninja test/test.ninja
-build $test/new_file.diff: diff $test/tmp/new_file.txt test/new_file.txt
-
-rule _test_test.ninja
+rule run_test
   description = BANG $in
-  command = rm -f $test/tmp/new_file.txt ; $bin/bang -q $in -o $out -- arg1 arg2 -x=y
+  command = rm -f $test_dir/new_file.txt; $bang -q $in -o $out -- arg1 arg2 -x=y
 
-build $test/test.ninja | $test/tmp/new_file.txt: _test_test.ninja test/test.lua | $bin/bang |@ $test/test.diff $test/new_file.diff
-build test: phony $test/test.ninja
+######################################################################
+# Test of the luax interpreter
+######################################################################
+
+build $test/luax/test.diff: diff $test/luax/test.ninja test/test-luax.ninja
+build $test/luax/new_file.diff: diff $test/luax/new_file.txt test/new_file.txt
+build $test/luax/test.ninja | $test/luax/new_file.txt: run_test test/test.lua | $bin/bang |@ $test/luax/test.diff $test/luax/new_file.diff
+  bang = $bin/bang
+  test_dir = $test/luax
+
+######################################################################
+# Test of the lua interpreter
+######################################################################
+
+build $test/lua/test.diff: diff $test/lua/test.ninja test/test-lua.ninja
+build $test/lua/new_file.diff: diff $test/lua/new_file.txt test/new_file.txt
+build $test/lua/test.ninja | $test/lua/new_file.txt: run_test test/test.lua | $bin/bang.lua |@ $test/lua/test.diff $test/lua/new_file.diff
+  bang = $bin/bang.lua
+  test_dir = $test/lua
+build test: phony $test/luax/test.ninja $test/lua/test.ninja
 
 ######################################################################
 # Stress tests
@@ -109,7 +126,7 @@ rule install-bin
   description = INSTALL $in to bin
   command = install -v -D -t $${PREFIX:-$prefix}/bin $in
 
-build install-bin: install-bin $bin/bang
+build install-bin: install-bin $bin/bang $bin/bang.lua
 build install: phony install-bin
 
 ######################################################################

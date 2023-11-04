@@ -133,8 +133,9 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-lua.ninja
+# test/test-luax.ninja
 # test/test.lua
-# test/test.ninja
 
 ######################################################################
 # ls test/*
@@ -143,8 +144,9 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-lua.ninja
+# test/test-luax.ninja
 # test/test.lua
-# test/test.ninja
 
 ######################################################################
 # ls test/*.lua
@@ -169,8 +171,9 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-lua.ninja
+# test/test-luax.ninja
 # test/test.lua
-# test/test.ninja
 
 ######################################################################
 # ls test/**.c
@@ -193,13 +196,23 @@ default foo bar
 # additional file
 ######################################################################
 
-# .build/test/tmp/new_file.txt should be created
+# .build/test/lua/new_file.txt should be created
 
 ######################################################################
 # Command line arguments
 ######################################################################
 
 # The command line arguments are: {"arg1", "arg2", "-x=y"}
+
+######################################################################
+# Bang arguments
+######################################################################
+
+# bang = {
+#     input = "test/test.lua",
+#     output = ".build/test/lua/test.ninja",
+#     quiet = true,
+# }
 
 ######################################################################
 # Installation
@@ -254,14 +267,14 @@ rule help
 build help: help
 
 ######################################################################
-# Regenerate .build/test/test.ninja when test/test.lua changes
+# Regenerate .build/test/lua/test.ninja when test/test.lua changes
 ######################################################################
 
 rule bang
   command = bang $quiet $in -o $out -- $args
   generator = true
 
-build .build/test/test.ninja: bang test/test.lua | foo bar
+build .build/test/lua/test.ninja: bang test/test.lua | foo bar
   another_variable = abc def
   args = arg1 arg2 -x=y
   quiet = -q

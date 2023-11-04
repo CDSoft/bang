@@ -49,24 +49,31 @@ clean "$builddir"
 
 section "Compilation"
 
-build "$bin/bang" {
-    description = "LUAX $out",
-    command = "luax -q -o $out $in",
-
+local sources = {
     ls "src/*.lua",
     ls "lib/*.lua",
     build "$builddir/version" {
         description = "GIT version",
         command = "echo -n `git describe --tags` > $out",
         implicit_in = ".git/refs/tags .git/index",
-    }
+    },
 }
 
-phony "compile" { "$bin/bang" }
+rule "luax" {
+    description = "LUAX $out",
+    command = "luax $arg -q -o $out $in",
+}
+
+local binaries = {
+    build "$bin/bang"     { "luax", sources },
+    build "$bin/bang.lua" { "luax", sources, arg="-t lua" },
+}
+
+phony "compile" { binaries }
 default "compile"
 help "compile" "compile $name"
 
-install "bin" "$bin/bang"
+install "bin" { binaries }
 
 ---------------------------------------------------------------------
 -- Tests
@@ -79,22 +86,34 @@ rule "diff" {
     command = "diff $in > $out || (cat $out && false)",
 }
 
-phony "test" {
-    build "$test/test.ninja" { "test/test.lua",
-        description = "BANG $in",
-        command = {
-            "rm -f",
-                "$test/tmp/new_file.txt",
-            ";",
-            "$bin/bang -q $in -o $out -- arg1 arg2 -x=y",
-        },
-        implicit_in = "$bin/bang",
-        implicit_out = { "$test/tmp/new_file.txt" },
-        validations = {
-            build "$test/test.diff"     {"diff", {"$test/test.ninja",       "test/test.ninja"}},
-            build "$test/new_file.diff" {"diff", {"$test/tmp/new_file.txt", "test/new_file.txt"}},
-        },
+rule "run_test" {
+    description = "BANG $in",
+    command = {
+        "rm -f $test_dir/new_file.txt;",
+        "$bang -q $in -o $out -- arg1 arg2 -x=y",
     },
+}
+
+phony "test" {
+    F{
+        { "$bin/bang",     "$test/luax" },
+        { "$bin/bang.lua", "$test/lua"  },
+    }
+    : map(function(bang_test_dir)
+        local bang, test_dir = F.unpack(bang_test_dir)
+        local interpreter = test_dir:basename()
+        section("Test of the "..interpreter.." interpreter")
+        return build(test_dir/"test.ninja") { "run_test", "test/test.lua",
+            bang = bang,
+            test_dir = test_dir,
+            implicit_in = bang,
+            implicit_out = test_dir/"new_file.txt",
+            validations = {
+                build(test_dir/"test.diff")     {"diff", {test_dir/"test.ninja",       "test/test-"..interpreter..".ninja"}},
+                build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
+            },
+        }
+    end),
 }
 
 section "Stress tests"
