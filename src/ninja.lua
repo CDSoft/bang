@@ -106,16 +106,13 @@ nl()
 emit { "ninja_required_version = ", ninja_required_version_token, "\n" }
 nl()
 
-function ninja_required_version(v)
-    local current_version = ninja_required_version_token[1] : split "%."
-    local new_version = v : split "%."
-    local function upgrade()
-        ninja_required_version_token[1] = v
-    end
-    for i = 1, #new_version do
-        if current_version[i] == nil then return upgrade() end
-        if tonumber(new_version[i]) > tonumber(current_version[i]) then return upgrade() end
-        if tonumber(new_version[i]) < tonumber(current_version[i]) then return end
+function ninja_required_version(required_version)
+    local current = ninja_required_version_token[1] : split "%." : map(tonumber)
+    local new = required_version : split "%." : map(tonumber)
+    for i = 1, #new do
+        current[i] = current[i] or 0
+        if new[i] > current[i] then ninja_required_version_token[1] = required_version; return end
+        if new[i] < current[i] then return end
     end
 end
 
