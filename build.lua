@@ -94,6 +94,11 @@ rule "run_test" {
     },
 }
 
+rule "run_test-future-version" {
+    description = "BANG $in",
+    command = "$bang -q $in -o $out",
+}
+
 phony "test" {
     F{
         { "$bin/bang",     "$test/luax" },
@@ -103,14 +108,31 @@ phony "test" {
         local bang, test_dir = F.unpack(bang_test_dir)
         local interpreter = test_dir:basename()
         section("Test of the "..interpreter.." interpreter")
-        return build(test_dir/"test.ninja") { "run_test", "test/test.lua",
-            bang = bang,
-            test_dir = test_dir,
-            implicit_in = bang,
-            implicit_out = test_dir/"new_file.txt",
-            validations = {
-                build(test_dir/"test.diff")     {"diff", {test_dir/"test.ninja",       "test/test-"..interpreter..".ninja"}},
-                build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
+        return {
+            build(test_dir/"test.ninja") { "run_test", "test/test.lua",
+                bang = bang,
+                test_dir = test_dir,
+                implicit_in = bang,
+                implicit_out = test_dir/"new_file.txt",
+                validations = {
+                    build(test_dir/"test.diff")     {"diff", {test_dir/"test.ninja",   "test/test-"..interpreter..".ninja"}},
+                    build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
+                },
+            },
+            build(test_dir/"test-future-version-1.ninja") { "run_test-future-version", "test/test-future-version-1.lua",
+                bang = bang,
+                implicit_in = bang,
+                validations = build(test_dir/"test-future-version-1.diff") {"diff", {test_dir/"test-future-version-1.ninja", "test/test-future-version-1-"..interpreter..".ninja"}},
+            },
+            build(test_dir/"test-future-version-2.ninja") { "run_test-future-version", "test/test-future-version-2.lua",
+                bang = bang,
+                implicit_in = bang,
+                validations = build(test_dir/"test-future-version-2.diff") {"diff", {test_dir/"test-future-version-2.ninja", "test/test-future-version-2-"..interpreter..".ninja"}},
+            },
+            build(test_dir/"test-future-version-3.ninja") { "run_test-future-version", "test/test-future-version-3.lua",
+                bang = bang,
+                implicit_in = bang,
+                validations = build(test_dir/"test-future-version-3.diff") {"diff", {test_dir/"test-future-version-3.ninja", "test/test-future-version-3-"..interpreter..".ninja"}},
             },
         }
     end),

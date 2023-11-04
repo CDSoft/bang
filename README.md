@@ -96,6 +96,15 @@ The global variable `vars` is a table containing a copy of all the Ninja variabl
 
 `var` returns the name of the variable (prefixed with `"$"`).
 
+### Ninja required version
+
+The special variable `ninja_required_version` shall be set by the `ninja_required_version` function.
+`ninja_required_version` will change the default required version only if the script requires a higher version.
+
+``` lua
+ninja_required_version "1.42"
+```
+
 ### Rules
 
 `rule` adds a new rule definition:
