@@ -110,6 +110,11 @@ build $test/lua/test-future-version-2.ninja: run_test-future-version test/test-f
 build $test/lua/test-future-version-3.diff: diff $test/lua/test-future-version-3.ninja test/test-future-version-3-lua.ninja
 build $test/lua/test-future-version-3.ninja: run_test-future-version test/test-future-version-3.lua | $bin/bang.lua |@ $test/lua/test-future-version-3.diff
   bang = $bin/bang.lua
+
+######################################################################
+# Functional tests
+######################################################################
+
 build test: phony $test/luax/test.ninja $test/luax/test-future-version-1.ninja $test/luax/test-future-version-2.ninja $test/luax/test-future-version-3.ninja $test/lua/test.ninja $test/lua/test-future-version-1.ninja $test/lua/test-future-version-2.ninja $test/lua/test-future-version-3.ninja
 
 ######################################################################

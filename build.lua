@@ -99,7 +99,7 @@ rule "run_test-future-version" {
     command = "$bang -q $in -o $out",
 }
 
-phony "test" {
+local tests = {
     F{
         { "$bin/bang",     "$test/luax" },
         { "$bin/bang.lua", "$test/lua"  },
@@ -119,24 +119,24 @@ phony "test" {
                     build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
                 },
             },
-            build(test_dir/"test-future-version-1.ninja") { "run_test-future-version", "test/test-future-version-1.lua",
-                bang = bang,
-                implicit_in = bang,
-                validations = build(test_dir/"test-future-version-1.diff") {"diff", {test_dir/"test-future-version-1.ninja", "test/test-future-version-1-"..interpreter..".ninja"}},
-            },
-            build(test_dir/"test-future-version-2.ninja") { "run_test-future-version", "test/test-future-version-2.lua",
-                bang = bang,
-                implicit_in = bang,
-                validations = build(test_dir/"test-future-version-2.diff") {"diff", {test_dir/"test-future-version-2.ninja", "test/test-future-version-2-"..interpreter..".ninja"}},
-            },
-            build(test_dir/"test-future-version-3.ninja") { "run_test-future-version", "test/test-future-version-3.lua",
-                bang = bang,
-                implicit_in = bang,
-                validations = build(test_dir/"test-future-version-3.diff") {"diff", {test_dir/"test-future-version-3.ninja", "test/test-future-version-3-"..interpreter..".ninja"}},
-            },
+            ls "test/test-future-version-*.lua"
+            : map(function(src)
+                local ninja = test_dir/src:basename():splitext()..".ninja"
+                local diff_res = test_dir/src:basename():splitext()..".diff"
+                local ninja_ref = src:splitext().."-"..interpreter..".ninja"
+                return build(ninja) { "run_test-future-version", src,
+                    bang = bang,
+                    implicit_in = bang,
+                    validations = build(diff_res) { "diff", ninja, ninja_ref },
+                }
+            end),
         }
     end),
 }
+
+section "Functional tests"
+
+phony "test" { tests }
 
 section "Stress tests"
 
