@@ -17,3 +17,5 @@
 -- https://cdelord.fr/bang
 
 ninja_required_version "1.11.999"
+
+generator(false)

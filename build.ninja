@@ -82,13 +82,13 @@ build $test/luax/new_file.diff: diff $test/luax/new_file.txt test/new_file.txt
 build $test/luax/test.ninja | $test/luax/new_file.txt: run_test test/test.lua | $bin/bang |@ $test/luax/test.diff $test/luax/new_file.diff
   bang = $bin/bang
   test_dir = $test/luax
-build $test/luax/test-future-version-1.diff: diff $test/luax/test-future-version-1.ninja test/test-future-version-1-luax.ninja
+build $test/luax/test-future-version-1.diff: diff $test/luax/test-future-version-1.ninja test/test-future-version-1.ninja
 build $test/luax/test-future-version-1.ninja: run_test-future-version test/test-future-version-1.lua | $bin/bang |@ $test/luax/test-future-version-1.diff
   bang = $bin/bang
-build $test/luax/test-future-version-2.diff: diff $test/luax/test-future-version-2.ninja test/test-future-version-2-luax.ninja
+build $test/luax/test-future-version-2.diff: diff $test/luax/test-future-version-2.ninja test/test-future-version-2.ninja
 build $test/luax/test-future-version-2.ninja: run_test-future-version test/test-future-version-2.lua | $bin/bang |@ $test/luax/test-future-version-2.diff
   bang = $bin/bang
-build $test/luax/test-future-version-3.diff: diff $test/luax/test-future-version-3.ninja test/test-future-version-3-luax.ninja
+build $test/luax/test-future-version-3.diff: diff $test/luax/test-future-version-3.ninja test/test-future-version-3.ninja
 build $test/luax/test-future-version-3.ninja: run_test-future-version test/test-future-version-3.lua | $bin/bang |@ $test/luax/test-future-version-3.diff
   bang = $bin/bang
 
@@ -101,13 +101,13 @@ build $test/lua/new_file.diff: diff $test/lua/new_file.txt test/new_file.txt
 build $test/lua/test.ninja | $test/lua/new_file.txt: run_test test/test.lua | $bin/bang.lua |@ $test/lua/test.diff $test/lua/new_file.diff
   bang = $bin/bang.lua
   test_dir = $test/lua
-build $test/lua/test-future-version-1.diff: diff $test/lua/test-future-version-1.ninja test/test-future-version-1-lua.ninja
+build $test/lua/test-future-version-1.diff: diff $test/lua/test-future-version-1.ninja test/test-future-version-1.ninja
 build $test/lua/test-future-version-1.ninja: run_test-future-version test/test-future-version-1.lua | $bin/bang.lua |@ $test/lua/test-future-version-1.diff
   bang = $bin/bang.lua
-build $test/lua/test-future-version-2.diff: diff $test/lua/test-future-version-2.ninja test/test-future-version-2-lua.ninja
+build $test/lua/test-future-version-2.diff: diff $test/lua/test-future-version-2.ninja test/test-future-version-2.ninja
 build $test/lua/test-future-version-2.ninja: run_test-future-version test/test-future-version-2.lua | $bin/bang.lua |@ $test/lua/test-future-version-2.diff
   bang = $bin/bang.lua
-build $test/lua/test-future-version-3.diff: diff $test/lua/test-future-version-3.ninja test/test-future-version-3-lua.ninja
+build $test/lua/test-future-version-3.diff: diff $test/lua/test-future-version-3.ninja test/test-future-version-3.ninja
 build $test/lua/test-future-version-3.ninja: run_test-future-version test/test-future-version-3.lua | $bin/bang.lua |@ $test/lua/test-future-version-3.diff
   bang = $bin/bang.lua
 

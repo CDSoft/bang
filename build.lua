@@ -123,7 +123,7 @@ local tests = {
             : map(function(src)
                 local ninja = test_dir/src:basename():splitext()..".ninja"
                 local diff_res = test_dir/src:basename():splitext()..".diff"
-                local ninja_ref = src:splitext().."-"..interpreter..".ninja"
+                local ninja_ref = src:splitext()..".ninja"
                 return build(ninja) { "run_test-future-version", src,
                     bang = bang,
                     implicit_in = bang,
