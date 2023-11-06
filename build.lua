@@ -99,6 +99,21 @@ rule "run_test-future-version" {
     command = "$bang -q $in -o $out",
 }
 
+rule "run_test-error" {
+    description = "BANG $in",
+    command = "$bang -q $in -o $ninja_file 2> $out; test $$? -ne 0",
+}
+
+rule "missing" {
+    description = "TEST $missing",
+    command = "test ! -f $missing_file > $out",
+}
+
+rule "run_test-error-unknown_file" {
+    description = "BANG $in",
+    command = "$bang -q $unknown_input -o $ninja_file 2> $out; test $$? -ne 0",
+}
+
 local tests = {
     F{
         { "$bin/bang",     "$test/luax" },
@@ -109,6 +124,8 @@ local tests = {
         local interpreter = test_dir:basename()
         section("Test of the "..interpreter.." interpreter")
         return {
+
+            -- Nominal tests
             build(test_dir/"test.ninja") { "run_test", "test/test.lua",
                 bang = bang,
                 test_dir = test_dir,
@@ -119,10 +136,12 @@ local tests = {
                     build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
                 },
             },
+
+            -- ninja_required_version
             ls "test/test-future-version-*.lua"
             : map(function(src)
-                local ninja = test_dir/src:basename():splitext()..".ninja"
-                local diff_res = test_dir/src:basename():splitext()..".diff"
+                local ninja     = test_dir/src:basename():splitext()..".ninja"
+                local diff_res  = test_dir/src:basename():splitext()..".diff"
                 local ninja_ref = src:splitext()..".ninja"
                 return build(ninja) { "run_test-future-version", src,
                     bang = bang,
@@ -130,6 +149,46 @@ local tests = {
                     validations = build(diff_res) { "diff", ninja, ninja_ref },
                 }
             end),
+
+            -- errors
+            ls "test/test-err-*.lua"
+            : map(function(src)
+                local ninja         = test_dir/src:basename():splitext()..".ninja"
+                local ninja_missing = test_dir/src:basename():splitext()..".ninja-missing"
+                local diff_res      = test_dir/src:basename():splitext()..".diff"
+                local stderr        = test_dir/src:basename():splitext()..".stderr"
+                local stderr_ref    = src:splitext()..".stderr"
+                return build(stderr) { "run_test-error", src,
+                    bang = bang,
+                    implicit_in = bang,
+                    ninja_file = ninja,
+                    validations = {
+                        build(diff_res)      { "diff", stderr, stderr_ref },
+                        build(ninja_missing) { "missing", stderr, missing_file=ninja },
+                    },
+                }
+            end),
+
+            -- unknown file
+            (function()
+                local src = F"test/unknown_file.lua"
+                local ninja         = test_dir/src:basename():splitext()..".ninja"
+                local ninja_missing = test_dir/src:basename():splitext()..".ninja-missing"
+                local diff_res      = test_dir/src:basename():splitext()..".diff"
+                local stderr        = test_dir/src:basename():splitext()..".stderr"
+                local stderr_ref    = src:splitext()..".stderr"
+                return build(stderr) { "run_test-error-unknown_file",
+                    bang = bang,
+                    implicit_in = bang,
+                    ninja_file = ninja,
+                    unknown_input = src,
+                    validations = {
+                        build(diff_res)      { "diff", stderr, stderr_ref },
+                        build(ninja_missing) { "missing", stderr, missing_file=ninja },
+                    },
+                }
+            end)(),
+
         }
     end),
 }

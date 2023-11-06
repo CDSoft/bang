@@ -135,6 +135,38 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-err-bad_generator_arg-1.lua
+# test/test-err-bad_generator_arg-1.stderr
+# test/test-err-bad_generator_arg-2.lua
+# test/test-err-bad_generator_arg-2.stderr
+# test/test-err-bad_generator_arg-3.lua
+# test/test-err-bad_generator_arg-3.stderr
+# test/test-err-incomplete_build_call-2.lua
+# test/test-err-incomplete_build_call-2.stderr
+# test/test-err-incomplete_build_call.lua
+# test/test-err-incomplete_build_call.stderr
+# test/test-err-incomplete_pool_call.lua
+# test/test-err-incomplete_pool_call.stderr
+# test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_var_call.lua
+# test/test-err-incomplete_var_call.stderr
+# test/test-err-multiple_build.lua
+# test/test-err-multiple_build.stderr
+# test/test-err-multiple_generator.lua
+# test/test-err-multiple_generator.stderr
+# test/test-err-multiple_pool.lua
+# test/test-err-multiple_pool.stderr
+# test/test-err-multiple_rule.lua
+# test/test-err-multiple_rule.stderr
+# test/test-err-multiple_var.lua
+# test/test-err-multiple_var.stderr
+# test/test-err-unknown_pool_var.lua
+# test/test-err-unknown_pool_var.stderr
+# test/test-err-unknown_rule.lua
+# test/test-err-unknown_rule.stderr
+# test/test-err-unknown_rule_var.lua
+# test/test-err-unknown_rule_var.stderr
 # test/test-future-version-1.lua
 # test/test-future-version-1.ninja
 # test/test-future-version-2.lua
@@ -144,6 +176,7 @@ default foo bar
 # test/test-lua.ninja
 # test/test-luax.ninja
 # test/test.lua
+# test/unknown_file.stderr
 
 ######################################################################
 # ls test/*
@@ -152,6 +185,38 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-err-bad_generator_arg-1.lua
+# test/test-err-bad_generator_arg-1.stderr
+# test/test-err-bad_generator_arg-2.lua
+# test/test-err-bad_generator_arg-2.stderr
+# test/test-err-bad_generator_arg-3.lua
+# test/test-err-bad_generator_arg-3.stderr
+# test/test-err-incomplete_build_call-2.lua
+# test/test-err-incomplete_build_call-2.stderr
+# test/test-err-incomplete_build_call.lua
+# test/test-err-incomplete_build_call.stderr
+# test/test-err-incomplete_pool_call.lua
+# test/test-err-incomplete_pool_call.stderr
+# test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_var_call.lua
+# test/test-err-incomplete_var_call.stderr
+# test/test-err-multiple_build.lua
+# test/test-err-multiple_build.stderr
+# test/test-err-multiple_generator.lua
+# test/test-err-multiple_generator.stderr
+# test/test-err-multiple_pool.lua
+# test/test-err-multiple_pool.stderr
+# test/test-err-multiple_rule.lua
+# test/test-err-multiple_rule.stderr
+# test/test-err-multiple_var.lua
+# test/test-err-multiple_var.stderr
+# test/test-err-unknown_pool_var.lua
+# test/test-err-unknown_pool_var.stderr
+# test/test-err-unknown_rule.lua
+# test/test-err-unknown_rule.stderr
+# test/test-err-unknown_rule_var.lua
+# test/test-err-unknown_rule_var.stderr
 # test/test-future-version-1.lua
 # test/test-future-version-1.ninja
 # test/test-future-version-2.lua
@@ -161,6 +226,7 @@ default foo bar
 # test/test-lua.ninja
 # test/test-luax.ninja
 # test/test.lua
+# test/unknown_file.stderr
 
 ######################################################################
 # ls test/*.lua
@@ -168,6 +234,22 @@ default foo bar
 
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-err-bad_generator_arg-1.lua
+# test/test-err-bad_generator_arg-2.lua
+# test/test-err-bad_generator_arg-3.lua
+# test/test-err-incomplete_build_call-2.lua
+# test/test-err-incomplete_build_call.lua
+# test/test-err-incomplete_pool_call.lua
+# test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_var_call.lua
+# test/test-err-multiple_build.lua
+# test/test-err-multiple_generator.lua
+# test/test-err-multiple_pool.lua
+# test/test-err-multiple_rule.lua
+# test/test-err-multiple_var.lua
+# test/test-err-unknown_pool_var.lua
+# test/test-err-unknown_rule.lua
+# test/test-err-unknown_rule_var.lua
 # test/test-future-version-1.lua
 # test/test-future-version-2.lua
 # test/test-future-version-3.lua
@@ -188,6 +270,38 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-err-bad_generator_arg-1.lua
+# test/test-err-bad_generator_arg-1.stderr
+# test/test-err-bad_generator_arg-2.lua
+# test/test-err-bad_generator_arg-2.stderr
+# test/test-err-bad_generator_arg-3.lua
+# test/test-err-bad_generator_arg-3.stderr
+# test/test-err-incomplete_build_call-2.lua
+# test/test-err-incomplete_build_call-2.stderr
+# test/test-err-incomplete_build_call.lua
+# test/test-err-incomplete_build_call.stderr
+# test/test-err-incomplete_pool_call.lua
+# test/test-err-incomplete_pool_call.stderr
+# test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_var_call.lua
+# test/test-err-incomplete_var_call.stderr
+# test/test-err-multiple_build.lua
+# test/test-err-multiple_build.stderr
+# test/test-err-multiple_generator.lua
+# test/test-err-multiple_generator.stderr
+# test/test-err-multiple_pool.lua
+# test/test-err-multiple_pool.stderr
+# test/test-err-multiple_rule.lua
+# test/test-err-multiple_rule.stderr
+# test/test-err-multiple_var.lua
+# test/test-err-multiple_var.stderr
+# test/test-err-unknown_pool_var.lua
+# test/test-err-unknown_pool_var.stderr
+# test/test-err-unknown_rule.lua
+# test/test-err-unknown_rule.stderr
+# test/test-err-unknown_rule_var.lua
+# test/test-err-unknown_rule_var.stderr
 # test/test-future-version-1.lua
 # test/test-future-version-1.ninja
 # test/test-future-version-2.lua
@@ -197,6 +311,7 @@ default foo bar
 # test/test-lua.ninja
 # test/test-luax.ninja
 # test/test.lua
+# test/unknown_file.stderr
 
 ######################################################################
 # ls test/**.c
@@ -213,6 +328,22 @@ default foo bar
 # test/foo/sub/f4.lua
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-err-bad_generator_arg-1.lua
+# test/test-err-bad_generator_arg-2.lua
+# test/test-err-bad_generator_arg-3.lua
+# test/test-err-incomplete_build_call-2.lua
+# test/test-err-incomplete_build_call.lua
+# test/test-err-incomplete_pool_call.lua
+# test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_var_call.lua
+# test/test-err-multiple_build.lua
+# test/test-err-multiple_generator.lua
+# test/test-err-multiple_pool.lua
+# test/test-err-multiple_rule.lua
+# test/test-err-multiple_var.lua
+# test/test-err-unknown_pool_var.lua
+# test/test-err-unknown_rule.lua
+# test/test-err-unknown_rule_var.lua
 # test/test-future-version-1.lua
 # test/test-future-version-2.lua
 # test/test-future-version-3.lua
