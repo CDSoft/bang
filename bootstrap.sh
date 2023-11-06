@@ -23,9 +23,21 @@
 
 set -e
 
-LUA_PATH="src/?.lua;lib/?.lua" luax \
-    $(find lib -name "*.lua" -exec basename {} .lua \; | sort | awk '{print "-l", $1}') \
-    src/bang.lua build.lua \
-    -o build.ninja
+# set LUA search path to load modules that will later live in the bang executable
+export LUA_PATH="src/?.lua;lib/?.lua"
 
-ninja
+# Load bang libraries that would be automatically loaded by LuaX
+declare -a LOAD_LIBS=()
+declare -a LIBS=(lib/*.lua)
+for lib in "${LIBS[@]}"
+do
+    lib=${lib%.lua} # remove the .lua extension
+    lib=${lib##*/}  # remove the path name
+    LOAD_LIBS+=("-l" "$lib")
+done
+
+# Call LuaX to run bang as if it were already compiled
+luax "${LOAD_LIBS[@]}" src/bang.lua build.lua -o build.ninja
+
+# Finally run ninja on the newly created ninja file
+ninja -f build.ninja
