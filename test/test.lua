@@ -196,6 +196,30 @@ f("Line", " ", 1, "\n")
 f("Line", " ", 2, "\n")
 comment(new_file.." should be created")
 
+section "case expressions"
+
+local opt1 = case "debug" {
+    debug     = "-g",
+    fast      = "-O3",
+    otherwise = "-O2",
+}
+
+local opt2 = case "fast" {
+    debug     = "-g",
+    fast      = "-O3",
+    otherwise = "-O2",
+}
+
+local opt3 = case "" {
+    debug     = "-g",
+    fast      = "-O3",
+    otherwise = "-O2",
+}
+
+comment("opt1 = "..F.show(opt1))
+comment("opt2 = "..F.show(opt2))
+comment("opt3 = "..F.show(opt3))
+
 section "Command line arguments"
 comment("The command line arguments are: "..F.show(arg))
 

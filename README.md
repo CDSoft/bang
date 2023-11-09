@@ -269,6 +269,26 @@ acc(my_list) {"item2", "item3"}
 my_list -- contains {"item1", "item2", "item3"}
 ```
 
+### Case expressions
+
+The `case` function provides a switch-like structure to simplify conditional expressions.
+`case` is a curried function that takes a value (generally a string) and a table.
+It searches for the value in the keys of the table and returns the associated value.
+If the key is not found it returns the value associated to the `otherwise` key
+or raises an error.
+
+E.g.:
+
+``` lua
+local cflags = {
+    case(mode) {
+        debug   = "-g -Og",
+        release = "-s -O3",
+        otherwise = {},
+    }
+}
+```
+
 ### File listing
 
 The `ls` function lists files in a directory.
