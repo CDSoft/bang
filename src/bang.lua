@@ -53,12 +53,15 @@ local function parse_args()
         : args "0-1"
 
     local bang_arg, script_arg = F.break_(F.partial(F.op.eq, "--"), arg)
-    _G.arg = script_arg : drop(1)
-
-    return F.merge{
+    local args = F.merge{
         { input="build.lua", output="build.ninja" },
         parser:parse(bang_arg),
     }
+
+    _G.arg = script_arg : drop(1)
+    _G.arg[0] = args.input
+
+    return args
 end
 
 local args = parse_args()

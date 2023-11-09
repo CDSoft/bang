@@ -359,7 +359,7 @@ default foo bar
 # Command line arguments
 ######################################################################
 
-# The command line arguments are: {"arg1", "arg2", "-x=y"}
+# The command line arguments are: {"arg1", "arg2", "-x=y", [0]="test/test.lua"}
 
 ######################################################################
 # Bang arguments
