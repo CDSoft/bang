@@ -243,4 +243,4 @@ rule bang
   command = bang $quiet $in -o $out -- $args
   generator = true
 
-build build.ninja: bang build.lua
+build build.ninja: bang build.lua | ./arch/linux/config.lua ./arch/macos/config.lua ./arch/windows/config.lua

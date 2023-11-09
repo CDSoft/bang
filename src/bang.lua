@@ -66,6 +66,7 @@ end
 
 local args = parse_args()
 log.config(args)
+package.path = package.path..";"..args.input:dirname().."/?.lua"
 local ninja_file = ninja(args)
 log.info("write ", args.output)
 fs.write(args.output, ninja_file)

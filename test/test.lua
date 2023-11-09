@@ -25,6 +25,8 @@ Section comments can have multiple lines.
 
 ninja_required_version "1.10" -- lower than the version required by bang => should have no impact
 
+require "test-module" -- this shall appear in the generator inputs
+
 generator {
     implicit_in = {
         "foo",

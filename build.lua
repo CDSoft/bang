@@ -52,11 +52,12 @@ section "Compilation"
 local sources = {
     ls "src/*.lua",
     ls "lib/*.lua",
-    build "$builddir/version" {
-        description = "GIT version",
-        command = "echo -n `git describe --tags` > $out",
-        implicit_in = ".git/refs/tags .git/index",
-    },
+}
+
+local version = build "$builddir/version" {
+    description = "GIT version",
+    command = "echo -n `git describe --tags` > $out",
+    implicit_in = ".git/refs/tags .git/index",
 }
 
 rule "luax" {
@@ -65,8 +66,8 @@ rule "luax" {
 }
 
 local binaries = {
-    build "$bin/bang"     { "luax", sources },
-    build "$bin/bang.lua" { "luax", sources, arg="-t lua" },
+    build "$bin/bang"     { "luax", sources, version },
+    build "$bin/bang.lua" { "luax", sources, version, arg="-t lua" },
 }
 
 phony "compile" { binaries }
@@ -74,6 +75,10 @@ default "compile"
 help "compile" "compile $name"
 
 install "bin" { binaries }
+
+generator {
+    implicit_in = sources,
+}
 
 ---------------------------------------------------------------------
 -- Tests

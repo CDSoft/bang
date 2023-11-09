@@ -338,6 +338,11 @@ local function generator_rule(args)
         generator = true,
     }
 
+    local deps = F.values(package.modpath) ---@diagnostic disable-line: undefined-field
+    if not deps:null() then
+        generator_flag.implicit_in = F.flatten { generator_flag.implicit_in or {}, deps } : nub()
+    end
+
     build(args.output) (F.merge{
         { bang, args.input,
             quiet = args.quiet and "-q" or nil,

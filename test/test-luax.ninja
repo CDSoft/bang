@@ -7,6 +7,8 @@ ninja_required_version = 1.11.1
 # Section comments can have multiple lines.
 ######################################################################
 
+# This comment comes from test-module.lua
+
 ######################################################################
 # Atomic variables
 ######################################################################
@@ -175,6 +177,7 @@ default foo bar
 # test/test-future-version-3.ninja
 # test/test-lua.ninja
 # test/test-luax.ninja
+# test/test-module.lua
 # test/test.lua
 # test/unknown_file.stderr
 
@@ -225,6 +228,7 @@ default foo bar
 # test/test-future-version-3.ninja
 # test/test-lua.ninja
 # test/test-luax.ninja
+# test/test-module.lua
 # test/test.lua
 # test/unknown_file.stderr
 
@@ -253,6 +257,7 @@ default foo bar
 # test/test-future-version-1.lua
 # test/test-future-version-2.lua
 # test/test-future-version-3.lua
+# test/test-module.lua
 # test/test.lua
 
 ######################################################################
@@ -310,6 +315,7 @@ default foo bar
 # test/test-future-version-3.ninja
 # test/test-lua.ninja
 # test/test-luax.ninja
+# test/test-module.lua
 # test/test.lua
 # test/unknown_file.stderr
 
@@ -347,6 +353,7 @@ default foo bar
 # test/test-future-version-1.lua
 # test/test-future-version-2.lua
 # test/test-future-version-3.lua
+# test/test-module.lua
 # test/test.lua
 
 ######################################################################
@@ -439,7 +446,7 @@ rule bang
   command = bang $quiet $in -o $out -- $args
   generator = true
 
-build .build/test/luax/test.ninja: bang test/test.lua | foo bar
+build .build/test/luax/test.ninja: bang test/test.lua | foo bar test/test-module.lua
   another_variable = abc def
   args = arg1 arg2 -x=y
   quiet = -q
