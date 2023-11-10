@@ -446,10 +446,8 @@ build help: help
 ######################################################################
 
 rule bang
-  command = bang $quiet $in -o $out -- $args
+  command = bang -q $in -o $out -- arg1 arg2 -x=y
   generator = true
 
 build .build/test/luax/test.ninja: bang test/test.lua | foo bar test/test-module.lua
   another_variable = abc def
-  args = arg1 arg2 -x=y
-  quiet = -q

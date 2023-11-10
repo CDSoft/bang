@@ -334,7 +334,12 @@ local function generator_rule(args)
     section(("Regenerate %s when %s changes"):format(args.output, args.input))
 
     local bang = rule(unique_rule_name "bang") {
-        command = "bang $quiet $in -o $out -- $args",
+        command = {
+            "bang",
+            args.quiet and "-q" or {},
+            "$in -o $out",
+            #_G.arg > 0 and {"--", _G.arg} or {},
+        },
         generator = true,
     }
 
@@ -344,10 +349,7 @@ local function generator_rule(args)
     end
 
     build(args.output) (F.merge{
-        { bang, args.input,
-            quiet = args.quiet and "-q" or nil,
-            args = #_G.arg > 0 and _G.arg or nil,
-        },
+        { bang, args.input },
         generator_flag,
     })
 end
