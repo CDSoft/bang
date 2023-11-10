@@ -22,10 +22,7 @@ local F = require "F"
 
 local function case(x)
     return function(t)
-        local y = t[x]
-        if y == nil then y = t.otherwise end
-        if y == nil then F.error_without_stack_trace(x..": unknown value", 2) end
-        return y
+        return F.default(t.otherwise, t[x])
     end
 end
 

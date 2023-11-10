@@ -222,6 +222,27 @@ comment("opt1 = "..F.show(opt1))
 comment("opt2 = "..F.show(opt2))
 comment("opt3 = "..F.show(opt3))
 
+local opt4 = case "debug" {
+    debug     = "-g",
+    fast      = "-O3",
+}
+
+local opt5 = case "fast" {
+    debug     = "-g",
+    fast      = "-O3",
+}
+
+local opt6 = case "" {
+    debug     = "-g",
+    fast      = "-O3",
+}
+
+comment("opt4 = "..F.show(opt4))
+comment("opt5 = "..F.show(opt5))
+comment("opt6 = "..F.show(opt6))
+
+
+
 section "Command line arguments"
 comment("The command line arguments are: "..F.show(arg))
 

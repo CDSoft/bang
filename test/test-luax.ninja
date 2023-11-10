@@ -369,6 +369,9 @@ default foo bar
 # opt1 = "-g"
 # opt2 = "-O3"
 # opt3 = "-O2"
+# opt4 = "-g"
+# opt5 = "-O3"
+# opt6 = nil
 
 ######################################################################
 # Command line arguments
