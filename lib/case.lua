@@ -20,10 +20,4 @@
 
 local F = require "F"
 
-local function case(x)
-    return function(t)
-        return F.default(t.otherwise, t[x])
-    end
-end
-
-return case
+return F.case
