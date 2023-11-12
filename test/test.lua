@@ -201,21 +201,21 @@ comment(new_file.." should be created")
 section "case expressions"
 
 local opt1 = case "debug" {
-    debug     = "-g",
-    fast      = "-O3",
-    otherwise = "-O2",
+    debug   = "-g",
+    fast    = "-O3",
+    [F.Nil] = "-O2",
 }
 
 local opt2 = case "fast" {
-    debug     = "-g",
-    fast      = "-O3",
-    otherwise = "-O2",
+    debug   = "-g",
+    fast    = "-O3",
+    [F.Nil] = "-O2",
 }
 
 local opt3 = case "" {
-    debug     = "-g",
-    fast      = "-O3",
-    otherwise = "-O2",
+    debug   = "-g",
+    fast    = "-O3",
+    [F.Nil] = "-O2",
 }
 
 comment("opt1 = "..F.show(opt1))
@@ -240,8 +240,6 @@ local opt6 = case "" {
 comment("opt4 = "..F.show(opt4))
 comment("opt5 = "..F.show(opt5))
 comment("opt6 = "..F.show(opt6))
-
-
 
 section "Command line arguments"
 comment("The command line arguments are: "..F.show(arg))
