@@ -37,6 +37,17 @@ In this case `$PREFIX/bin/bang.lua` can be executed with any standard Lua 5.4 in
 **Warning**: `bang.lua` is insanely slower than `bang`,
 especially when dealing with a large amount of source files.
 
+## Precompiled binaries
+
+In case precompiled binaries are needed (GNU/Linux, MacOS, Windows),
+some can be found at [cdelord.fr/hey](http://cdelord.fr/hey).
+These archives contain bang as well as some other softwares more or less related to LuaX.
+
+**Warning**: There are Linux binaries linked with musl and glibc. The musl
+binaries are platform independent but can not load shared libraries. The glibc
+binaries can load shared libraries but may depend on some specific glibc
+versions on the host.
+
 Usage
 =====
 
