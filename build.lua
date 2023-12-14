@@ -104,6 +104,11 @@ rule "run_test-future-version" {
     command = "$bang -q $in -o $out",
 }
 
+rule "run_test-default" {
+    description = "BANG $in",
+    command = "$bang -q $in -o $out",
+}
+
 rule "run_test-error" {
     description = "BANG $in",
     command = "$bang -q $in -o $ninja_file 2> $out; test $$? -ne 0",
@@ -149,6 +154,19 @@ local tests = {
                 local diff_res  = test_dir/src:basename():splitext()..".diff"
                 local ninja_ref = src:splitext()..".ninja"
                 return build(ninja) { "run_test-future-version", src,
+                    bang = bang,
+                    implicit_in = bang,
+                    validations = build(diff_res) { "diff", ninja, ninja_ref },
+                }
+            end),
+
+            -- default targets
+            ls "test/test-default-*.lua"
+            : map(function(src)
+                local ninja     = test_dir/src:basename():splitext()..".ninja"
+                local diff_res  = test_dir/src:basename():splitext()..".diff"
+                local ninja_ref = src:splitext().."-"..interpreter..".ninja"
+                return build(ninja) { "run_test-default", src,
                     bang = bang,
                     implicit_in = bang,
                     validations = build(diff_res) { "diff", ninja, ninja_ref },

@@ -237,6 +237,9 @@ default "target1"
 default {"target2", "target3"}
 ```
 
+Note: if no custom target is defined and if there are help, install or clean targets,
+bang will generate an explicit default target with all targets, except from help, install and clean targets.
+
 ### Phony targets
 
 `phony` is a shortcut to `build` that uses the `phony` rule:

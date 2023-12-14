@@ -38,6 +38,10 @@ function clean.mrproper(dir)
     directories_to_clean_more[#directories_to_clean_more+1] = dir
 end
 
+function mt.__index:default_target_needed()
+    return #directories_to_clean > 0 or #directories_to_clean_more > 0
+end
+
 function mt.__index:gen()
 
     if #directories_to_clean > 0 then
@@ -48,12 +52,16 @@ function mt.__index:gen()
 
         local targets = directories_to_clean : map(function(dir)
             return build("clean-"..ident(dir)) {
+                ["$no_default"] = true,
                 description = {"CLEAN ", dir},
                 command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
             }
         end)
 
-        phony "clean" (targets)
+        phony "clean" {
+            ["$no_default"] = true,
+            targets,
+        }
 
     end
 
@@ -65,12 +73,14 @@ function mt.__index:gen()
 
         local targets = directories_to_clean_more : map(function(dir)
             return build("mrproper-"..ident(dir)) {
+                ["$no_default"] = true,
                 description = {"CLEAN ", dir},
                 command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
             }
         end)
 
         phony "mrproper" {
+            ["$no_default"] = true,
             #directories_to_clean > 0 and "clean" or {},
             targets,
         }

@@ -16,30 +16,28 @@ rule "clangtidy" {
     command = "clang-tidy --quiet --warnings-as-errors=* $in > $out 2>/dev/null",
 }
 
-default {
-    build("$builddir/stress") { "ld",
+build("$builddir/stress") { "ld",
 
-        build("$builddir/main.o") { "cc", root/"main.c",
-            validations = {
-                build("$builddir/main.ok") { "clangtidy", root/"main.c" },
-            }
-        },
+    build("$builddir/main.o") { "cc", root/"main.c",
+        validations = {
+            build("$builddir/main.ok") { "clangtidy", root/"main.c" },
+        }
+    },
 
-        ls(root/"*")
-        : filter(function(lib) return fs.is_dir(lib) end)
-        : map(function(lib)
-            return build("$builddir"/lib..".a") { "ar",
-                ls (lib/"**.c")
-                : map(function(src)
-                    local obj = "$builddir"/src:splitext()..".o"
-                    return build(obj) { "cc", src,
-                        validations = {
-                            build(obj:splitext()..".ok") { "clangtidy", src },
-                        }
+    ls(root/"*")
+    : filter(function(lib) return fs.is_dir(lib) end)
+    : map(function(lib)
+        return build("$builddir"/lib..".a") { "ar",
+            ls (lib/"**.c")
+            : map(function(src)
+                local obj = "$builddir"/src:splitext()..".o"
+                return build(obj) { "cc", src,
+                    validations = {
+                        build(obj:splitext()..".ok") { "clangtidy", src },
                     }
-                end)
-            }
-        end),
+                }
+            end)
+        }
+    end),
 
-    }
 }

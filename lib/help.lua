@@ -54,10 +54,16 @@ function mt.__call(_, ...)
     return help.target(...)
 end
 
+local function help_defined()
+    return not description:null() or not epilog:null() or not targets:null()
+end
+
+function mt.__index:default_target_needed()
+    return help_defined()
+end
+
 function mt.__index:gen()
-    if description:null() and epilog:null() and targets:null() then
-        return
-    end
+    if not help_defined() then return end
 
     if not targets:null() then
         table.insert(targets, 1, {name="help", txt="show this help message"})
@@ -71,6 +77,7 @@ function mt.__index:gen()
     section "Help"
 
     build "help" {
+        ["$no_default"] = true,
         description = "help",
         command = F{
             description:null() and {} or description:unlines(),

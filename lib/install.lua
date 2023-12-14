@@ -38,6 +38,10 @@ function mt.__call(_, name)
     end
 end
 
+function mt.__index:default_target_needed()
+    return not targets:null()
+end
+
 function mt.__index:gen()
     if targets:null() then
         return
@@ -56,12 +60,16 @@ function mt.__index:gen()
         local target_name = target_group[1].name
         local rule_name = "install-"..ident(target_name)
         return build(rule_name) { target_group:map(function(target) return target.sources end),
+            ["$no_default"] = true,
             description = "INSTALL $in to "..target_name,
             command = { "install -v -D -t", "$${PREFIX:-$prefix}"/target_name, "$in" },
         }
     end)
 
-    phony "install" {rule_names}
+    phony "install" {
+        ["$no_default"] = true,
+        rule_names,
+    }
 
 end
 

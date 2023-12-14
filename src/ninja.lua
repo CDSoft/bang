@@ -205,6 +205,9 @@ end
 
 local builds = {}
 
+local default_build_statements = {}
+local custom_default_statement = false
+
 local nbbuilds = 0
 
 function build(outputs)
@@ -214,7 +217,8 @@ function build(outputs)
     end, "build "..outputs..": incomplete definition")
     return function(inputs)
         -- variables defined in the current build statement
-        local build_opt = F.filterk(function(k, _) return type(k) == "string" end, inputs)
+        local build_opt = F.filterk(function(k, _) return type(k) == "string" and not k:has_prefix"$" end, inputs)
+        local no_default = inputs["$no_default"]
 
         if build_opt.command then
             -- the build statement contains its own rule
@@ -266,6 +270,9 @@ function build(outputs)
             end
             builds[output] = true
         end)
+        if not no_default then
+            default_build_statements[#default_build_statements+1] = output_list
+        end
         return #output_list ~= 1 and output_list or output_list[1]
     end
 end
@@ -297,14 +304,28 @@ function pool(name)
 end
 
 function default(targets)
+    custom_default_statement = true
     nl()
     emit { "default ", stringify(targets), "\n" }
     nl()
 end
 
+atexit(function()
+    if custom_default_statement then return end
+    if require"clean".default_target_needed()
+    or require"help".default_target_needed()
+    or require"install".default_target_needed()
+    then
+        section "Default targets"
+        default(default_build_statements)
+    end
+end)
+
 function phony(outputs)
     return function(inputs)
-        return build(outputs) {"phony", inputs}
+        return build(outputs) {"phony", inputs,
+            ["$no_default"] = inputs["$no_default"],
+        }
     end
 end
 
@@ -349,6 +370,7 @@ local function generator_rule(args)
     end
 
     build(args.output) (F.merge{
+        { ["$no_default"] = true },
         { bang, args.input },
         generator_flag,
     })
