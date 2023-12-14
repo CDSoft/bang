@@ -73,13 +73,15 @@ local function stringify(value)
     : unwords()
 end
 
+local predicates_to_check_at_exit = F{}
+
 local function check_at_exit(predicate, error_message)
     local loc = where()
-    atexit(function()
+    predicates_to_check_at_exit[#predicates_to_check_at_exit+1] = function()
         if not predicate() then
             log.error_at(loc, error_message)
         end
-    end)
+    end
 end
 
 local nbvars = 0
@@ -310,7 +312,7 @@ function default(targets)
     nl()
 end
 
-atexit(function()
+local function generate_default()
     if custom_default_statement then return end
     if require"clean".default_target_needed()
     or require"help".default_target_needed()
@@ -319,7 +321,7 @@ atexit(function()
         section "Default targets"
         default(default_build_statements)
     end
-end)
+end
 
 function phony(outputs)
     return function(inputs)
@@ -383,11 +385,13 @@ return function(args)
     end
     _G.bang = F.clone(args)
     assert(loadfile(args.input, "t"))()
+    atexit.run()
     install:gen()
     clean:gen()
     help:gen() -- help shall be generated after clean and install
     generator_rule(args)
-    atexit.run()
+    generate_default()
+    predicates_to_check_at_exit:foreach(F.call)
     local ninja = tokens
         : flatten()
         : str()

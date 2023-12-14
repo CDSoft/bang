@@ -69,4 +69,5 @@ log.config(args)
 package.path = package.path..";"..args.input:dirname().."/?.lua"
 local ninja_file = ninja(args)
 log.info("write ", args.output)
+require "file" : flush()
 fs.write(args.output, ninja_file)

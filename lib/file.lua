@@ -18,7 +18,6 @@
 
 --@LOAD
 
-local atexit = require "atexit"
 local fs = require "fs"
 local F = require "F"
 
@@ -45,10 +44,17 @@ function file_mt.__index:close()
     fs.write(self.name, new_content)
 end
 
+local flush_functions = F{}
+
 local function file(name)
     local f = setmetatable({name=name, chunks=F{}}, file_mt)
-    atexit(function() f:close() end)
+    flush_functions[#flush_functions+1] = function() f:close() end
     return f
 end
 
-return file
+return setmetatable({}, {
+    __call = function(_, name) return file(name) end,
+    __index = {
+        flush = function() flush_functions:foreach(F.call) end,
+    },
+})
