@@ -483,9 +483,9 @@ by the `clean` and `install` functions.
 Bang generates a generator rule to update the Ninja file when the build description changes.
 This behaviour can be customized or disabled with the `generator` function:
 
-- `generator(true)`{.lua}: bang adds a generator rule at the end of the ninja file (default behaviour)
-- `generator(false)`{.lua}: bang does not add a generator rule
-- `generator(t)`{.lua}: if `t` is a table, bang adds a generator rule with the additional variables defined in `t`
+- `generator(true)`: bang adds a generator rule at the end of the ninja file (default behaviour)
+- `generator(false)`: bang does not add a generator rule
+- `generator(t)`: if `t` is a table, bang adds a generator rule with the additional variables defined in `t`
 
 The generator rule runs bang with the same options than the initial bang command.
 
