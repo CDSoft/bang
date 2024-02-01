@@ -90,6 +90,10 @@ rule run_test-error-unknown_file
   command = $bang -q $unknown_input -o $ninja_file 2> $out; test $$? -ne 0
 
 ######################################################################
+# Functional tests
+######################################################################
+
+######################################################################
 # Test of the luax interpreter
 ######################################################################
 
@@ -350,11 +354,6 @@ build $test/lua/unknown_file.stderr: run_test-error-unknown_file | $bin/bang.lua
   bang = $bin/bang.lua
   ninja_file = $test/lua/unknown_file.ninja
   unknown_input = test/unknown_file.lua
-
-######################################################################
-# Functional tests
-######################################################################
-
 build test: phony $test/luax/test.ninja $test/luax/test-future-version-1.ninja $test/luax/test-future-version-2.ninja $test/luax/test-future-version-3.ninja $test/luax/test-default-1.ninja $test/luax/test-default-2.ninja $test/luax/test-default-3.ninja $test/luax/test-err-bad_generator_arg-1.stderr $test/luax/test-err-bad_generator_arg-2.stderr $test/luax/test-err-bad_generator_arg-3.stderr $test/luax/test-err-incomplete_build_call-2.stderr $test/luax/test-err-incomplete_build_call.stderr $test/luax/test-err-incomplete_pool_call.stderr $test/luax/test-err-incomplete_rule_call.stderr $test/luax/test-err-incomplete_var_call.stderr $test/luax/test-err-multiple_build.stderr $test/luax/test-err-multiple_generator.stderr $test/luax/test-err-multiple_pool.stderr $test/luax/test-err-multiple_rule.stderr $test/luax/test-err-multiple_var.stderr $test/luax/test-err-unknown_pool_var.stderr $test/luax/test-err-unknown_rule.stderr $test/luax/test-err-unknown_rule_var.stderr $test/luax/unknown_file.stderr $test/lua/test.ninja $test/lua/test-future-version-1.ninja $test/lua/test-future-version-2.ninja $test/lua/test-future-version-3.ninja $test/lua/test-default-1.ninja $test/lua/test-default-2.ninja $test/lua/test-default-3.ninja $test/lua/test-err-bad_generator_arg-1.stderr $test/lua/test-err-bad_generator_arg-2.stderr $test/lua/test-err-bad_generator_arg-3.stderr $test/lua/test-err-incomplete_build_call-2.stderr $test/lua/test-err-incomplete_build_call.stderr $test/lua/test-err-incomplete_pool_call.stderr $test/lua/test-err-incomplete_rule_call.stderr $test/lua/test-err-incomplete_var_call.stderr $test/lua/test-err-multiple_build.stderr $test/lua/test-err-multiple_generator.stderr $test/lua/test-err-multiple_pool.stderr $test/lua/test-err-multiple_rule.stderr $test/lua/test-err-multiple_var.stderr $test/lua/test-err-unknown_pool_var.stderr $test/lua/test-err-unknown_rule.stderr $test/lua/test-err-unknown_rule_var.stderr $test/lua/unknown_file.stderr
 
 ######################################################################

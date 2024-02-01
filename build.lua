@@ -124,7 +124,10 @@ rule "run_test-error-unknown_file" {
     command = "$bang -q $unknown_input -o $ninja_file 2> $out; test $$? -ne 0",
 }
 
-local tests = {
+section "Functional tests"
+
+phony "test" {
+
     F{
         { "$bin/bang",     "$test/luax" },
         { "$bin/bang.lua", "$test/lua"  },
@@ -193,8 +196,8 @@ local tests = {
             end),
 
             -- unknown file
-            (function()
-                local src = F"test/unknown_file.lua"
+            F{ "test/unknown_file.lua" }
+            : map(function(src)
                 local ninja         = test_dir/src:basename():splitext()..".ninja"
                 local ninja_missing = test_dir/src:basename():splitext()..".ninja-missing"
                 local diff_res      = test_dir/src:basename():splitext()..".diff"
@@ -210,15 +213,12 @@ local tests = {
                         build(ninja_missing) { "missing", stderr, missing_file=ninja },
                     },
                 }
-            end)(),
+            end),
 
         }
     end),
+
 }
-
-section "Functional tests"
-
-phony "test" { tests }
 
 section "Stress tests"
 
