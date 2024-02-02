@@ -110,6 +110,7 @@ pool link_pool
   depth = 4
 
 rule link
+  command = true
   pool = link_pool
 
 build link1: link
@@ -162,6 +163,10 @@ default foo bar
 # test/test-err-incomplete_pool_call.stderr
 # test/test-err-incomplete_rule_call.lua
 # test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_rule_definition-1.lua
+# test/test-err-incomplete_rule_definition-1.stderr
+# test/test-err-incomplete_rule_definition-2.lua
+# test/test-err-incomplete_rule_definition-2.stderr
 # test/test-err-incomplete_var_call.lua
 # test/test-err-incomplete_var_call.stderr
 # test/test-err-multiple_build.lua
@@ -224,6 +229,10 @@ default foo bar
 # test/test-err-incomplete_pool_call.stderr
 # test/test-err-incomplete_rule_call.lua
 # test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_rule_definition-1.lua
+# test/test-err-incomplete_rule_definition-1.stderr
+# test/test-err-incomplete_rule_definition-2.lua
+# test/test-err-incomplete_rule_definition-2.stderr
 # test/test-err-incomplete_var_call.lua
 # test/test-err-incomplete_var_call.stderr
 # test/test-err-multiple_build.lua
@@ -270,6 +279,8 @@ default foo bar
 # test/test-err-incomplete_build_call.lua
 # test/test-err-incomplete_pool_call.lua
 # test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_rule_definition-1.lua
+# test/test-err-incomplete_rule_definition-2.lua
 # test/test-err-incomplete_var_call.lua
 # test/test-err-multiple_build.lua
 # test/test-err-multiple_generator.lua
@@ -325,6 +336,10 @@ default foo bar
 # test/test-err-incomplete_pool_call.stderr
 # test/test-err-incomplete_rule_call.lua
 # test/test-err-incomplete_rule_call.stderr
+# test/test-err-incomplete_rule_definition-1.lua
+# test/test-err-incomplete_rule_definition-1.stderr
+# test/test-err-incomplete_rule_definition-2.lua
+# test/test-err-incomplete_rule_definition-2.stderr
 # test/test-err-incomplete_var_call.lua
 # test/test-err-incomplete_var_call.stderr
 # test/test-err-multiple_build.lua
@@ -380,6 +395,8 @@ default foo bar
 # test/test-err-incomplete_build_call.lua
 # test/test-err-incomplete_pool_call.lua
 # test/test-err-incomplete_rule_call.lua
+# test/test-err-incomplete_rule_definition-1.lua
+# test/test-err-incomplete_rule_definition-2.lua
 # test/test-err-incomplete_var_call.lua
 # test/test-err-multiple_build.lua
 # test/test-err-multiple_generator.lua

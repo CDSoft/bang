@@ -154,6 +154,7 @@ section "Pools"
 
 rule "link" {
     pool = pool "link_pool" { depth=4 },
+    command = true,
 }
 
 build "link1" { "link" }

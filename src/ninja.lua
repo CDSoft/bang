@@ -162,6 +162,9 @@ function rule(name)
         if rules[name] then
             log.error("rule "..name..": multiple definition")
         end
+        if opt.command == nil then
+            log.error("rule "..name..": expected 'command' attribute")
+        end
 
         new_rule(name)
         nbrules = nbrules + 1

@@ -1,6 +1,6 @@
 generator(false)
 
-rule "foo" {}
-rule "bar" {}
-rule "baz" {}
-rule "foo" {} -- [test/test-err-multiple_rule.lua:6] ERROR: rule foo: multiple definition
+rule "foo" { command = true }
+rule "bar" { command = true }
+rule "baz" { command = true }
+rule "foo" { command = true } -- [test/test-err-multiple_rule.lua:6] ERROR: rule foo: multiple definition

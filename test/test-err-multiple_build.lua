@@ -1,6 +1,6 @@
 generator(false)
 
-rule "foo" {}
+rule "foo" { command = true }
 
 build "bar" { "foo" }
 build "baz" { "foo" }
