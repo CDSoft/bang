@@ -65,9 +65,22 @@ rule "luax" {
     command = "luax $arg -q -o $out $in",
 }
 
+rule "luaxc" {
+    description = "LUAXC $out",
+    command = "luaxc -b master $arg -o $out $in",
+    pool = pool "luaxc" { depth = 1 },
+}
+
 local binaries = {
     build "$bin/bang"     { "luax", sources, version },
     build "$bin/bang.lua" { "luax", sources, version, arg="-t lua" },
+}
+
+phony "cross-compile" {
+    F(require "sys".targets):map(function(target)
+        local ext = target.zig_os=="windows" and ".exe" or ""
+        return build("$bin/bang-"..target.name..ext) { "luaxc", sources, version, arg={"-t", target.name} }
+    end)
 }
 
 phony "compile" { binaries }
