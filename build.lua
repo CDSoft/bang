@@ -49,15 +49,26 @@ clean "$builddir"
 
 section "Compilation"
 
+local targets = F(require "sys".targets):map(F.partial(F.nth, "name"))
+local target, ext = nil, ""
+F(arg) : foreach(function(a)
+    if targets:elem(a) then
+        if target then F.error_without_stack_trace("multiple target definition", 2) end
+        target = a
+        if target:match"windows" then ext = ".exe" end
+    else
+        F.error_without_stack_trace(a..": unknown argument")
+    end
+end)
+
 local sources = {
     ls "src/*.lua",
     ls "lib/*.lua",
-}
-
-local version = build "$builddir/version" {
-    description = "GIT version",
-    command = "echo -n `git describe --tags` > $out",
-    implicit_in = ".git/refs/tags .git/index",
+    build "$builddir/version" {
+        description = "GIT version",
+        command = "echo -n `git describe --tags` > $out",
+        implicit_in = ".git/refs/tags",
+    },
 }
 
 rule "luax" {
@@ -72,20 +83,17 @@ rule "luaxc" {
 }
 
 local binaries = {
-    build "$bin/bang"     { "luax", sources, version },
-    build "$bin/bang.lua" { "luax", sources, version, arg="-t lua" },
-}
-
-phony "cross-compile" {
-    F(require "sys".targets):map(function(target)
-        local ext = target.zig_os=="windows" and ".exe" or ""
-        return build("$bin/bang-"..target.name..ext) { "luaxc", sources, version, arg={"-t", target.name} }
-    end)
+    build("$bin/bang"..ext) {
+        target and "luaxc" or "luax",
+        sources,
+        arg = target and {"-t", target},
+    },
+    build "$bin/bang.lua" { "luax", sources, arg="-t lua" },
 }
 
 phony "compile" { binaries }
 default "compile"
-help "compile" "compile $name"
+help "compile" ("compile $name"..(target and " for "..target or ""))
 
 install "bin" { binaries }
 
@@ -96,6 +104,8 @@ generator {
 ---------------------------------------------------------------------
 -- Tests
 ---------------------------------------------------------------------
+
+if not target then
 
 section "Tests"
 
@@ -260,3 +270,5 @@ phony "stress" {
 
 default "test"
 help "test" "test $name"
+
+end
