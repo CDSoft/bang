@@ -47,7 +47,11 @@ build mrproper: phony clean mrproper-_builddir
 
 rule help
   description = help
-  command = echo "Targets:"; echo "  help       show this help message"; echo "  all        Build all"; echo "  clean      clean generated files"; echo "  mrproper   clean generated files and more";
+  command = echo "Targets:"; $
+            echo "  help       show this help message"; $
+            echo "  all        Build all"; $
+            echo "  clean      clean generated files"; $
+            echo "  mrproper   clean generated files and more"
 
 build help: help
 

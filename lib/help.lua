@@ -95,7 +95,8 @@ function mt.__index:gen()
           : trim()
           : gsub("\n\n+", "\n\n")   -- remove duplicate blank lines
           : lines()
-          : map(function(line) return ("echo %q;"):format(line) end)
+          : map(function(line) return ("echo %q"):format(line) end)
+          : str "; $\n            "
     }
 
 end

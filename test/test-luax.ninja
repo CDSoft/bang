@@ -493,7 +493,18 @@ build clean: phony clean-_builddir clean-_builddir_foo clean-foo_bar
 
 rule help
   description = help
-  command = echo "A short description of the Ninja file for building Bang test"; echo ""; echo "Targets:"; echo "  help                         show this help message"; echo "  target1                      description of target1"; echo "  target2                      description of target2"; echo "  target3-with-a-longer-name   description of target3"; echo "  target4                      description of target4"; echo "  install                      install Bang test in PREFIX or ~/.local/pub/bang_test"; echo "  clean                        clean generated files"; echo ""; echo "More information at https://cdelord.fr/bang";
+  command = echo "A short description of the Ninja file for building Bang test"; $
+            echo ""; $
+            echo "Targets:"; $
+            echo "  help                         show this help message"; $
+            echo "  target1                      description of target1"; $
+            echo "  target2                      description of target2"; $
+            echo "  target3-with-a-longer-name   description of target3"; $
+            echo "  target4                      description of target4"; $
+            echo "  install                      install Bang test in PREFIX or ~/.local/pub/bang_test"; $
+            echo "  clean                        clean generated files"; $
+            echo ""; $
+            echo "More information at https://cdelord.fr/bang"
 
 build help: help
 
