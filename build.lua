@@ -78,7 +78,7 @@ rule "luax" {
 
 rule "luaxc" {
     description = "LUAXC $out",
-    command = "luaxc -b master $arg -o $out $in",
+    command = "luaxc $arg -o $out $in",
     pool = pool "luaxc" { depth = 1 },
 }
 
