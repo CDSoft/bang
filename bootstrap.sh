@@ -40,4 +40,4 @@ done
 luax "${LOAD_LIBS[@]}" src/bang.lua build.lua -o build.ninja
 
 # Finally run ninja on the newly created ninja file
-ninja -f build.ninja
+ninja -f build.ninja "$@"
