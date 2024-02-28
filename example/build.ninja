@@ -240,7 +240,7 @@ build doc/graph.svg: svgtidy.svg $builddir/pipe/doc/graph-pipe-2.svg
 ######################################################################
 
 rule bang
-  command = bang $in -o $out
+  command = ../.build/bin/bang $in -o $out
   generator = true
 
 build build.ninja: bang build.lua | ./arch/linux/config.lua ./arch/macos/config.lua ./arch/windows/config.lua

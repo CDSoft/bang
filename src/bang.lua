@@ -43,6 +43,11 @@ local function parse_args()
         : description "Quiet mode (no output on stdout)"
         : target "quiet"
 
+    parser : option "-g"
+        : description "Set a custom command for the generator rule"
+        : argname "cmd"
+        : target "gen_cmd"
+
     parser : option "-o"
         : description "Output file (default: build.ninja)"
         : argname "output"
@@ -54,6 +59,7 @@ local function parse_args()
 
     local bang_arg, script_arg = F.break_(F.partial(F.op.eq, "--"), arg)
     local args = F.merge{
+        { cli_args = arg },
         { input="build.lua", output="build.ninja" },
         parser:parse(bang_arg),
     }

@@ -359,9 +359,14 @@ local function generator_rule(args)
 
     section(("Regenerate %s when %s changes"):format(args.output, args.input))
 
+    local bang_cmd= args.gen_cmd or
+        F.filterk(function(k)
+            return math.type(k) == "integer" and k <= 0
+        end, args.cli_args) : values() : unwords()
+
     local bang = rule(unique_rule_name "bang") {
         command = {
-            "bang",
+            bang_cmd,
             args.quiet and "-q" or {},
             "$in -o $out",
             #_G.arg > 0 and {"--", _G.arg} or {},

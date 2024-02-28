@@ -440,6 +440,10 @@ default foo bar
 ######################################################################
 
 # bang = {
+#     cli_args = {"-g", ".build/bin/bang", "-q", "test/test.lua", "-o", ".build/test/luax/test.ninja", "--", "arg1", "arg2", "-x=y",
+#         [0] = ".build/bin/bang",
+#     },
+#     gen_cmd = ".build/bin/bang",
 #     input = "test/test.lua",
 #     output = ".build/test/luax/test.ninja",
 #     quiet = true,
@@ -513,7 +517,7 @@ build help: help
 ######################################################################
 
 rule bang
-  command = bang -q $in -o $out -- arg1 arg2 -x=y
+  command = .build/bin/bang -q $in -o $out -- arg1 arg2 -x=y
   generator = true
 
 build .build/test/luax/test.ninja: bang test/test.lua | foo bar test/test-module.lua

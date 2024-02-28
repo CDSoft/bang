@@ -60,7 +60,7 @@ build help: help
 ######################################################################
 
 rule bang
-  command = bang -q $in -o $out
+  command = .build/bin/bang.lua -q $in -o $out
   generator = true
 
 build .build/test/lua/test-default-2.ninja: bang test/test-default-2.lua

@@ -53,7 +53,7 @@ Usage
 
 ```
 $ bang -h
-Usage: bang [-h] [-v] [-q] [-o output] [<input>]
+Usage: bang [-h] [-v] [-q] [-g cmd] [-o output] [<input>]
 
 Ninja file generator
 
@@ -66,6 +66,7 @@ Options:
    -h, --help            Show this help message and exit.
    -v                    Print Bang version
    -q                    Quiet mode (no output on stdout)
+   -g cmd                Set a custom command for the generator rule
    -o output             Output file (default: build.ninja)
 
 For more information, see https://github.com/CDSoft/bang

@@ -37,7 +37,4 @@ do
 done
 
 # Call LuaX to run bang as if it were already compiled
-luax "${LOAD_LIBS[@]}" src/bang.lua build.lua -o build.ninja
-
-# Finally run ninja on the newly created ninja file
-ninja -f build.ninja "$@"
+luax "${LOAD_LIBS[@]}" src/bang.lua -g "$0" "$@"
