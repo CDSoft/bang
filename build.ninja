@@ -50,13 +50,9 @@ rule luax
   description = LUAX $out
   command = luax $arg -q -o $out $in
 
-pool luaxc
-  depth = 1
-
 rule luaxc
   description = LUAXC $out
-  command = luaxc $arg -o $out $in
-  pool = luaxc
+  command = luaxc $arg -q -o $out $in
 
 build $bin/bang: luaxc src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua src/where.lua lib/acc.lua lib/case.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua lib/pipe.lua $builddir/version
 build $bin/bang.lua: luax src/atexit.lua src/bang.lua src/ident.lua src/log.lua src/ninja.lua src/where.lua lib/acc.lua lib/case.lua lib/clean.lua lib/file.lua lib/help.lua lib/install.lua lib/ls.lua lib/pipe.lua $builddir/version

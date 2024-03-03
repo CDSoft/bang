@@ -78,8 +78,7 @@ rule "luax" {
 
 rule "luaxc" {
     description = "LUAXC $out",
-    command = "luaxc $arg -o $out $in",
-    pool = pool "luaxc" { depth = 1 },
+    command = "luaxc $arg -q -o $out $in",
 }
 
 local binaries = {
