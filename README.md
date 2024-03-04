@@ -501,6 +501,37 @@ generator {
 In this example, the generator statement will be executed if the Lua script has
 changed as well as `foo` and `bar`.
 
+### Target
+
+The `target` function is a simple helper function to select a luaxc compilation target from the command line.
+It takes a target name or a list of parameters potentially containing target names
+and returns the target description (an entry in `sys.targets`) and the remaining arguments.
+
+E.g.:
+
+``` lua
+local target, args = target(arg)
+if #args > 0 then
+    error(args:unwords()..": unexpected arguments")
+end
+
+--[[
+if arg contains "linux-x86_64"
+then target is {
+     name="linux-x86_64",
+     os="linux",
+     arch="x86_64",
+     libc="gnu",
+     exe="",     -- executable extension (.exe on Windows)
+     so=".so",   -- shared library extension (.dylib on MacOS, .dll on Windows)
+}
+--]]
+
+-- e.g. to build a LuaX application in a specific directory:
+
+var "builddir" (".build"/(target and target.name))
+```
+
 Examples
 ========
 

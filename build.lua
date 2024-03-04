@@ -24,10 +24,16 @@ https://cdelord.fr/bang
 ]]
 
 local F = require "F"
+local sys = require "sys"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
 help.epilog [[Without any arguments, Ninja will compile and test $name.]]
+
+local target, args = target(arg)
+if #args > 0 then
+    F.error_without_stack_trace(args:unwords()..": unexpected arguments")
+end
 
 ---------------------------------------------------------------------
 -- Build directories
@@ -35,11 +41,10 @@ help.epilog [[Without any arguments, Ninja will compile and test $name.]]
 
 section "Build directories"
 
-var "builddir" ".build"
+var "builddir" (".build"/(target and target.name))
 
-F"bin test doc" : words() : foreach(function(dir)
-    var (dir) ("$builddir" / dir)
-end)
+var "bin"  "$builddir/bin"
+var "test" "$builddir/test"
 
 clean "$builddir"
 
@@ -48,18 +53,6 @@ clean "$builddir"
 ---------------------------------------------------------------------
 
 section "Compilation"
-
-local targets = F(require "sys".targets):map(F.partial(F.nth, "name"))
-local target, ext = nil, ""
-F(arg) : foreach(function(a)
-    if targets:elem(a) then
-        if target then F.error_without_stack_trace("multiple target definition", 2) end
-        target = a
-        if target:match"windows" then ext = ".exe" end
-    else
-        F.error_without_stack_trace(a..": unknown argument")
-    end
-end)
 
 local sources = {
     ls "src/*.lua",
@@ -82,17 +75,17 @@ rule "luaxc" {
 }
 
 local binaries = {
-    build("$bin/bang"..ext) {
+    build("$bin/bang"..(target or sys.build).exe) {
         "luaxc",
         sources,
-        arg = target and {"-t", target},
+        arg = target and {"-t", target.name},
     },
     build "$bin/bang.lua" { "luax", sources, arg="-t lua" },
 }
 
 phony "compile" { binaries }
 default "compile"
-help "compile" ("compile $name"..(target and " for "..target or ""))
+help "compile" ("compile $name"..(target and " for "..target.name or ""))
 
 install "bin" { binaries }
 
