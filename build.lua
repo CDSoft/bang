@@ -75,7 +75,7 @@ rule "luaxc" {
 }
 
 local binaries = {
-    build("$bin/bang"..(target or sys.build).exe) {
+    build("$bin/bang"..(target or sys).exe) {
         "luaxc",
         sources,
         arg = target and {"-t", target.name},
