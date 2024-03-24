@@ -22,6 +22,12 @@ var3 = true
 # vars.var2 = 42
 # v3        = $var3
 # vars.var3 = true
+# vars.expand: « var1 = string, var2 = 42, var3 = true »
+foo = FOO
+bar = bar is $foo
+baz = baz is $foo and $bar
+# vars expand with recursive definitions: « baz = baz is FOO and bar is FOO »
+# vars.expand on a list: {"FOO", {"bar is FOO", "baz is FOO and bar is FOO"}}
 
 ######################################################################
 # Compound variables

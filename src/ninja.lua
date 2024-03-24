@@ -86,7 +86,23 @@ end
 
 local nbvars = 0
 
-vars = {}
+local vars = {}
+local function expand(s)
+    if type(s) == "string" then
+        for _ in pairs(vars) do
+            local s1 = s:gsub("%$(%w+)", vars)
+            if s1 == s then break end
+            s = s1
+        end
+        return s
+    end
+    if type(s) == "table" then
+        return F.map(expand, s)
+    end
+    log.error("vars.expand expects a string or a list of strings")
+end
+
+_G.vars = setmetatable(vars, { __index = {expand = expand} })
 
 function var(name)
     check_at_exit(function() return vars[name] ~= nil end, "var "..name..": incomplete definition")
