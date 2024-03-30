@@ -19,13 +19,15 @@
 --@LOAD
 
 local F = require "F"
-local sys = require "sys"
+local targets = require "targets"
+    : map(function(t) return {t.name, t} end)
+    : from_list()
 
 local function target(target_spec)
     if type(target_spec) == "string" then target_spec = {target_spec} end
     if type(target_spec) == "table" then
-        local names, other_args = F.partition(function(name) return sys.targets[name] end, target_spec)
-        if #names == 1 then return sys.targets[names:head()], other_args end
+        local names, other_args = F.partition(function(name) return targets[name] end, target_spec)
+        if #names == 1 then return targets[names:head()], other_args end
         if #names > 1 then F.error_without_stack_trace("multiple target definition", 1) end
         return nil, F(target_spec)
     end
