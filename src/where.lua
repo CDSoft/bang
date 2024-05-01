@@ -20,20 +20,16 @@
 
 return function()
     -- get the current location in the first user script in the call stack
+
     local i = 2
     while true do
-        local info_S = debug.getinfo(i, 'S')
-        local info_l = debug.getinfo(i, 'l')
-        if not info_S then
-            return ""
-        end
-        local file = info_S.source
-        local line = info_l.currentline
-        if not file then error "Can not locate the current source file" end
-        file = file:match "^@(.*)"
+        local info = debug.getinfo(i)
+        if not info then return "" end
+        local file = info.source : match "^@(.*)"
         if file and not file:has_prefix "$" and file:is_file() then
-            return ("[%s:%d] "):format(file, line)
+            return ("[%s:%d] "):format(file, info.currentline)
         end
-        i = i+1
+        i = i + 1
     end
+
 end
