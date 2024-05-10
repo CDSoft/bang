@@ -64,23 +64,16 @@ local sources = {
     },
 }
 
-rule "luax" {
-    description = "LUAX $out",
-    command = "luax $arg -q -o $out $in",
-}
-
 rule "luaxc" {
     description = "LUAXC $out",
-    command = "luaxc $arg -q -o $out $in",
+    command = "luax compile $arg -q -o $out $in",
 }
 
 local binaries = {
-    build("$bin/bang"..(target or sys).exe) {
-        "luaxc",
-        sources,
-        arg = target and {"-t", target.name},
+    build("$bin/bang"..(target or sys).exe) { "luaxc", sources,
+        arg = { "-b", "-t", (target or sys).name },
     },
-    build "$bin/bang.lua" { "luax", sources, arg="-t lua" },
+    build "$bin/bang.lua" { "luaxc", sources, arg="-t lua" },
 }
 
 phony "compile" { binaries }
