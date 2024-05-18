@@ -33,9 +33,9 @@ baz = baz is $foo and $bar
 # Compound variables
 ######################################################################
 
-var4 = string 42 true foo bar
+var4 = string 42 true foo bar baz
 # v4        = $var4
-# vars.var4 = string 42 true foo bar
+# vars.var4 = string 42 true foo bar baz
 
 ######################################################################
 # Rules

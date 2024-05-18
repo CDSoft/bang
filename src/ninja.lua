@@ -25,6 +25,7 @@ local where = require "where"
 
 local log = require "log"
 local ident = require "ident"
+local flatten = require "flatten"
 
 local ninja_required_version_for_bang = F"1.11.1"
 
@@ -68,7 +69,7 @@ local trim_word = F.compose {
 }
 
 local function stringify(value)
-    return F.flatten{value}
+    return flatten{value}
     : map(trim_word)
     : unwords()
 end
@@ -254,7 +255,7 @@ function build(outputs)
         end
 
         -- variables defined at the rule level and inherited by this statement
-        local rule_name = F{inputs}:flatten():head():words():head()
+        local rule_name = flatten{inputs}:head():words():head()
         if not rules[rule_name] then
             log.error(rule_name..": unknown rule")
         end
@@ -392,7 +393,7 @@ local function generator_rule(args)
 
     local deps = F.values(package.modpath) ---@diagnostic disable-line: undefined-field
     if not deps:null() then
-        generator_flag.implicit_in = F.flatten { generator_flag.implicit_in or {}, deps } : nub()
+        generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps } : nub()
     end
 
     build(args.output) (F.merge{
@@ -416,8 +417,7 @@ return function(args)
     generator_rule(args)
     generate_default()
     predicates_to_check_at_exit:foreach(F.call)
-    local ninja = tokens
-        : flatten()
+    local ninja = flatten(tokens)
         : str()
         : lines()
         : map(string.rtrim) ---@diagnostic disable-line: undefined-field

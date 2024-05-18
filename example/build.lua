@@ -36,6 +36,7 @@ local clang_tidy_checks = F{
     "-altera-id-dependent-backward-branch",
     "-altera-unroll-loops",
     "-readability-identifier-length",
+    "-cppcoreguidelines-macro-to-enum",
 }:str","
 
 file "compile_flags.txt" (cflags:unlines())

@@ -16,16 +16,16 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
---@LOAD
+--@LIB
 
-local flatten = require "flatten"
+local F = require "F"
 
-local function acc(list)
-    return function(xs)
-        flatten{xs} : foreach(function(x)
-            list[#list+1] = x
-        end)
-    end
+local Nil = require "Nil"
+
+local function is_not_Nil(x)
+    return x ~= Nil
 end
 
-return acc
+return function(xs)
+    return F.flatten(xs):filter(is_not_Nil)
+end

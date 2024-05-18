@@ -298,7 +298,7 @@ my_list -- contains {"item1", "item2", "item3"}
 The `case` function provides a switch-like structure to simplify conditional expressions.
 `case` is a curried function that takes a value (generally a string) and a table.
 It searches for the value in the keys of the table and returns the associated value.
-If the key is not found it returns the value associated to the `F.Nil` key or `nil`.
+If the key is not found it returns the value associated to the `Nil` key or `nil`.
 
 E.g.:
 
@@ -307,10 +307,13 @@ local cflags = {
     case(mode) {
         debug   = "-g -Og",
         release = "-s -O3",
-        [F.Nil] = {},
+        [Nil]   = Nil,  -- equivalent to [Nil] = {}
     }
 }
 ```
+
+**Note**: `Nil` is a special value that can be used to represent nothing (no
+value) in a list. `Nil` is ignored by bang.
 
 ### File listing
 

@@ -21,6 +21,8 @@
 local fs = require "fs"
 local F = require "F"
 
+local flatten = require "flatten"
+
 local file_mt = {__index = {}}
 
 function file_mt.__call(self, ...)
@@ -35,7 +37,7 @@ function file_mt.__index:write(...)
 end
 
 function file_mt.__index:close()
-    local new_content = self.chunks:flatten():str()
+    local new_content = flatten(self.chunks):str()
     local old_content = fs.read(self.name)
     if old_content == new_content then
         return -- keep the old file untouched

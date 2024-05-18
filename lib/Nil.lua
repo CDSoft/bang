@@ -18,14 +18,6 @@
 
 --@LOAD
 
-local flatten = require "flatten"
+local F = require "F"
 
-local function acc(list)
-    return function(xs)
-        flatten{xs} : foreach(function(x)
-            list[#list+1] = x
-        end)
-    end
-end
-
-return acc
+return F.Nil

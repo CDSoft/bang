@@ -68,6 +68,8 @@ local v4 = var "var4" {
         " foo  ",
         { },
         "  bar ",
+        Nil,    -- equivalent to {}
+        "   baz   ",
     },
 }
 comment("v4        = "..v4)
@@ -210,21 +212,21 @@ comment(new_file.." should be created")
 section "case expressions"
 
 local opt1 = case "debug" {
-    debug   = "-g",
-    fast    = "-O3",
-    [F.Nil] = "-O2",
+    debug = "-g",
+    fast  = "-O3",
+    [Nil] = "-O2",
 }
 
 local opt2 = case "fast" {
-    debug   = "-g",
-    fast    = "-O3",
-    [F.Nil] = "-O2",
+    debug = "-g",
+    fast  = "-O3",
+    [Nil] = "-O2",
 }
 
 local opt3 = case "" {
-    debug   = "-g",
-    fast    = "-O3",
-    [F.Nil] = "-O2",
+    debug = "-g",
+    fast  = "-O3",
+    [Nil] = "-O2",
 }
 
 comment("opt1 = "..F.show(opt1))
