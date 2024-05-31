@@ -13,7 +13,9 @@ It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://gith
 
 ``` sh
 $ git clone https://github.com/CDSoft/luax
-$ ninja -C luax install  # this should install LuaX to ~/.local/bin
+$ cd luax
+$ ./bootstrap.sh
+$ ninja install  # this should install LuaX to ~/.local/bin
 ```
 
 ## Bang
