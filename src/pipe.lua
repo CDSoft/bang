@@ -20,6 +20,8 @@
 
 local F = require "F"
 
+local tmp = require "tmp"
+
 local function split_hybrid_table(t)
     local function is_numeric_key(k)
         return math.type(k) == "integer"
@@ -29,6 +31,7 @@ end
 
 local function pipe(rules)
     assert(#rules > 0, "pipe requires at least one rule")
+    local builddir = rules.builddir or "$builddir/tmp"
     return F.curry(function(output, inputs)
         if type(inputs) == "string" then
             inputs = {inputs}
@@ -38,13 +41,12 @@ local function pipe(rules)
         local implicit_out = input_vars.implicit_out
         input_vars.implicit_in = nil
         input_vars.implicit_out = nil
-        local base = output:gsub("^%$builddir/", "")
-        local tmp = F.range(1, #rules-1):map(function(i)
-            return "$builddir/pipe"/base:splitext().."-pipe-"..tostring(i)..rules[i]:ext()
+        local tmpfiles = F.range(1, #rules-1):map(function(i)
+            return tmp(builddir, output, output:basename():splitext().."-"..tostring(i))..rules[i]:ext()
         end)
         for i = 1, #rules do
-            build(tmp[i] or output) (F.merge{
-                { rules[i], {tmp[i-1] or input_list} },
+            build(tmpfiles[i] or output) (F.merge{
+                { rules[i], {tmpfiles[i-1] or input_list} },
                 input_vars,
                 {
                     implicit_in  = i==1      and implicit_in  or nil,

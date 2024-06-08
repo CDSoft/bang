@@ -99,13 +99,13 @@ rule wkhtmltopdf.pdf
   command = wkhtmltopdf $in $out
 
 build $builddir/doc/file1.md: ypp.md doc/file1.md
-build $builddir/pipe/doc/file2-pipe-1.md: ypp.md doc/file2.md
-build $builddir/doc/file2.html: panda.html $builddir/pipe/doc/file2-pipe-1.md | foo.css
-build $builddir/pipe/doc/file3-pipe-1.md: ypp.md doc/file3.md | foo.in
+build $builddir/tmp/doc/file2.html.tmp/file2-1.md: ypp.md doc/file2.md
+build $builddir/doc/file2.html: panda.html $builddir/tmp/doc/file2.html.tmp/file2-1.md | foo.css
+build $builddir/tmp/doc/file3.pdf.tmp/file3-1.md: ypp.md doc/file3.md | foo.in
   variable = baz
-build $builddir/pipe/doc/file3-pipe-2.html: panda.html $builddir/pipe/doc/file3-pipe-1.md | foo.css
+build $builddir/tmp/doc/file3.pdf.tmp/file3-2.html: panda.html $builddir/tmp/doc/file3.pdf.tmp/file3-1.md | foo.css
   variable = baz
-build $builddir/doc/file3.pdf | bar.out: wkhtmltopdf.pdf $builddir/pipe/doc/file3-pipe-2.html | pdf.css
+build $builddir/doc/file3.pdf | bar.out: wkhtmltopdf.pdf $builddir/tmp/doc/file3.pdf.tmp/file3-2.html | pdf.css
   variable = baz
 
 ######################################################################
@@ -454,6 +454,35 @@ default foo bar
 #     output = ".build/test/luax/test.ninja",
 #     quiet = true,
 # }
+
+######################################################################
+# C compilers
+######################################################################
+
+rule zig-cc
+  description = zig $out
+  command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -Og -g -Iinc $in -o $out
+  depfile = $out.d
+
+rule zig-ar
+  description = zig $out
+  command = zig ar -crs $out $in
+
+rule zig-so
+  description = zig $out
+  command = cc -shared -o $out $in
+
+rule zig-ld
+  description = zig $out
+  command = zig ld -target x86_64-linux-musl -lm -o $out $in
+
+build f1.o: zig-cc f1.c
+build $builddir/tmp/lib.a.tmp/f2.o: zig-cc f2.c
+build lib.a: zig-ar f1.o $builddir/tmp/lib.a.tmp/f2.o
+build $builddir/tmp/libf3.so.tmp/f3.o: zig-cc f3.c
+build libf3.so: zig-so f1.o lib.a $builddir/tmp/libf3.so.tmp/f3.o
+build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c
+build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o
 
 ######################################################################
 # Installation

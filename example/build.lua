@@ -15,6 +15,9 @@ local fs = require "fs"
 
 var "builddir" ".build"
 
+var "ex0" "$builddir/ex0"
+var "ex1" "$builddir/ex1"
+
 local cflags = F{
     "-O3",
     "-Wall",
@@ -60,6 +63,8 @@ rule "clang-tidy" {
     }
 }
 
+section "Example 0: compilation with low level ninja primitives"
+
 -- cc/ar/ld rules for each architecture
 local cc = {}
 local ar = {}
@@ -79,7 +84,7 @@ local architectures = ls "arch"
             command = {
                 arch.cc, "-c",
                 "$cflags", var("cflags_"..arch_name)(arch.cflags),
-                "-MD -MF $out.d",
+                "-MD -MF $depfile",
                 " $in -o $out",
             },
             depfile = "$out.d",
@@ -99,14 +104,14 @@ local architectures = ls "arch"
             },
         }
 
-        arch.archive_file = "$builddir" / "arch" / arch_name / "arch.a"
+        arch.archive_file = "$ex0" / "arch" / arch_name / "arch.a"
         build(arch.archive_file) { ar[arch_name],
             ls(path/"**.c")
             : map(function(source)
-                return build("$builddir" / source:splitext()..".o") {
+                return build("$ex0" / source:splitext()..".o") {
                     cc[arch_name], source,
                     validations = validation and {
-                        build("$builddir/clang-tidy"/source..".check") { "clang-tidy", source },
+                        build("$ex0/clang-tidy"/source..".check") { "clang-tidy", source },
                     },
                 }
             end)
@@ -121,14 +126,14 @@ architectures : foreach(function(arch)
         : map(function(path)
             local lib_name = path:basename()
             section(lib_name.." for "..arch.name)
-            return build("$builddir" / arch.name / "lib" / lib_name / lib_name..".a") {
+            return build("$ex0" / arch.name / "lib" / lib_name / lib_name..".a") {
                 ar[arch.name],
                 ls(path/"**.c")
                 : map(function(source)
-                    return build("$builddir" / arch.name / source:splitext()..".o") {
+                    return build("$ex0" / arch.name / source:splitext()..".o") {
                         cc[arch.name], source,
                         validations = validation and {
-                            build("$builddir/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
+                            build("$ex0/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
                         },
                     }
                 end)
@@ -141,14 +146,46 @@ architectures : foreach(function(arch)
     : foreach(function(path)
         local bin_name = path:basename()
         section(bin_name:splitext().." for "..arch.name)
-        build("$builddir" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
+        build("$ex0" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
             ld[arch.name], arch.libraries, arch.archive_file,
-            build("$builddir" / arch.name / "bin" / bin_name:splitext()..".o") {
+            build("$ex0" / arch.name / "bin" / bin_name:splitext()..".o") {
                 cc[arch.name], path,
                 validations = validation and {
-                    build("$builddir/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
+                    build("$ex0/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
                 },
             }
+        }
+    end)
+end)
+
+section "Example 1: compilation with the C compilation feature"
+
+ls "arch"
+: filter(fs.is_dir)
+: map(function(arch_path)
+    local arch_name = arch_path:basename()
+    section(arch_name)
+
+    local arch = require(arch_path / "config")
+
+    local compiler = arch.compiler
+        : set "builddir" ("$ex1" / arch_name)
+        : add "cflags" { "$cflags", "$cflags_"..arch_name }
+        : add "ldflags" { "$ldflags", "$ldflags_"..arch_name }
+        : set "cvalid" "clang-tidy"
+
+    local arch_lib = compiler:static_lib("$ex1" / "arch" / arch_name / "arch.a") {
+        ls(arch_path/"**.c")
+    }
+
+    ls "bin/*.c"
+    : foreach(function(bin_path)
+        local bin_name = bin_path:basename():splitext()..compiler.exe_ext
+
+        compiler:executable("$ex1" / arch_name / "bin" / bin_name) {
+            bin_path,
+            arch_lib,
+            ls "lib/**.c"
         }
     end)
 end)

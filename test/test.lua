@@ -277,3 +277,32 @@ help "target1" "description of target1"
 help "target2" "description of target2"
 help "target3-with-a-longer-name" "description of target3"
 help "target4" "description of target4"
+
+section "C compilers"
+
+local target = "x86_64-linux-musl"
+
+local zig = require "C" : new "zig"
+    : set "builddir" "$builddir/tmp"
+    : set "cc" { "zig cc", "-target", target }
+    : add "cflags" { "-Og", "-g", "-Iinc" }
+    : set "ar" "zig ar"
+    : set "ld" { "zig ld", "-target", target }
+    : add "ldflags" "-lm"
+
+zig:compile "f1.o" { "f1.c" }
+zig:static_lib "lib.a" {
+    "f1.o",
+    "f2.c",
+}
+zig:dynamic_lib "libf3.so" {
+    "f1.o",
+    "lib.a",
+    "f3.c",
+}
+zig:executable "file.exe" {
+    "f1.o",
+    "lib.a",
+    "f3.o",
+    "f4.c",
+}

@@ -368,7 +368,8 @@ A simple solution (for Makefiles or Ninja files) is to chain several rules.
 The `pipe` function takes a list of rules and returns a function that applies all the rules,
 in the order of the list. This function takes two parameters: the output and the inputs of the pipe.
 
-Intermediate outputs are stored in `$builddir/pipe`.
+Intermediate outputs are stored in `$builddir/tmp`
+(this directory can be changed by adding a `builddir` attribute to the rule list).
 If a rule name contains a dot, its « extension » is used to name intermediate outputs.
 
 E.g.:
@@ -385,8 +386,8 @@ ypp_then_panda "$builddir/doc/mydoc.html" "doc/mydoc.md"
 is equivalent to:
 
 ``` lua
-build "$builddir/pipe/doc/mydoc.md" { "ypp.md", "doc/mydoc.md" }
-build "$builddir/doc/mydoc.html"    { "panda.html", "$builddir/pipe/doc/mydoc.md" }
+build "$builddir/tmp/doc/mydoc.md" { "ypp.md", "doc/mydoc.md" }
+build "$builddir/doc/mydoc.html"    { "panda.html", "$builddir/tmp/doc/mydoc.md" }
 ```
 
 Since `rule` returns the name of the rule, this can also be written as:
@@ -415,11 +416,11 @@ ypp_then_panda "out.html" { "in.md",
 is equivalent to:
 
 ``` lua
-build "$builddir/pipe/doc/out-1.md" { "ypp.md", "doc/in.md",
+build "$builddir/tmp/doc/out-1.md" { "ypp.md", "doc/in.md",
     implicit_in = "foo.in",
     other_var = "42",
 }
-build "out.html" { "panda.html", "$builddir/pipe/doc/out-1.md",
+build "out.html" { "panda.html", "$builddir/tmp/doc/out-1.md",
     implicit_out = "foo.out",
     other_var = "42",
 }
@@ -544,6 +545,101 @@ then target is {
 -- e.g. to build a LuaX application in a specific directory:
 
 var "builddir" (".build"/(target and target.name))
+```
+
+## Higher level build modules
+
+### C compilers
+
+The module `C` creates C compilation objects.
+
+The module itself is a default compiler that should works on most Linux and MacOS systems
+and uses `cc`.
+
+``` lua
+local C = require "C"           -- load the C module
+```
+
+A new compiler can be created by calling the `new` method of an existing compiler with a new name
+and changing some options. E.g.:
+
+``` lua
+local gcc = C:new "gcc"         -- creates a new C compiler named "gcc"
+    : set "cc" "gcc"                        -- compiler command
+    : add "cflags" { "-O2", "-Iinclude" }   -- compilation flags
+}
+```
+
+A compiler has two methods to modify options:
+
+- `set` changes the value of an option
+- `add` adds values to the current value of an option
+
+| Option        | Description                           | Default value                     |
+| ------------- | ------------------------------------- | --------------------------------- |
+| `builddir`    | Build dir for temporary files         | `"$builddir"`                     |
+| `cc`          | Compilation command                   | `"cc"`                            |
+| `cflags`      | Compilation options                   | `{"-c", "-MD -MF $depfile"}`      |
+| `cargs`       | Input and output                      | `"$in -o $out"`                   |
+| `depfile`     | Dependency file name                  | `"$out.d"`                        |
+| `cvalid`      | Validation rule                       | `{}`                              |
+| `ar`          | Archive command (static libraries)    | `"ar"`                            |
+| `aflags`      | Archive flags                         | `"-crs"`                          |
+| `aargs`       | Inputs anf output                     | `"$in -o $out"`                   |
+| `so`          | Link command (dynamic libraries)      | `"cc"`                            |
+| `soflags`     | Link options                          | `"-shared"`                       |
+| `soargs`      | Inputs and output                     | `"$in -o $out"`                   |
+| `ld`          | Link command (executables)            | `"cc"`                            |
+| `ldflags`     | Link options                          | `{}`                              |
+| `ldargs`      | Inputs and output                     | `"$in -o $out"`                   |
+| `c_exts`      | List of C source extensions           | `{ ".c" }`                        |
+| `o_ext`       | Object file extension                 | `".o"`                            |
+| `a_ext`       | Archive file extension                | `".a"`                            |
+| `so_ext`      | Dynamic library file extension        | `".so"`, `".dylib"` or "`.dll`"   |
+| `exe_ext`     | Executable file extension             | `""` or `".exe"`                  |
+
+A compiler can compile a single C source as well as complete libraries and executables.
+Inputs of libraries or executables can be C sources
+(which will be compiled in a subdirectory of `builddir`)
+or other static libraries.
+
+Examples:
+
+``` lua
+-- Compilation of a single source file
+local obj_file = gcc:compile "$builddir/file.o" "file.c"
+
+-- Creation of a static library
+local lib_a = gcc:static_lib "$builddir/lib.a" {
+    obj_file,       -- already compiled
+    ls "lib/*.c",   -- compile and archive all sources in the lib directory
+}
+
+-- Creation of a dynamic library
+local lib_so = gcc:dynamic_lib "$builddir/lib.so" {
+    lib_a,
+    ls "dynlib/*.c",
+}
+
+-- Creation of an executable file
+local exe = gcc:executable "$builddir/file.exe" {
+    lib_a,
+    "src/main.c",
+}
+
+-- Same with an all-in-one statement
+local exe = gcc:executable "$builddir/file.exe" {
+    "file.c",
+    ls "lib/*.c",
+    "src/main.c",
+}
+
+-- The `__call` metamethod is a shortcut to the `executable` method
+local exe = gcc "$builddir/file.exe" {
+    "file.c",
+    ls "lib/*.c",
+    "src/main.c",
+}
 ```
 
 Examples
