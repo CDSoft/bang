@@ -56,7 +56,6 @@ section "Compilation"
 
 local sources = {
     ls "src/*.lua",
-    ls "lib/*.lua",
     build "$builddir/version" {
         description = "GIT version",
         command = "echo -n `git describe --tags` > $out",

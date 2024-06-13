@@ -23,7 +23,7 @@ local fs = require "fs"
 
 local ninja = require "ninja"
 local log = require "log"
-local _, version = pcall(require, "version")
+local version = require "version"
 
 local function parse_args()
     local parser = require "argparse"()
