@@ -15,20 +15,21 @@ It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://gith
 $ git clone https://github.com/CDSoft/luax
 $ cd luax
 $ ./bootstrap.sh
-$ ninja install  # this should install LuaX to ~/.local/bin
+$ ninja install  # install LuaX to ~/.local/bin
 ```
 
 ## Bang
 
 ``` sh
 $ git clone https://github.com/CDSoft/bang
-$ ninja -C bang install  # this should compile bang with Ninja and install it to ~/.local/bin
+$ cd bang
+$ ninja install  # build bang with Ninja and install it to ~/.local/bin
 ```
 
 or set `$PREFIX` to install `bang` to a custom directory (`$PREFIX/bin`):
 
 ``` sh
-$ PREFIX=/path ninja install # installs bang to /path/bin
+$ PREFIX=/path ninja install # install bang to /path/bin
 ```
 
 ## Pure Lua implementation
@@ -226,7 +227,7 @@ rule "output" {
 build "output" { "output", "inputs" }
 ```
 
-Note: the rule name is the output name where special characters are replaced with underscores.
+**Note**: the rule name is the output name where special characters are replaced with underscores.
 
 ### Pools
 
@@ -249,7 +250,7 @@ default "target1"
 default {"target2", "target3"}
 ```
 
-Note: if no custom target is defined and if there are help, install or clean targets,
+**Note**: if no custom target is defined and if there are help, install or clean targets,
 bang will generate an explicit default target with all targets, except from help, install and clean targets.
 
 ### Phony targets
@@ -387,7 +388,7 @@ is equivalent to:
 
 ``` lua
 build "$builddir/tmp/doc/mydoc.md" { "ypp.md", "doc/mydoc.md" }
-build "$builddir/doc/mydoc.html"    { "panda.html", "$builddir/tmp/doc/mydoc.md" }
+build "$builddir/doc/mydoc.html"   { "panda.html", "$builddir/tmp/doc/mydoc.md" }
 ```
 
 Since `rule` returns the name of the rule, this can also be written as:
@@ -491,7 +492,7 @@ help "compile" "Compile every thing"
 -- ...
 ```
 
-Note: the `clean` and `install` target are automatically documented
+**Note**: the `clean` and `install` target are automatically documented
 by the `clean` and `install` functions.
 
 ### Generator
@@ -552,19 +553,16 @@ var "builddir" (".build"/(target and target.name))
 ### C compilers
 
 The module `C` creates C compilation objects.
+This module is available as a `build` function metamethod.
 
 The module itself is a default compiler that should works on most Linux and MacOS systems
 and uses `cc`.
-
-``` lua
-local C = require "C"           -- load the C module
-```
 
 A new compiler can be created by calling the `new` method of an existing compiler with a new name
 and changing some options. E.g.:
 
 ``` lua
-local gcc = C:new "gcc"         -- creates a new C compiler named "gcc"
+local gcc = build.C:new "gcc"   -- creates a new C compiler named "gcc"
     : set "cc" "gcc"                        -- compiler command
     : add "cflags" { "-O2", "-Iinclude" }   -- compilation flags
 }
@@ -639,6 +637,77 @@ local exe = gcc "$builddir/file.exe" {
     "file.c",
     ls "lib/*.c",
     "src/main.c",
+}
+```
+
+### Builders
+
+The `build` function has methods to create new builder objects
+(note that these methods are also available in the "builders" module).
+
+The `build` metamethods contain some predefined builders:
+
+| Builder                   | Description                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `build.cat`               | File concatenation.                                                                                   |
+| `build.cp`                | Copy a file.                                                                                          |
+| `build.ypp`               | Preprocess a file with [ypp](https://github.com/CDSoft/ypp).                                          |
+| `build.pandoc`            | Convert a file with [pandoc](https://pandoc.org).                                                     |
+| `build.pandoc_gfm`        | Convert a file with [pandoc](https://pandoc.org) for Github.                                          |
+| `build.panda`             | Convert a file with [panda](https://github.com/CDSoft/panda).                                         |
+| `build.panda_gfm`         | Convert a file with [panda](https://github.com/CDSoft/panda) for Github.                              |
+| `build.graphviz.prog.img` | [Graphviz](https://graphviz.org/) image rendered with *prog*[^graphviz] as an *img*[^img] image.      |
+| `build.plantuml.img`      | [PlantUML](https://plantuml.com) image rendered as an *img*[^img] image.                              |
+| `build.ditaa.img`         | [Ditaa](https://ditaa.sourceforge.net/) image rendered as an *img*[^img] image.                       |
+| `build.asymptote.img`     | [Asymptote](https://asymptote.sourceforge.io/) image rendered as an *img*[^img] image.                |
+| `build.mermaid.img`       | [Mermaid](https://mermaid.js.org/) image rendered as an *img*[^img] image.                            |
+| `build.blockdiag.img`     | [Blockdiag](http://blockdiag.com/en/) image rendered with `blockdiag` as an *img*[^img] image.        |
+| `build.blockdiag.prog.img`| [Blockdiag](http://blockdiag.com/en/) image rendered with *prog*[^blockdiag] as an *img*[^img] image. |
+| `build.gnuplot.img`       | [Gnuplot](http://www.gnuplot.info/) image rendered as an *img*[^img] image.                           |
+| `build.octave.img`        | [Octave](https://octave.org/) image rendered as an *img*[^img] image.                                 |
+| `build.lsvg.img`          | [Lsvg](https://github.com/CDSoft/lsvg) image rendered as an *img*[^img] image.                        |
+
+[^img]: The available image formats are: `svg`, `png` and `pdf`.
+[^graphviz]: Graphviz renderers are: `dot`, `neato`, `twopi`, `circo`, `fdp`, `sfdp`, `patchwork` and `osage`.
+[^blockdiag]: Other Blockdiag renderers are: `activity`, `network`, `packet`, `rack` and `sequence`.
+
+A new builder can be created by calling the `new` method of an existing builder with a new name
+and changing some options. E.g.:
+
+``` lua
+local tac = build.cat:new "tac"   -- new builder "tac" based on "cat"
+    : set "cmd" "tac"
+```
+
+The `new` method of the `build` function can also be used to create a new builder from scratch:
+
+``` lua
+local tac = build.new "tac"   -- new builder "tac"
+    : set "cmd" "tac"
+    : set "args" "$in > $out"
+```
+
+A builder has two methods to modify options:
+
+- `set` changes the value of an option
+- `add` adds values to the current value of an option
+
+| Option        | Description                           |
+| ------------- | ------------------------------------- |
+| `cmd`         | Command to execute                    |
+| `flags`       | Command options                       |
+| `args`        | Input and output                      |
+| `depfile`     | Dependency file name                  |
+
+Other options are added to the rule definition (note that `name` can not be used as a rule variable).
+
+Examples:
+
+``` lua
+-- preprocess Markdown files with ypp
+-- and convert them to a single HTML file with pandoc
+build.pandoc "$builddir/output.html" {
+    build.ypp "$builddir/output.md" { "input1.md", "input2.md" }
 }
 ```
 

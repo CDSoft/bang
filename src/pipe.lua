@@ -41,12 +41,15 @@ local function pipe(rules)
         local implicit_out = input_vars.implicit_out
         input_vars.implicit_in = nil
         input_vars.implicit_out = nil
+        local rule_names = F.map(function(r)
+            return type(r)=="table" and r:rule() or r
+        end, rules)
         local tmpfiles = F.range(1, #rules-1):map(function(i)
-            return tmp(builddir, output, output:basename():splitext().."-"..tostring(i))..rules[i]:ext()
+            return tmp(builddir, output, output:basename():splitext().."-"..tostring(i))..rule_names[i]:ext()
         end)
         for i = 1, #rules do
             build(tmpfiles[i] or output) (F.merge{
-                { rules[i], {tmpfiles[i-1] or input_list} },
+                { rule_names[i], {tmpfiles[i-1] or input_list} },
                 input_vars,
                 {
                     implicit_in  = i==1      and implicit_in  or nil,

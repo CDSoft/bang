@@ -71,11 +71,16 @@ local rules = setmetatable({}, {
 local function compile(self, output)
     local cc = rules[self].cc
     return function(inputs)
-        return build(output) { cc,
-            inputs,
-            validations = #self.cvalid > 0 and {
-                build(output..".check") { self.cvalid, inputs }
-            } or nil,
+        local validations = F.flatten{self.cvalid}:map(function(valid)
+            local valid_output = output.."-"..(valid.name or valid)..".check"
+            if valid.name then
+                return valid(valid_output) { inputs }
+            else
+                return build(valid_output) { valid, inputs }
+            end
+        end)
+        return build(output) { cc, inputs,
+            validations = validations,
         }
     end
 end

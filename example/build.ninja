@@ -371,15 +371,15 @@ build $ex1/windows/bin/hi.exe: x86_64-windows-gnu-ld $ex1/windows/bin/hi.exe.tmp
 ######################################################################
 
 rule graph.dot
-  description = GRAPH $in
+  description = graph.dot $out
   command = ninja -f $in -t graph > $out
 
 rule render_graph.svg
-  description = DOT $out
+  description = render_graph.svg $out
   command = dot -Tsvg -o$out $in
 
 rule svgtidy.svg
-  description = TIDY $out
+  description = svgtidy.svg $out
   command = doc/svgtidy.lua < $in > $out
 
 build $builddir/tmp/doc/graph.svg.tmp/graph-1.dot: graph.dot build.ninja

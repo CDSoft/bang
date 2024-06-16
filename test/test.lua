@@ -282,7 +282,7 @@ section "C compilers"
 
 local target = "x86_64-linux-musl"
 
-local zig = require "C" : new "zig"
+local zig = build.C : new "zig"
     : set "builddir" "$builddir/tmp"
     : set "cc" { "zig cc", "-target", target }
     : add "cflags" { "-Og", "-g", "-Iinc" }
@@ -306,3 +306,35 @@ zig:executable "file.exe" {
     "f3.o",
     "f4.c",
 }
+
+section "Document generators"
+
+build.cat "cat.txt" "f.txt"
+build.cp "copy.txt" "f.txt"
+
+local tac = build.new "tac"
+    : set "cmd" "tac"
+    : add "implicit_in" { "x", "y" }
+    : add "implicit_out" { "z" }
+
+tac "rev.txt" { "f.txt",
+    implicit_in = "foo.txt",
+    other_arg = { "a", "b" },
+}
+
+rule "rule_1" {
+    command = "r1",
+}
+
+rule "rule_2" {
+    command = "r2",
+}
+
+local pipe_with_rules_and_generators = pipe {
+    "rule_1",
+    build.cat,
+    "rule_2",
+    tac,
+}
+
+pipe_with_rules_and_generators "bar.md" "foo.rst"

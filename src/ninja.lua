@@ -225,6 +225,10 @@ local function unique_rule_name(name)
     return rule_name
 end
 
+local function defined(x)
+    return x and #x>0
+end
+
 local builds = {}
 
 local default_build_statements = {}
@@ -232,7 +236,20 @@ local custom_default_statement = false
 
 local nbbuilds = 0
 
-function build(outputs)
+local function build_decorator(build)
+    local self = {}
+    local mt = {
+        __call = function(_, ...) return build(...) end,
+        __index = {},
+    }
+    mt.__index.C = require "C"
+    local builders = require "builders"
+    F.foreachk(builders, function(name, builder) mt.__index[name] = builder end)
+    mt.__index.new = function(...) return builders:new(...) end
+    return setmetatable(self, mt)
+end
+
+build = build_decorator(function(outputs)
     outputs = stringify(outputs)
     check_at_exit(function()
         return F(outputs):words():all(function(output) return builds[output] ~= nil end)
@@ -269,12 +286,12 @@ function build(outputs)
 
         emit { "build ",
             outputs,
-            opt.implicit_out and {" | ", stringify(opt.implicit_out)} or {},
+            defined(opt.implicit_out) and {" | ", stringify(opt.implicit_out)} or {},
             ": ",
             stringify(inputs),
-            opt.implicit_in and {" | ", stringify(opt.implicit_in)} or {},
-            opt.order_only_deps and {" || ", stringify(opt.order_only_deps)} or {},
-            opt.validations and {" |@ ", stringify(opt.validations)} or {},
+            defined(opt.implicit_in) and {" | ", stringify(opt.implicit_in)} or {},
+            defined(opt.order_only_deps) and {" || ", stringify(opt.order_only_deps)} or {},
+            defined(opt.validations) and {" |@ ", stringify(opt.validations)} or {},
             "\n",
         }
 
@@ -297,7 +314,7 @@ function build(outputs)
         end
         return #output_list ~= 1 and output_list or output_list[1]
     end
-end
+end)
 
 local pool_variables = F{
     "depth",

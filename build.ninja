@@ -49,9 +49,9 @@ rule luaxc
   description = LUAXC $out
   command = luax compile $arg -q -o $out $in
 
-build $bin/bang: luaxc src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
+build $bin/bang: luaxc src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/builders.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
   arg = -b -t native
-build $bin/bang.lua: luaxc src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
+build $bin/bang.lua: luaxc src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/builders.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
   arg = -t lua
 build compile: phony $bin/bang $bin/bang.lua
 
@@ -459,4 +459,4 @@ rule bang
   command = luax ./boot.lua $in -o $out
   generator = true
 
-build build.ninja: bang build.lua | src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
+build build.ninja: bang build.lua | src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/builders.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version

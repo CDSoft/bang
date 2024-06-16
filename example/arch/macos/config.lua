@@ -12,7 +12,7 @@ return {
     ext = "",
 
     -- level 1: C compilation feature provided by bang
-    compiler = require "C" : new(target)
+    compiler = build.C : new(target)
         : set "cc"     { "zig cc", "-target", target }
         : add "cflags" { "-DTARGET=\""..target.."\"" }
         : set "ar"     { "zig ar" }

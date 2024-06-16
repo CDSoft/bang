@@ -485,6 +485,40 @@ build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c
 build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o
 
 ######################################################################
+# Document generators
+######################################################################
+
+rule cat
+  description = cat $out
+  command = cat $in > $out
+
+build cat.txt: cat f.txt
+
+rule cp
+  description = cp $out
+  command = cp -d --preserve=mode $in $out
+
+build copy.txt: cp f.txt
+
+rule tac
+  description = tac $out
+  command = tac $in > $out
+
+build rev.txt | z: tac f.txt | x y foo.txt
+  other_arg = a b
+
+rule rule_1
+  command = r1
+
+rule rule_2
+  command = r2
+
+build $builddir/tmp/bar.md.tmp/bar-1: rule_1 foo.rst
+build $builddir/tmp/bar.md.tmp/bar-2: cat $builddir/tmp/bar.md.tmp/bar-1
+build $builddir/tmp/bar.md.tmp/bar-3: rule_2 $builddir/tmp/bar.md.tmp/bar-2
+build bar.md | z: tac $builddir/tmp/bar.md.tmp/bar-3 | x y
+
+######################################################################
 # Installation
 ######################################################################
 
