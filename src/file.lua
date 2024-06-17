@@ -29,13 +29,6 @@ function file_mt.__call(self, ...)
     self.chunks[#self.chunks+1] = {...}
 end
 
--- TODO: remove the write method at the next major release
-function file_mt.__index:write(...)
-    local log = require "log"
-    log.warning("file:write(...) is deprecated, please use file(...) instead")
-    self(...)
-end
-
 function file_mt.__index:close()
     local new_content = flatten(self.chunks):str()
     local old_content = fs.read(self.name)
