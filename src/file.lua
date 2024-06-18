@@ -39,17 +39,22 @@ function file_mt.__index:close()
     fs.write(self.name, new_content)
 end
 
-local flush_functions = F{}
+local open_files = F{}
 
 local function file(name)
+    if open_files[name] then
+        error(name..": multiple file creation")
+    end
     local f = setmetatable({name=name, chunks=F{}}, file_mt)
-    flush_functions[#flush_functions+1] = function() f:close() end
+    open_files[name] = f
     return f
 end
 
 return setmetatable({}, {
     __call = function(_, name) return file(name) end,
     __index = {
-        flush = function() flush_functions:foreach(F.call) end,
+        flush = function()
+            open_files:foreacht(function(f) f:close() end)
+        end,
     },
 })
