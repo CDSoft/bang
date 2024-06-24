@@ -408,7 +408,7 @@ local function generator_rule(args)
         generator = true,
     }
 
-    local deps = F.values(package.modpath) ---@diagnostic disable-line: undefined-field
+    local deps = F.values(package.modpath) .. require "import".files
     if not deps:null() then
         generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps } : nub()
     end
