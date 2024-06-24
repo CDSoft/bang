@@ -652,6 +652,7 @@ The `build` metamethods contain some predefined builders:
 | `build.cat`               | File concatenation.                                                                                   |
 | `build.cp`                | Copy a file.                                                                                          |
 | `build.ypp`               | Preprocess a file with [ypp](https://github.com/CDSoft/ypp).                                          |
+| `build.ypp-pandoc`        | Preprocess a file with [ypp](https://github.com/CDSoft/ypp) with the Pandoc Lua interpreter.          |
 | `build.pandoc`            | Convert a file with [pandoc](https://pandoc.org).                                                     |
 | `build.pandoc_gfm`        | Convert a file with [pandoc](https://pandoc.org) for Github.                                          |
 | `build.panda`             | Convert a file with [panda](https://github.com/CDSoft/panda).                                         |

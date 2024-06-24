@@ -190,6 +190,7 @@ return setmetatable({
     cat = cat,
     cp = cp,
     ypp = ypp,
+    ypp_pandoc = ypp:new "ypp_pandoc" : set "cmd" "ypp-pandoc.lua",
     panda = panda,
     panda_gfm = panda:new "panda_gfm" : add "flags" "-t gfm",
     pandoc = pandoc,
