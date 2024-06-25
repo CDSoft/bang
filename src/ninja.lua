@@ -64,7 +64,7 @@ function section(...)
 end
 
 local trim_word = F.compose {
-    string.trim, ---@diagnostic disable-line: undefined-field
+    string.trim,
     tostring,
 }
 
@@ -408,7 +408,7 @@ local function generator_rule(args)
         generator = true,
     }
 
-    local deps = F.values(package.modpath) .. require "import".files
+    local deps = F.values(package.modpath)
     if not deps:null() then
         generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps } : nub()
     end
@@ -437,8 +437,8 @@ return function(args)
     local ninja = flatten(tokens)
         : str()
         : lines()
-        : map(string.rtrim) ---@diagnostic disable-line: undefined-field
-        : drop_while_end(string.null) ---@diagnostic disable-line: undefined-field
+        : map(string.rtrim)
+        : drop_while_end(string.null)
         : unlines()
     log.info(nbvars, " variables")
     log.info(nbrules, " rules")
