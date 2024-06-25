@@ -21,7 +21,6 @@
 local F = require "F"
 local fs = require "fs"
 local atexit = require "atexit"
-local where = require "where"
 
 local log = require "log"
 local ident = require "ident"
@@ -74,17 +73,6 @@ local function stringify(value)
     : unwords()
 end
 
-local predicates_to_check_at_exit = F{}
-
-local function check_at_exit(predicate, error_message)
-    local loc = where()
-    predicates_to_check_at_exit[#predicates_to_check_at_exit+1] = function()
-        if not predicate() then
-            log.error_at(loc, error_message)
-        end
-    end
-end
-
 local nbvars = 0
 
 local vars = {}
@@ -106,7 +94,6 @@ end
 _G.vars = setmetatable(vars, { __index = {expand = expand} })
 
 function var(name)
-    check_at_exit(function() return vars[name] ~= nil end, "var "..name..": incomplete definition")
     return function(value)
         if vars[name] then
             log.error("var "..name..": multiple definition")
@@ -174,7 +161,6 @@ new_rule "phony"
 local nbrules = 0
 
 function rule(name)
-    check_at_exit(function() return rules[name] ~= nil end, "rule "..name..": incomplete definition")
     return function(opt)
         if rules[name] then
             log.error("rule "..name..": multiple definition")
@@ -251,9 +237,6 @@ end
 
 build = build_decorator(function(outputs)
     outputs = stringify(outputs)
-    check_at_exit(function()
-        return F(outputs):words():all(function(output) return builds[output] ~= nil end)
-    end, "build "..outputs..": incomplete definition")
     return function(inputs)
         -- variables defined in the current build statement
         local build_opt = F.filterk(function(k, _) return type(k) == "string" and not k:has_prefix"$" end, inputs)
@@ -323,7 +306,6 @@ local pool_variables = F{
 local pools = {}
 
 function pool(name)
-    check_at_exit(function() return pools[name] ~= nil end, "pool "..name..": incomplete definition")
     return function(opt)
         if pools[name] then
             log.error("pool "..name..": multiple definition")
@@ -433,7 +415,6 @@ return function(args)
     help:gen() -- help shall be generated after clean and install
     generator_rule(args)
     generate_default()
-    predicates_to_check_at_exit:foreach(F.call)
     local ninja = flatten(tokens)
         : str()
         : lines()

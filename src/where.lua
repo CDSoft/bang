@@ -26,7 +26,7 @@ return function()
         local info = debug.getinfo(i)
         if not info then return "" end
         local file = info.source : match "^@(.*)"
-        if file and not file:has_prefix "$" and file:is_file() then
+        if file and not file:has_prefix "$" then
             return ("[%s:%d] "):format(file, info.currentline)
         end
         i = i + 1

@@ -29,11 +29,7 @@ function log.config(args)
 end
 
 function log.error(...)
-    log.error_at(where(), ...)
-end
-
-function log.error_at(loc, ...)
-    io.stderr:write(F.flatten{loc, "ERROR: ", {...}, "\n"}:unpack())
+    io.stderr:write(F.flatten{where(), "ERROR: ", {...}, "\n"}:unpack())
     os.exit(1)
 end
 
