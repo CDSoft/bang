@@ -246,30 +246,30 @@ rule x86_64-linux-musl-ld
   description = x86_64-linux-musl $out
   command = zig cc -target x86_64-linux-musl $ldflags $ldflags_linux -o $out $in
 
-build $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o.check: clang-tidy arch/linux/ask.c
-build $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o: x86_64-linux-musl-cc arch/linux/ask.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o.check
-build $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o.check: clang-tidy arch/linux/get_arch.c
-build $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o: x86_64-linux-musl-cc arch/linux/get_arch.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o.check
-build $ex1/linux/arch/arch.a.tmp/arch/linux/say.o.check: clang-tidy arch/linux/say.c
-build $ex1/linux/arch/arch.a.tmp/arch/linux/say.o: x86_64-linux-musl-cc arch/linux/say.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/say.o.check
+build $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o-clang-tidy.check: clang-tidy arch/linux/ask.c
+build $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o: x86_64-linux-musl-cc arch/linux/ask.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o-clang-tidy.check
+build $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o-clang-tidy.check: clang-tidy arch/linux/get_arch.c
+build $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o: x86_64-linux-musl-cc arch/linux/get_arch.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o-clang-tidy.check
+build $ex1/linux/arch/arch.a.tmp/arch/linux/say.o-clang-tidy.check: clang-tidy arch/linux/say.c
+build $ex1/linux/arch/arch.a.tmp/arch/linux/say.o: x86_64-linux-musl-cc arch/linux/say.c |@ $ex1/linux/arch/arch.a.tmp/arch/linux/say.o-clang-tidy.check
 build $ex1/arch/linux/arch.a: x86_64-linux-musl-ar $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o $ex1/linux/arch/arch.a.tmp/arch/linux/get_arch.o $ex1/linux/arch/arch.a.tmp/arch/linux/say.o
-build $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o.check: clang-tidy bin/hi-repl.c
-build $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o: x86_64-linux-musl-cc bin/hi-repl.c |@ $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o.check
-build $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o: x86_64-linux-musl-cc lib/hello/hello.c |@ $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o.check
-build $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o: x86_64-linux-musl-cc lib/utils/fib.c |@ $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o.check
-build $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o: x86_64-linux-musl-cc lib/utils/utils.c |@ $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o.check
+build $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o-clang-tidy.check: clang-tidy bin/hi-repl.c
+build $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o: x86_64-linux-musl-cc bin/hi-repl.c |@ $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o-clang-tidy.check
+build $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o: x86_64-linux-musl-cc lib/hello/hello.c |@ $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o: x86_64-linux-musl-cc lib/utils/fib.c |@ $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o: x86_64-linux-musl-cc lib/utils/utils.c |@ $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/linux/bin/hi-repl: x86_64-linux-musl-ld $ex1/linux/bin/hi-repl.tmp/bin/hi-repl.o $ex1/arch/linux/arch.a $ex1/linux/bin/hi-repl.tmp/lib/hello/hello.o $ex1/linux/bin/hi-repl.tmp/lib/utils/fib.o $ex1/linux/bin/hi-repl.tmp/lib/utils/utils.o
-build $ex1/linux/bin/hi.tmp/bin/hi.o.check: clang-tidy bin/hi.c
-build $ex1/linux/bin/hi.tmp/bin/hi.o: x86_64-linux-musl-cc bin/hi.c |@ $ex1/linux/bin/hi.tmp/bin/hi.o.check
-build $ex1/linux/bin/hi.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/linux/bin/hi.tmp/lib/hello/hello.o: x86_64-linux-musl-cc lib/hello/hello.c |@ $ex1/linux/bin/hi.tmp/lib/hello/hello.o.check
-build $ex1/linux/bin/hi.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/linux/bin/hi.tmp/lib/utils/fib.o: x86_64-linux-musl-cc lib/utils/fib.c |@ $ex1/linux/bin/hi.tmp/lib/utils/fib.o.check
-build $ex1/linux/bin/hi.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/linux/bin/hi.tmp/lib/utils/utils.o: x86_64-linux-musl-cc lib/utils/utils.c |@ $ex1/linux/bin/hi.tmp/lib/utils/utils.o.check
+build $ex1/linux/bin/hi.tmp/bin/hi.o-clang-tidy.check: clang-tidy bin/hi.c
+build $ex1/linux/bin/hi.tmp/bin/hi.o: x86_64-linux-musl-cc bin/hi.c |@ $ex1/linux/bin/hi.tmp/bin/hi.o-clang-tidy.check
+build $ex1/linux/bin/hi.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/linux/bin/hi.tmp/lib/hello/hello.o: x86_64-linux-musl-cc lib/hello/hello.c |@ $ex1/linux/bin/hi.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/linux/bin/hi.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/linux/bin/hi.tmp/lib/utils/fib.o: x86_64-linux-musl-cc lib/utils/fib.c |@ $ex1/linux/bin/hi.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/linux/bin/hi.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/linux/bin/hi.tmp/lib/utils/utils.o: x86_64-linux-musl-cc lib/utils/utils.c |@ $ex1/linux/bin/hi.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/linux/bin/hi: x86_64-linux-musl-ld $ex1/linux/bin/hi.tmp/bin/hi.o $ex1/arch/linux/arch.a $ex1/linux/bin/hi.tmp/lib/hello/hello.o $ex1/linux/bin/hi.tmp/lib/utils/fib.o $ex1/linux/bin/hi.tmp/lib/utils/utils.o
 
 ######################################################################
@@ -293,30 +293,30 @@ rule x86_64-macos-none-ld
   description = x86_64-macos-none $out
   command = zig cc -target x86_64-macos-none $ldflags $ldflags_macos -o $out $in
 
-build $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o.check: clang-tidy arch/macos/ask.c
-build $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o: x86_64-macos-none-cc arch/macos/ask.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o.check
-build $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o.check: clang-tidy arch/macos/get_arch.c
-build $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o: x86_64-macos-none-cc arch/macos/get_arch.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o.check
-build $ex1/macos/arch/arch.a.tmp/arch/macos/say.o.check: clang-tidy arch/macos/say.c
-build $ex1/macos/arch/arch.a.tmp/arch/macos/say.o: x86_64-macos-none-cc arch/macos/say.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/say.o.check
+build $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o-clang-tidy.check: clang-tidy arch/macos/ask.c
+build $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o: x86_64-macos-none-cc arch/macos/ask.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o-clang-tidy.check
+build $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o-clang-tidy.check: clang-tidy arch/macos/get_arch.c
+build $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o: x86_64-macos-none-cc arch/macos/get_arch.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o-clang-tidy.check
+build $ex1/macos/arch/arch.a.tmp/arch/macos/say.o-clang-tidy.check: clang-tidy arch/macos/say.c
+build $ex1/macos/arch/arch.a.tmp/arch/macos/say.o: x86_64-macos-none-cc arch/macos/say.c |@ $ex1/macos/arch/arch.a.tmp/arch/macos/say.o-clang-tidy.check
 build $ex1/arch/macos/arch.a: x86_64-macos-none-ar $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o $ex1/macos/arch/arch.a.tmp/arch/macos/get_arch.o $ex1/macos/arch/arch.a.tmp/arch/macos/say.o
-build $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o.check: clang-tidy bin/hi-repl.c
-build $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o: x86_64-macos-none-cc bin/hi-repl.c |@ $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o.check
-build $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o: x86_64-macos-none-cc lib/hello/hello.c |@ $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o.check
-build $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o: x86_64-macos-none-cc lib/utils/fib.c |@ $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o.check
-build $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o: x86_64-macos-none-cc lib/utils/utils.c |@ $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o.check
+build $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o-clang-tidy.check: clang-tidy bin/hi-repl.c
+build $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o: x86_64-macos-none-cc bin/hi-repl.c |@ $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o-clang-tidy.check
+build $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o: x86_64-macos-none-cc lib/hello/hello.c |@ $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o: x86_64-macos-none-cc lib/utils/fib.c |@ $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o: x86_64-macos-none-cc lib/utils/utils.c |@ $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/macos/bin/hi-repl: x86_64-macos-none-ld $ex1/macos/bin/hi-repl.tmp/bin/hi-repl.o $ex1/arch/macos/arch.a $ex1/macos/bin/hi-repl.tmp/lib/hello/hello.o $ex1/macos/bin/hi-repl.tmp/lib/utils/fib.o $ex1/macos/bin/hi-repl.tmp/lib/utils/utils.o
-build $ex1/macos/bin/hi.tmp/bin/hi.o.check: clang-tidy bin/hi.c
-build $ex1/macos/bin/hi.tmp/bin/hi.o: x86_64-macos-none-cc bin/hi.c |@ $ex1/macos/bin/hi.tmp/bin/hi.o.check
-build $ex1/macos/bin/hi.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/macos/bin/hi.tmp/lib/hello/hello.o: x86_64-macos-none-cc lib/hello/hello.c |@ $ex1/macos/bin/hi.tmp/lib/hello/hello.o.check
-build $ex1/macos/bin/hi.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/macos/bin/hi.tmp/lib/utils/fib.o: x86_64-macos-none-cc lib/utils/fib.c |@ $ex1/macos/bin/hi.tmp/lib/utils/fib.o.check
-build $ex1/macos/bin/hi.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/macos/bin/hi.tmp/lib/utils/utils.o: x86_64-macos-none-cc lib/utils/utils.c |@ $ex1/macos/bin/hi.tmp/lib/utils/utils.o.check
+build $ex1/macos/bin/hi.tmp/bin/hi.o-clang-tidy.check: clang-tidy bin/hi.c
+build $ex1/macos/bin/hi.tmp/bin/hi.o: x86_64-macos-none-cc bin/hi.c |@ $ex1/macos/bin/hi.tmp/bin/hi.o-clang-tidy.check
+build $ex1/macos/bin/hi.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/macos/bin/hi.tmp/lib/hello/hello.o: x86_64-macos-none-cc lib/hello/hello.c |@ $ex1/macos/bin/hi.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/macos/bin/hi.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/macos/bin/hi.tmp/lib/utils/fib.o: x86_64-macos-none-cc lib/utils/fib.c |@ $ex1/macos/bin/hi.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/macos/bin/hi.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/macos/bin/hi.tmp/lib/utils/utils.o: x86_64-macos-none-cc lib/utils/utils.c |@ $ex1/macos/bin/hi.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/macos/bin/hi: x86_64-macos-none-ld $ex1/macos/bin/hi.tmp/bin/hi.o $ex1/arch/macos/arch.a $ex1/macos/bin/hi.tmp/lib/hello/hello.o $ex1/macos/bin/hi.tmp/lib/utils/fib.o $ex1/macos/bin/hi.tmp/lib/utils/utils.o
 
 ######################################################################
@@ -340,30 +340,30 @@ rule x86_64-windows-gnu-ld
   description = x86_64-windows-gnu $out
   command = zig cc -target x86_64-windows-gnu $ldflags $ldflags_windows -o $out $in
 
-build $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o.check: clang-tidy arch/windows/ask.c
-build $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o: x86_64-windows-gnu-cc arch/windows/ask.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o.check
-build $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o.check: clang-tidy arch/windows/get_arch.c
-build $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o: x86_64-windows-gnu-cc arch/windows/get_arch.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o.check
-build $ex1/windows/arch/arch.a.tmp/arch/windows/say.o.check: clang-tidy arch/windows/say.c
-build $ex1/windows/arch/arch.a.tmp/arch/windows/say.o: x86_64-windows-gnu-cc arch/windows/say.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/say.o.check
+build $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o-clang-tidy.check: clang-tidy arch/windows/ask.c
+build $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o: x86_64-windows-gnu-cc arch/windows/ask.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o-clang-tidy.check
+build $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o-clang-tidy.check: clang-tidy arch/windows/get_arch.c
+build $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o: x86_64-windows-gnu-cc arch/windows/get_arch.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o-clang-tidy.check
+build $ex1/windows/arch/arch.a.tmp/arch/windows/say.o-clang-tidy.check: clang-tidy arch/windows/say.c
+build $ex1/windows/arch/arch.a.tmp/arch/windows/say.o: x86_64-windows-gnu-cc arch/windows/say.c |@ $ex1/windows/arch/arch.a.tmp/arch/windows/say.o-clang-tidy.check
 build $ex1/arch/windows/arch.a: x86_64-windows-gnu-ar $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o $ex1/windows/arch/arch.a.tmp/arch/windows/get_arch.o $ex1/windows/arch/arch.a.tmp/arch/windows/say.o
-build $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o.check: clang-tidy bin/hi-repl.c
-build $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o: x86_64-windows-gnu-cc bin/hi-repl.c |@ $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o.check
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o: x86_64-windows-gnu-cc lib/hello/hello.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o.check
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o: x86_64-windows-gnu-cc lib/utils/fib.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o.check
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o: x86_64-windows-gnu-cc lib/utils/utils.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o.check
+build $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o-clang-tidy.check: clang-tidy bin/hi-repl.c
+build $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o: x86_64-windows-gnu-cc bin/hi-repl.c |@ $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o-clang-tidy.check
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o: x86_64-windows-gnu-cc lib/hello/hello.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o: x86_64-windows-gnu-cc lib/utils/fib.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o: x86_64-windows-gnu-cc lib/utils/utils.c |@ $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/windows/bin/hi-repl.exe: x86_64-windows-gnu-ld $ex1/windows/bin/hi-repl.exe.tmp/bin/hi-repl.o $ex1/arch/windows/arch.a $ex1/windows/bin/hi-repl.exe.tmp/lib/hello/hello.o $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/fib.o $ex1/windows/bin/hi-repl.exe.tmp/lib/utils/utils.o
-build $ex1/windows/bin/hi.exe.tmp/bin/hi.o.check: clang-tidy bin/hi.c
-build $ex1/windows/bin/hi.exe.tmp/bin/hi.o: x86_64-windows-gnu-cc bin/hi.c |@ $ex1/windows/bin/hi.exe.tmp/bin/hi.o.check
-build $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o.check: clang-tidy lib/hello/hello.c
-build $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o: x86_64-windows-gnu-cc lib/hello/hello.c |@ $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o.check
-build $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o.check: clang-tidy lib/utils/fib.c
-build $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o: x86_64-windows-gnu-cc lib/utils/fib.c |@ $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o.check
-build $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o.check: clang-tidy lib/utils/utils.c
-build $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o: x86_64-windows-gnu-cc lib/utils/utils.c |@ $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o.check
+build $ex1/windows/bin/hi.exe.tmp/bin/hi.o-clang-tidy.check: clang-tidy bin/hi.c
+build $ex1/windows/bin/hi.exe.tmp/bin/hi.o: x86_64-windows-gnu-cc bin/hi.c |@ $ex1/windows/bin/hi.exe.tmp/bin/hi.o-clang-tidy.check
+build $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o-clang-tidy.check: clang-tidy lib/hello/hello.c
+build $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o: x86_64-windows-gnu-cc lib/hello/hello.c |@ $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o-clang-tidy.check
+build $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o-clang-tidy.check: clang-tidy lib/utils/fib.c
+build $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o: x86_64-windows-gnu-cc lib/utils/fib.c |@ $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o-clang-tidy.check
+build $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o-clang-tidy.check: clang-tidy lib/utils/utils.c
+build $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o: x86_64-windows-gnu-cc lib/utils/utils.c |@ $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o-clang-tidy.check
 build $ex1/windows/bin/hi.exe: x86_64-windows-gnu-ld $ex1/windows/bin/hi.exe.tmp/bin/hi.o $ex1/arch/windows/arch.a $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o
 
 ######################################################################
