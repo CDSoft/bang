@@ -53,8 +53,8 @@ function mt.__index:gen()
         local targets = directories_to_clean : map(function(dir)
             return build("clean-"..ident(dir)) {
                 ["$no_default"] = true,
-                description = {"CLEAN ", dir},
-                command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
+                description = {"CLEAN", dir},
+                command = {"rm -rf", dir..(dir==builddir and "/*" or "")},
             }
         end)
 
@@ -74,8 +74,8 @@ function mt.__index:gen()
         local targets = directories_to_clean_more : map(function(dir)
             return build("mrproper-"..ident(dir)) {
                 ["$no_default"] = true,
-                description = {"CLEAN ", dir},
-                command = {"rm -rf ", dir..(dir==builddir and "/*" or "")},
+                description = {"CLEAN", dir},
+                command = {"rm -rf", dir..(dir==builddir and "/*" or "")},
             }
         end)
 

@@ -69,3 +69,4 @@ build .build/test/lua/test-default-1.ninja: bang test/test-default-1.lua
 ######################################################################
 
 default bar baz all
+

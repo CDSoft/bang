@@ -23,7 +23,7 @@ ex1 = $builddir/ex1
 ######################################################################
 
 cflags = -O3 -Wall -Werror -Ilib -Iarch
-ldflags =
+ldflags = 
 
 rule clang-tidy
   command = clang-tidy --quiet --use-color --warnings-as-errors=* -header-filter=.* --checks=*,-llvmlibc-restrict-system-libc-headers,-llvm-header-guard,-modernize-macro-to-enum,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-altera-id-dependent-backward-branch,-altera-unroll-loops,-readability-identifier-length,-cppcoreguidelines-macro-to-enum $in &> $out || (cat $out && false)
@@ -47,7 +47,7 @@ rule ar_linux
   description = [linux] AR $out
   command = zig ar -crs $out $in
 
-ldflags_linux =
+ldflags_linux = 
 
 rule ld_linux
   description = [linux] LD $out
@@ -76,7 +76,7 @@ rule ar_macos
   description = [macos] AR $out
   command = zig ar -crs $out $in
 
-ldflags_macos =
+ldflags_macos = 
 
 rule ld_macos
   description = [macos] LD $out
@@ -105,7 +105,7 @@ rule ar_windows
   description = [windows] AR $out
   command = zig ar -crs $out $in
 
-ldflags_windows =
+ldflags_windows = 
 
 rule ld_windows
   description = [windows] LD $out

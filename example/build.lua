@@ -85,7 +85,7 @@ local architectures = ls "arch"
                 arch.cc, "-c",
                 "$cflags", var("cflags_"..arch_name)(arch.cflags),
                 "-MD -MF $depfile",
-                " $in -o $out",
+                "$in -o $out",
             },
             depfile = "$out.d",
         }

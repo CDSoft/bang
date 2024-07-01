@@ -33,9 +33,9 @@ baz = baz is $foo and $bar
 # Compound variables
 ######################################################################
 
-var4 = string 42 true foo bar baz
+var4 = string 42 true  foo     bar     baz   
 # v4        = $var4
-# vars.var4 = string 42 true foo bar baz
+# vars.var4 = string 42 true  foo     bar     baz   
 
 ######################################################################
 # Rules
@@ -121,7 +121,7 @@ rule link
 
 build link1: link
 build link2: link
-  pool =
+  pool = 
 
 ######################################################################
 # Default

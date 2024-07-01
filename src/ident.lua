@@ -18,6 +18,8 @@
 
 --@LIB
 
+local gsub = string.gsub
+
 return function(s)
-    return s : gsub("[^a-zA-Z0-9_%.%-]+", "_")
+    return gsub(s, "[^a-zA-Z0-9_%.%-]+", "_")
 end

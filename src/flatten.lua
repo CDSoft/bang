@@ -19,6 +19,8 @@
 --@LIB
 
 local F = require "F"
+local F_flatten = F.flatten
+local filter = F.filter
 
 local Nil = require "Nil"
 
@@ -27,5 +29,5 @@ local function is_not_Nil(x)
 end
 
 return function(xs)
-    return F.flatten(xs):filter(is_not_Nil)
+    return filter(is_not_Nil, F_flatten(xs))
 end
