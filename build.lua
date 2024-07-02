@@ -63,16 +63,11 @@ local sources = {
     },
 }
 
-rule "luaxc" {
-    description = "LUAXC $out",
-    command = "luax compile $arg -q -o $out $in",
-}
+build.luax.add_global "flags" "-q"
 
 local binaries = {
-    build("$bin/bang"..(target or sys).exe) { "luaxc", sources,
-        arg = { "-b", "-t", target and target.name or "native" },
-    },
-    build "$bin/bang.lua" { "luaxc", sources, arg="-t lua" },
+    build.luax[target and target.name or "native"]("$bin/bang"..(target or sys).exe) { sources },
+    build.luax.lua "$bin/bang.lua" { sources },
 }
 
 phony "compile" { binaries }

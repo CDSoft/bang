@@ -307,6 +307,22 @@ zig:executable "file.exe" {
     "f4.c",
 }
 
+section "LuaX compiler"
+
+build.luax.set_global "luax" "/path/to/luax"
+build.luax.add_global "flags" { "-s", "-k", ("%q"):format("a \"super\" key") }
+
+build.luax.native:add "flags" "-q"
+
+build.luax "hello-luax-1" { "hello.luax", "module.lua" }
+build.luax.luax "hello-luax-2" { "hello.luax", "module.lua" }
+build.luax.lua "hello-lua" { "hello.lua", "module.lua" }
+build.luax.pandoc "hello-pandoc" { "hello.lua", "module.lua" }
+build.luax.native "hello-native" { "hello.lua", "module.lua" }
+F.foreach(require "targets", function(t)
+    build.luax[t.name]("hello-"..t.name) { "hello.lua", "module.lua" }
+end)
+
 section "Document generators"
 
 build.cat "cat.txt" "f.txt"

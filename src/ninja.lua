@@ -254,6 +254,7 @@ local function build_decorator(build)
         __index = {},
     }
     mt.__index.C = require "C"
+    mt.__index.luax = require "luax"
     local builders = require "builders"
     F.foreachk(builders, function(name, builder) mt.__index[name] = builder end)
     mt.__index.new = function(...) return builders:new(...) end

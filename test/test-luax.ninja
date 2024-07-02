@@ -445,6 +445,77 @@ build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c
 build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o
 
 ######################################################################
+# LuaX compiler
+######################################################################
+
+rule luax
+  description = luax $out
+  command = /path/to/luax compile -t luax $in -o $out -s -k "a \"super\" key"
+
+build hello-luax-1: luax hello.luax module.lua
+build hello-luax-2: luax hello.luax module.lua
+
+rule luax-lua
+  description = luax-lua $out
+  command = /path/to/luax compile -t lua $in -o $out -s -k "a \"super\" key"
+
+build hello-lua: luax-lua hello.lua module.lua
+
+rule luax-pandoc
+  description = luax-pandoc $out
+  command = /path/to/luax compile -t pandoc $in -o $out -s -k "a \"super\" key"
+
+build hello-pandoc: luax-pandoc hello.lua module.lua
+
+rule luax-native
+  description = luax-native $out
+  command = /path/to/luax compile -t native $in -o $out -s -k "a \"super\" key" -q
+
+build hello-native: luax-native hello.lua module.lua
+
+rule luax-linux-x86_64
+  description = luax-linux-x86_64 $out
+  command = /path/to/luax compile -t linux-x86_64 $in -o $out -s -k "a \"super\" key"
+
+build hello-linux-x86_64: luax-linux-x86_64 hello.lua module.lua
+
+rule luax-linux-x86_64-musl
+  description = luax-linux-x86_64-musl $out
+  command = /path/to/luax compile -t linux-x86_64-musl $in -o $out -s -k "a \"super\" key"
+
+build hello-linux-x86_64-musl: luax-linux-x86_64-musl hello.lua module.lua
+
+rule luax-linux-aarch64
+  description = luax-linux-aarch64 $out
+  command = /path/to/luax compile -t linux-aarch64 $in -o $out -s -k "a \"super\" key"
+
+build hello-linux-aarch64: luax-linux-aarch64 hello.lua module.lua
+
+rule luax-linux-aarch64-musl
+  description = luax-linux-aarch64-musl $out
+  command = /path/to/luax compile -t linux-aarch64-musl $in -o $out -s -k "a \"super\" key"
+
+build hello-linux-aarch64-musl: luax-linux-aarch64-musl hello.lua module.lua
+
+rule luax-macos-x86_64
+  description = luax-macos-x86_64 $out
+  command = /path/to/luax compile -t macos-x86_64 $in -o $out -s -k "a \"super\" key"
+
+build hello-macos-x86_64: luax-macos-x86_64 hello.lua module.lua
+
+rule luax-macos-aarch64
+  description = luax-macos-aarch64 $out
+  command = /path/to/luax compile -t macos-aarch64 $in -o $out -s -k "a \"super\" key"
+
+build hello-macos-aarch64: luax-macos-aarch64 hello.lua module.lua
+
+rule luax-windows-x86_64
+  description = luax-windows-x86_64 $out
+  command = /path/to/luax compile -t windows-x86_64 $in -o $out -s -k "a \"super\" key"
+
+build hello-windows-x86_64: luax-windows-x86_64 hello.lua module.lua
+
+######################################################################
 # Document generators
 ######################################################################
 

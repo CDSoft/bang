@@ -565,7 +565,6 @@ and changing some options. E.g.:
 local gcc = build.C:new "gcc"   -- creates a new C compiler named "gcc"
     : set "cc" "gcc"                        -- compiler command
     : add "cflags" { "-O2", "-Iinclude" }   -- compilation flags
-}
 ```
 
 A compiler has two methods to modify options:
@@ -638,6 +637,46 @@ local exe = gcc "$builddir/file.exe" {
     ls "lib/*.c",
     "src/main.c",
 }
+```
+
+### LuaX compilers
+
+The module `luax` creates LuaX compilation objects.
+This module is available as a `build` function metamethod.
+
+The module itself is a default compiler that generates a Lua script executable by `luax`.
+
+A new compiler can be created by calling the `new` method of an existing compiler with a new name
+and changing some options. E.g.:
+
+``` lua
+local luaxq = build.luax:new "luax-q"   -- creates a new LuaX compiler named "luax-q"
+    : add "flags" "-q"                  -- add some compilation flags
+```
+
+A compiler has two methods to modify options:
+
+- `set` changes the value of an option
+- `add` adds values to the current value of an option
+
+The module also provides the methods `set_global` and `add_global` to add flags to all builtin LuaX compilers.
+
+| Option        | Description                           | Default value                     |
+| ------------- | ------------------------------------- | --------------------------------- |
+| `luax`        | LuaX binary to use to compile scripts | `"luax"`                          |
+| `target`      | Name of the target[^targets]          | `"luax"`                          |
+| `flags`       | Compilation options                   | `{}`                              |
+
+[^targets]: The available LuaX targets can be listed with `luax compile -t list`.
+
+Examples:
+
+``` lua
+-- make all LuaX compiler silent
+build.luax.add_global "flags" "-q"
+
+-- Compile hello.lua and some libs to a linux-x86_64-musl executable
+build.luax["linux-x86_64-musl"] "hello" { "hello.lua", "lib1.lua", "lib2.lua" }
 ```
 
 ### Builders
