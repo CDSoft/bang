@@ -312,6 +312,8 @@ section "LuaX compiler"
 build.luax.set_global "luax" "/path/to/luax"
 build.luax.add_global "flags" { "-s", "-k", ("%q"):format("a \"super\" key") }
 
+build.luax:add "flags" { "-x" }
+build.luax.luax:add "flags" { "-y" }
 build.luax.native:add "flags" "-q"
 
 build.luax "hello-luax-1" { "hello.luax", "module.lua" }

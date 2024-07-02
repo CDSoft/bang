@@ -101,6 +101,8 @@ return setmetatable(M, {
     __call = function(_, ...) return luax(...) end,
     __index = {
         new = function(_, ...) return luax:new(...) end,
+        set = function(_, ...) return luax:set(...) end,
+        add = function(_, ...) return luax:add(...) end,
         set_global = function(name)
             check_opt(name)
             return function(value)

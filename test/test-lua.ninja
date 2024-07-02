@@ -452,7 +452,7 @@ build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o
 
 rule luax
   description = luax $out
-  command = /path/to/luax compile -t luax $in -o $out -s -k "a \"super\" key"
+  command = /path/to/luax compile -t luax $in -o $out -s -k "a \"super\" key" -x -y
 
 build hello-luax-1: luax hello.luax module.lua
 build hello-luax-2: luax hello.luax module.lua
