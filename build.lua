@@ -70,7 +70,10 @@ local binaries = {
     build.luax.lua "$bin/bang.lua" { sources },
 }
 
-phony "compile" { binaries }
+-- used by LuaX only
+local bang_luax = build.luax.luax "$bin/bang.luax" { sources }
+
+phony "compile" { binaries, bang_luax }
 default "compile"
 help "compile" ("compile $name"..(target and " for "..target.name or ""))
 

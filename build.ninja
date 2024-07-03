@@ -56,7 +56,13 @@ rule luax-lua
   command = luax compile -t lua $in -o $out -q
 
 build $bin/bang.lua: luax-lua src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/builders.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/luax.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
-build compile: phony $bin/bang $bin/bang.lua
+
+rule luax
+  description = luax $out
+  command = luax compile -t luax $in -o $out -q
+
+build $bin/bang.luax: luax src/C.lua src/Nil.lua src/acc.lua src/atexit.lua src/bang.lua src/builders.lua src/case.lua src/clean.lua src/file.lua src/flatten.lua src/help.lua src/ident.lua src/install.lua src/log.lua src/ls.lua src/luax.lua src/ninja.lua src/pipe.lua src/target.lua src/tmp.lua src/where.lua $builddir/version
+build compile: phony $bin/bang $bin/bang.lua $bin/bang.luax
 
 default compile
 
