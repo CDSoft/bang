@@ -18,6 +18,8 @@
 -- For further information about bang you can visit
 -- https://cdelord.fr/bang
 
+--@MAIN
+
 local F = require "F"
 local fs = require "fs"
 

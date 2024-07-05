@@ -21,12 +21,23 @@
 -- Use the Lua sources of bang to generate the build.ninja file
 -- that will be used to compile and test bang...
 
+local fs = require "fs"
+
 -- set Lua search path to load modules that will later live in the bang executable
 package.path = "src/?.lua"
 
 -- Load bang libraries that would be automatically loaded by LuaX
-setmetatable(_G, { __index = function(_, name) return require(name) end })
+local main = nil
+fs.ls "src/*.lua" : foreach(function(name)
+    local content = fs.read(name)
+    if content:match "@LOAD" then
+        local mod = name:basename():splitext()
+        _G[mod] = require(mod)
+    elseif content:match "@MAIN" then
+        main = name
+    end
+end)
 package.preload.version = function() return "N/A" end
 
 -- Execute the main bang Lua script
-dofile "src/bang.lua"
+dofile(assert(main, "Main script not found"))
