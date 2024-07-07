@@ -37,8 +37,9 @@ $ PREFIX=/path ninja install # install bang to /path/bin
 Bang also comes with a pure Lua implementation for environments where LuaX can not be executed.
 In this case `$PREFIX/bin/bang.lua` can be executed with any standard Lua 5.4 interpreter.
 
-**Warning**: `bang.lua` is insanely slower than `bang`,
-especially when dealing with a large amount of source files.
+> [!NOTE]
+> `bang.lua` may be slower than `bang`,
+> especially when dealing with a large amount of source files.
 
 ## Precompiled binaries
 
@@ -46,10 +47,11 @@ In case precompiled binaries are needed (GNU/Linux, MacOS, Windows),
 some can be found at [cdelord.fr/hey](http://cdelord.fr/hey).
 These archives contain bang as well as some other softwares more or less related to LuaX.
 
-**Warning**: There are Linux binaries linked with musl and glibc. The musl
-binaries are platform independent but can not load shared libraries. The glibc
-binaries can load shared libraries but may depend on some specific glibc
-versions on the host.
+> [!TIP]
+> There are Linux binaries linked with musl and glibc. The musl
+> binaries are platform independent but can not load shared libraries. The glibc
+> binaries can load shared libraries but may depend on some specific glibc
+> versions on the host.
 
 Usage
 =====
@@ -227,7 +229,8 @@ rule "output" {
 build "output" { "output", "inputs" }
 ```
 
-**Note**: the rule name is the output name where special characters are replaced with underscores.
+> [!NOTE]
+> the rule name is the output name where special characters are replaced with underscores.
 
 ### Pools
 
@@ -250,8 +253,9 @@ default "target1"
 default {"target2", "target3"}
 ```
 
-**Note**: if no custom target is defined and if there are help, install or clean targets,
-bang will generate an explicit default target with all targets, except from help, install and clean targets.
+> [!NOTE]
+> if no custom target is defined and if there are help, install or clean targets,
+> bang will generate an explicit default target with all targets, except from help, install and clean targets.
 
 ### Phony targets
 
@@ -492,8 +496,9 @@ help "compile" "Compile every thing"
 -- ...
 ```
 
-**Note**: the `clean` and `install` target are automatically documented
-by the `clean` and `install` functions.
+> [!NOTE]
+> the `clean` and `install` target are automatically documented
+> by the `clean` and `install` functions.
 
 ### Generator
 
