@@ -438,13 +438,13 @@ rule zig-ld
   description = zig $out
   command = zig ld -target x86_64-linux-musl -lm -o $out $in
 
-build f1.o: zig-cc f1.c
-build $builddir/tmp/lib.a.tmp/f2.o: zig-cc f2.c
-build lib.a: zig-ar f1.o $builddir/tmp/lib.a.tmp/f2.o
-build $builddir/tmp/libf3.so.tmp/f3.o: zig-cc f3.c
-build libf3.so: zig-so f1.o lib.a $builddir/tmp/libf3.so.tmp/f3.o
-build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c
-build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o
+build f1.o: zig-cc f1.c | $builddir/foo
+build $builddir/tmp/lib.a.tmp/f2.o: zig-cc f2.c | $builddir/foo
+build lib.a: zig-ar f1.o $builddir/tmp/lib.a.tmp/f2.o | $builddir/foo
+build $builddir/tmp/libf3.so.tmp/f3.o: zig-cc f3.c | $builddir/foo
+build libf3.so: zig-so f1.o lib.a $builddir/tmp/libf3.so.tmp/f3.o | $builddir/foo
+build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c | $builddir/foo
+build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o | $builddir/foo
 
 ######################################################################
 # LuaX compiler

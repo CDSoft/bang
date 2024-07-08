@@ -284,6 +284,7 @@ local target = "x86_64-linux-musl"
 
 local zig = build.C : new "zig"
     : set "builddir" "$builddir/tmp"
+    : set "implicit_in" "$builddir/foo"
     : set "cc" { "zig cc", "-target", target }
     : add "cflags" { "-Og", "-g", "-Iinc" }
     : set "ar" "zig ar"

@@ -577,28 +577,29 @@ A compiler has two methods to modify options:
 - `set` changes the value of an option
 - `add` adds values to the current value of an option
 
-| Option        | Description                           | Default value                     |
-| ------------- | ------------------------------------- | --------------------------------- |
-| `builddir`    | Build dir for temporary files         | `"$builddir"`                     |
-| `cc`          | Compilation command                   | `"cc"`                            |
-| `cflags`      | Compilation options                   | `{"-c", "-MD -MF $depfile"}`      |
-| `cargs`       | Input and output                      | `"$in -o $out"`                   |
-| `depfile`     | Dependency file name                  | `"$out.d"`                        |
-| `cvalid`      | Validation rule                       | `{}`                              |
-| `ar`          | Archive command (static libraries)    | `"ar"`                            |
-| `aflags`      | Archive flags                         | `"-crs"`                          |
-| `aargs`       | Inputs anf output                     | `"$in -o $out"`                   |
-| `so`          | Link command (dynamic libraries)      | `"cc"`                            |
-| `soflags`     | Link options                          | `"-shared"`                       |
-| `soargs`      | Inputs and output                     | `"$in -o $out"`                   |
-| `ld`          | Link command (executables)            | `"cc"`                            |
-| `ldflags`     | Link options                          | `{}`                              |
-| `ldargs`      | Inputs and output                     | `"$in -o $out"`                   |
-| `c_exts`      | List of C source extensions           | `{ ".c" }`                        |
-| `o_ext`       | Object file extension                 | `".o"`                            |
-| `a_ext`       | Archive file extension                | `".a"`                            |
-| `so_ext`      | Dynamic library file extension        | `".so"`, `".dylib"` or "`.dll`"   |
-| `exe_ext`     | Executable file extension             | `""` or `".exe"`                  |
+| Option        | Description                               | Default value                     |
+| ------------- | ----------------------------------------- | --------------------------------- |
+| `builddir`    | Build dir for temporary files             | `"$builddir"`                     |
+| `cc`          | Compilation command                       | `"cc"`                            |
+| `cflags`      | Compilation options                       | `{"-c", "-MD -MF $depfile"}`      |
+| `cargs`       | Input and output                          | `"$in -o $out"`                   |
+| `depfile`     | Dependency file name                      | `"$out.d"`                        |
+| `cvalid`      | Validation rule                           | `{}`                              |
+| `ar`          | Archive command (static libraries)        | `"ar"`                            |
+| `aflags`      | Archive flags                             | `"-crs"`                          |
+| `aargs`       | Inputs anf output                         | `"$in -o $out"`                   |
+| `so`          | Link command (dynamic libraries)          | `"cc"`                            |
+| `soflags`     | Link options                              | `"-shared"`                       |
+| `soargs`      | Inputs and output                         | `"$in -o $out"`                   |
+| `ld`          | Link command (executables)                | `"cc"`                            |
+| `ldflags`     | Link options                              | `{}`                              |
+| `ldargs`      | Inputs and output                         | `"$in -o $out"`                   |
+| `c_exts`      | List of C source extensions               | `{ ".c" }`                        |
+| `o_ext`       | Object file extension                     | `".o"`                            |
+| `a_ext`       | Archive file extension                    | `".a"`                            |
+| `so_ext`      | Dynamic library file extension            | `".so"`, `".dylib"` or "`.dll`"   |
+| `exe_ext`     | Executable file extension                 | `""` or `".exe"`                  |
+| `implicit_in` | Implicit inputs (e.g. custom compiler)    | `Nil`                             |
 
 A compiler can compile a single C source as well as complete libraries and executables.
 Inputs of libraries or executables can be C sources

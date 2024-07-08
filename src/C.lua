@@ -36,6 +36,7 @@ local default_options = {
     a_ext = ".a",
     so_ext = sys.so,
     exe_ext = sys.exe,
+    implicit_in = Nil,
 }
 
 local rules = setmetatable({}, {
@@ -49,18 +50,22 @@ local rules = setmetatable({}, {
                 description = {compiler.name, "$out"},
                 command = { compiler.cc, compiler.cflags, compiler.cargs },
                 depfile = compiler.depfile,
+                implicit_in = compiler.implicit_in,
             },
             ar = rule(ar) {
                 description = {compiler.name, "$out"},
                 command = { compiler.ar, compiler.aflags, compiler.aargs },
+                implicit_in = compiler.implicit_in,
             },
             so = rule(so) {
                 description = {compiler.name, "$out"},
                 command = { compiler.so, compiler.soflags, compiler.soargs },
+                implicit_in = compiler.implicit_in,
             },
             ld = rule(ld) {
                 description = {compiler.name, "$out"},
                 command = { compiler.ld, compiler.ldflags, compiler.ldargs },
+                implicit_in = compiler.implicit_in,
             },
         }
         rawset(self, compiler, new_rules)
