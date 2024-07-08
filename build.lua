@@ -49,6 +49,121 @@ var "test" "$builddir/test"
 clean "$builddir"
 
 ---------------------------------------------------------------------
+-- Compilation of ninja with Zig
+---------------------------------------------------------------------
+
+local ninja_bin = Nil
+
+if target then
+
+section "Ninja compilation"
+
+var "zig_version" "0.13.0"
+local home, zig_path = F.unpack(F.case(sys.os) {
+    windows = { "LOCALAPPDATA", "zig" / "$zig_version" },
+    [F.Nil] = { "HOME", ".local" / "opt" / "zig" / "$zig_version" },
+})
+
+var "archive" ("zig-"..sys.os.."-"..sys.arch.."-$zig_version.tar.xz")
+var "url" ("https://ziglang.org/download/$zig_version/$archive")
+var "zig_path" (os.getenv(home) / zig_path)
+var "zig" ("$zig_path"/"zig"..sys.exe)
+
+build "$zig" {
+    description = "install $out",
+    command = {
+        "test -x $zig",
+        "||",
+        "( curl -fsSL $url -o $builddir/$archive && tar xJf $builddir/$archive -C $zig_path --strip-components 1 )",
+    },
+}
+
+local target_name = {"-target", F{target.arch, target.os, target.libc}:str"-"}
+
+local cpp = build.C:new "zig"
+    : set "implicit_in" "$zig"
+    : set "cc" { "$zig c++", target_name }
+    : set "ar" "$zig ar"
+    : set "ld" { "$zig c++", target_name }
+    : set "c_exts" { ".cc" }
+    : add "cflags" {
+        "-Wno-deprecated",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-parameter",
+        "-Wno-inconsistent-missing-override",
+        "-fno-rtti",
+        "-fno-exceptions",
+        "-std=c++11",
+        "-pipe",
+        "-O2",
+        "-fdiagnostics-color",
+        "-DNDEBUG",
+        case (target.os) {
+            linux = {
+                "-fvisibility=hidden",
+                "-Wno-dll-attribute-on-redeclaration",
+                "-DUSE_PPOLL",
+            },
+            macos = {
+                "-fvisibility=hidden",
+                "-Wno-dll-attribute-on-redeclaration",
+            },
+            windows = {
+                "-D__USE_MINGW_ANSI_STDIO=1",
+                "-DUSE_PPOLL",
+            },
+        }
+    }
+    : add "ldflags" {
+        "-pipe",
+        "-s",
+    }
+
+local ninja_sources = F.map(F.prefix"ext/ninja/src/", {
+    "build_log.cc",
+    "build.cc",
+    "clean.cc",
+    "clparser.cc",
+    "dyndep.cc",
+    "dyndep_parser.cc",
+    "debug_flags.cc",
+    "deps_log.cc",
+    "disk_interface.cc",
+    "edit_distance.cc",
+    "eval_env.cc",
+    "graph.cc",
+    "graphviz.cc",
+    "json.cc",
+    "line_printer.cc",
+    "manifest_parser.cc",
+    "metrics.cc",
+    "missing_deps.cc",
+    "parser.cc",
+    "state.cc",
+    "status.cc",
+    "string_piece_util.cc",
+    "util.cc",
+    "version.cc",
+    "depfile_parser.cc",
+    "lexer.cc",
+    "ninja.cc",
+})
+
+local win_sources = ls "ext/ninja/src/*-win32.cc"
+local posix_sources = ls "ext/ninja/src/*-posix.cc"
+
+ninja_bin = cpp:executable("$bin/ninja"..target.exe) {
+    ninja_sources,
+    case (target.os) {
+        linux = posix_sources,
+        macos = posix_sources,
+        windows = win_sources,
+    },
+}
+
+end
+
+---------------------------------------------------------------------
 -- Compilation
 ---------------------------------------------------------------------
 
@@ -68,6 +183,7 @@ build.luax.add_global "flags" "-q"
 local binaries = {
     build.luax[target and target.name or "native"]("$bin/bang"..(target or sys).exe) { sources },
     build.luax.lua "$bin/bang.lua" { sources },
+    ninja_bin,
 }
 
 -- used by LuaX only
