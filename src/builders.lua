@@ -126,6 +126,11 @@ local panda = pandoc:new "panda"
     }
     : set "depfile" "$out.d"
 
+local typst = new(default_options, "typst")
+    : set "cmd" "typst"
+    : set "args" "$in $out"
+    : set "flags" "compile"
+
 if sys.os == "windows" then
     cat : set "cmd" "type"
     cp : set "cmd" "copy"
@@ -195,6 +200,7 @@ return setmetatable({
     panda_gfm = panda:new "panda_gfm" : add "flags" "-t gfm",
     pandoc = pandoc,
     pandoc_gfm = pandoc:new "pandoc_gfm" : add "flags" "-t gfm",
+    typst = typst,
     graphviz = {
         dot = {
             svg = dot:new "dot.svg" : add "flags" "-Tsvg",

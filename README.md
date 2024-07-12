@@ -702,6 +702,7 @@ The `build` metamethods contain some predefined builders:
 | `build.pandoc_gfm`        | Convert a file with [pandoc](https://pandoc.org) for Github.                                          |
 | `build.panda`             | Convert a file with [panda](https://github.com/CDSoft/panda).                                         |
 | `build.panda_gfm`         | Convert a file with [panda](https://github.com/CDSoft/panda) for Github.                              |
+| `build.typst`             | Convert a file with [typst](https://typst.app).                                                       |
 | `build.graphviz.prog.img` | [Graphviz](https://graphviz.org/) image rendered with *prog*[^graphviz] as an *img*[^img] image.      |
 | `build.plantuml.img`      | [PlantUML](https://plantuml.com) image rendered as an *img*[^img] image.                              |
 | `build.ditaa.img`         | [Ditaa](https://ditaa.sourceforge.net/) image rendered as an *img*[^img] image.                       |
