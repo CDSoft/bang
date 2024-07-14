@@ -62,7 +62,7 @@ function mt.__index:default_target_needed()
     return help_defined()
 end
 
-function mt.__index:gen()
+function mt.__index:gen(help_token)
     if not help_defined() then return end
 
     if not targets:null() then
@@ -76,25 +76,32 @@ function mt.__index:gen()
 
     section "Help"
 
+    local help_message = F{
+        description:null() and {} or description:unlines(),
+        "",
+        targets:null() and {} or {
+            "Targets:",
+            targets : map(function(target)
+                return F"  %s   %s":format(justify(target.name), target.txt)
+            end)
+        },
+        "",
+        epilog:null() and {} or epilog:unlines(),
+    } : flatten()
+      : unlines()
+      : trim()
+      : gsub("\n\n+", "\n\n")   -- remove duplicate blank lines
+      : lines()
+
+    acc(help_token) {
+        help_message : map(F.compose{string.rtrim, F.prefix"# "}) : unlines(),
+        "\n",
+    }
+
     build "help" {
         ["$no_default"] = true,
         description = "help",
-        command = F{
-            description:null() and {} or description:unlines(),
-            "",
-            targets:null() and {} or {
-                "Targets:",
-                targets : map(function(target)
-                    return F"  %s   %s":format(justify(target.name), target.txt)
-                end)
-            },
-            "",
-            epilog:null() and {} or epilog:unlines(),
-        } : flatten()
-          : unlines()
-          : trim()
-          : gsub("\n\n+", "\n\n")   -- remove duplicate blank lines
-          : lines()
+        command = help_message
           : map(function(line) return ("echo %q"):format(line) end)
           : str "; $\n            "
     }
