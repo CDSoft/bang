@@ -13,6 +13,14 @@
 #
 # More information at https://cdelord.fr/bang
 
+# Files installed in bin
+#   foo1.bin
+#   foo2.bin
+#   foo3.bin
+
+# Files installed in lib
+#   foo1.lib
+
 ninja_required_version = 1.11.1
 
 ######################################################################

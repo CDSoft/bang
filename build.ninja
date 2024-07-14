@@ -11,6 +11,10 @@
 #
 # Without any arguments, Ninja will compile and test Bang.
 
+# Files installed in bin
+#   .build/bin/bang
+#   .build/bin/bang.lua
+
 ninja_required_version = 1.11.1
 
 ######################################################################

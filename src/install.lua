@@ -20,6 +20,7 @@
 
 local F = require "F"
 
+local flatten = require "flatten"
 local ident = require "ident"
 
 local prefix = "~/.local"
@@ -42,7 +43,7 @@ function mt.__index:default_target_needed()
     return not targets:null()
 end
 
-function mt.__index:gen()
+function mt.__index:gen(install_token)
     if targets:null() then
         return
     end
@@ -59,6 +60,15 @@ function mt.__index:gen()
     : map(function(target_group)
         local target_name = target_group[1].name
         local rule_name = "install-"..ident(target_name)
+        acc(install_token) {
+            "# Files installed in "..target_name.."\n",
+            target_group
+                : map(function(target)
+                    local files = flatten{target.sources} : map(tostring) : unwords() : words()
+                    return files:map(function(file) return "#   "..vars.expand(file).."\n" end)
+                end),
+            "\n",
+        }
         return build(rule_name) { target_group:map(function(target) return target.sources end),
             ["$no_default"] = true,
             description = "INSTALL $in to "..target_name,
