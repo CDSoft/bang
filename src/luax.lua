@@ -26,6 +26,7 @@ local default_options = {
     luax = "luax",
     target = "luax",
     flags = {},
+    implicit_in = Nil,
 }
 
 local rules = setmetatable({}, {

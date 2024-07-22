@@ -667,11 +667,12 @@ A compiler has two methods to modify options:
 
 The module also provides the methods `set_global` and `add_global` to add flags to all builtin LuaX compilers.
 
-| Option        | Description                           | Default value                     |
-| ------------- | ------------------------------------- | --------------------------------- |
-| `luax`        | LuaX binary to use to compile scripts | `"luax"`                          |
-| `target`      | Name of the target[^targets]          | `"luax"`                          |
-| `flags`       | Compilation options                   | `{}`                              |
+| Option        | Description                               | Default value                     |
+| ------------- | ----------------------------------------- | --------------------------------- |
+| `luax`        | LuaX binary to use to compile scripts     | `"luax"`                          |
+| `target`      | Name of the target[^targets]              | `"luax"`                          |
+| `flags`       | Compilation options                       | `{}`                              |
+| `implicit_in` | Implicit inputs (e.g. custom compiler)    | `Nil`                             |
 
 [^targets]: The available LuaX targets can be listed with `luax compile -t list`.
 
