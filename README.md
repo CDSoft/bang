@@ -44,7 +44,7 @@ In this case `$PREFIX/bin/bang.lua` can be executed with any standard Lua 5.4 in
 ## Precompiled binaries
 
 In case precompiled binaries are needed (GNU/Linux, MacOS, Windows),
-some can be found at [cdelord.fr/hey](http://cdelord.fr/hey).
+some can be found at [cdelord.fr/pub](http://cdelord.fr/pub).
 These archives contain bang as well as some other softwares more or less related to LuaX.
 
 > [!TIP]
