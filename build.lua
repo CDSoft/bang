@@ -83,26 +83,19 @@ local cpp = build.C:new "zig"
     : set "c_exts" { ".cc" }
     : add "cflags" {
         "-Wno-deprecated",
-        "-Wno-missing-field-initializers",
-        "-Wno-unused-parameter",
-        "-Wno-inconsistent-missing-override",
         "-fno-rtti",
         "-fno-exceptions",
         "-std=c++11",
         "-pipe",
         "-O2",
         "-fdiagnostics-color",
+        "-fvisibility=hidden",
         "-DNDEBUG",
         case (target.os) {
             linux = {
-                "-fvisibility=hidden",
-                "-Wno-dll-attribute-on-redeclaration",
                 "-DUSE_PPOLL",
             },
-            macos = {
-                "-fvisibility=hidden",
-                "-Wno-dll-attribute-on-redeclaration",
-            },
+            macos = {},
             windows = {
                 "-D__USE_MINGW_ANSI_STDIO=1",
                 "-DUSE_PPOLL",
@@ -114,38 +107,16 @@ local cpp = build.C:new "zig"
         "-s",
     }
 
-local ninja_sources = F.map(F.prefix"ext/ninja/src/", {
-    "build_log.cc",
-    "build.cc",
-    "clean.cc",
-    "clparser.cc",
-    "dyndep.cc",
-    "dyndep_parser.cc",
-    "debug_flags.cc",
-    "deps_log.cc",
-    "disk_interface.cc",
-    "edit_distance.cc",
-    "eval_env.cc",
-    "graph.cc",
-    "graphviz.cc",
-    "json.cc",
-    "line_printer.cc",
-    "manifest_parser.cc",
-    "metrics.cc",
-    "missing_deps.cc",
-    "parser.cc",
-    "state.cc",
-    "status.cc",
-    "string_piece_util.cc",
-    "util.cc",
-    "version.cc",
-    "depfile_parser.cc",
-    "lexer.cc",
-    "ninja.cc",
-})
-
-local win_sources = ls "ext/ninja/src/*-win32.cc"
+local win_sources   = ls "ext/ninja/src/*-win32.cc"
 local posix_sources = ls "ext/ninja/src/*-posix.cc"
+local ninja_sources = ls "ext/ninja/src/*.cc"
+    : difference(posix_sources..win_sources)
+    : filter(function(name)
+        return  not name:match "test%.cc$"
+            and not name:match "bench%.cc$"
+            and not name:match "browse%.cc$"
+            and not name:match "%.in%.cc$"
+    end)
 
 ninja_bin = cpp:executable("$bin/ninja"..target.exe) {
     ninja_sources,
