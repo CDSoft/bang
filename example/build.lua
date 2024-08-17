@@ -108,7 +108,7 @@ local architectures = ls "arch"
         build(arch.archive_file) { ar[arch_name],
             ls(path/"**.c")
             : map(function(source)
-                return build("$ex0" / source:splitext()..".o") {
+                return build("$ex0" / source:chext".o") {
                     cc[arch_name], source,
                     validations = validation and {
                         build("$ex0/clang-tidy"/source..".check") { "clang-tidy", source },
@@ -130,7 +130,7 @@ architectures : foreach(function(arch)
                 ar[arch.name],
                 ls(path/"**.c")
                 : map(function(source)
-                    return build("$ex0" / arch.name / source:splitext()..".o") {
+                    return build("$ex0" / arch.name / source:chext".o") {
                         cc[arch.name], source,
                         validations = validation and {
                             build("$ex0/clang-tidy"/arch.name/source..".check") { "clang-tidy", source },
@@ -146,9 +146,9 @@ architectures : foreach(function(arch)
     : foreach(function(path)
         local bin_name = path:basename()
         section(bin_name:splitext().." for "..arch.name)
-        build("$ex0" / arch.name / "bin" / bin_name:splitext()..arch.ext) {
+        build("$ex0" / arch.name / "bin" / bin_name:chext(arch.ext)) {
             ld[arch.name], arch.libraries, arch.archive_file,
-            build("$ex0" / arch.name / "bin" / bin_name:splitext()..".o") {
+            build("$ex0" / arch.name / "bin" / bin_name:chext".o") {
                 cc[arch.name], path,
                 validations = validation and {
                     build("$ex0/clang-tidy"/arch.name/path..".check") { "clang-tidy", path },
@@ -180,7 +180,7 @@ ls "arch"
 
     ls "bin/*.c"
     : foreach(function(bin_path)
-        local bin_name = bin_path:basename():splitext()..compiler.exe_ext
+        local bin_name = bin_path:basename():chext(compiler.exe_ext)
 
         compiler:executable("$ex1" / arch_name / "bin" / bin_name) {
             bin_path,

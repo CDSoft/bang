@@ -240,9 +240,9 @@ phony "test" {
             -- ninja_required_version
             ls "test/test-future-version-*.lua"
             : map(function(src)
-                local ninja     = test_dir/src:basename():splitext()..".ninja"
-                local diff_res  = test_dir/src:basename():splitext()..".diff"
-                local ninja_ref = src:splitext()..".ninja"
+                local ninja     = test_dir/src:basename():chext".ninja"
+                local diff_res  = test_dir/src:basename():chext".diff"
+                local ninja_ref = src:chext".ninja"
                 return build(ninja) { "run_test-future-version", src,
                     bang = bang,
                     implicit_in = bang,
@@ -253,8 +253,8 @@ phony "test" {
             -- default targets
             ls "test/test-default-*.lua"
             : map(function(src)
-                local ninja     = test_dir/src:basename():splitext()..".ninja"
-                local diff_res  = test_dir/src:basename():splitext()..".diff"
+                local ninja     = test_dir/src:basename():chext".ninja"
+                local diff_res  = test_dir/src:basename():chext".diff"
                 local ninja_ref = src:splitext().."-"..interpreter..".ninja"
                 return build(ninja) { "run_test-default", src,
                     bang = bang,
@@ -266,11 +266,11 @@ phony "test" {
             -- errors
             ls "test/test-err-*.lua"
             : map(function(src)
-                local ninja         = test_dir/src:basename():splitext()..".ninja"
-                local ninja_missing = test_dir/src:basename():splitext()..".ninja-missing"
-                local diff_res      = test_dir/src:basename():splitext()..".diff"
-                local stderr        = test_dir/src:basename():splitext()..".stderr"
-                local stderr_ref    = src:splitext()..".stderr"
+                local ninja         = test_dir/src:basename():chext".ninja"
+                local ninja_missing = test_dir/src:basename():chext".ninja-missing"
+                local diff_res      = test_dir/src:basename():chext".diff"
+                local stderr        = test_dir/src:basename():chext".stderr"
+                local stderr_ref    = src:chext".stderr"
                 return build(stderr) { "run_test-error", src,
                     bang = bang,
                     implicit_in = bang,
@@ -285,11 +285,11 @@ phony "test" {
             -- unknown file
             F{ "test/unknown_file.lua" }
             : map(function(src)
-                local ninja         = test_dir/src:basename():splitext()..".ninja"
-                local ninja_missing = test_dir/src:basename():splitext()..".ninja-missing"
-                local diff_res      = test_dir/src:basename():splitext()..".diff"
-                local stderr        = test_dir/src:basename():splitext()..".stderr"
-                local stderr_ref    = src:splitext()..".stderr"
+                local ninja         = test_dir/src:basename():chext".ninja"
+                local ninja_missing = test_dir/src:basename():chext".ninja-missing"
+                local diff_res      = test_dir/src:basename():chext".diff"
+                local stderr        = test_dir/src:basename():chext".stderr"
+                local stderr_ref    = src:chext".stderr"
                 return build(stderr) { "run_test-error-unknown_file",
                     bang = bang,
                     implicit_in = bang,

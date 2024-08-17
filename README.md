@@ -338,7 +338,7 @@ E.g.:
 ``` lua
 ls "doc/*.md"
 : foreach(function(doc)
-    build (doc:splitext()..".pdf") { "md_to_pdf", doc }
+    build (doc:chext".pdf") { "md_to_pdf", doc }
 end)
 -- where md_to_pdf is a rule to convert Markdown files to PDF
 ```
