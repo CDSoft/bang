@@ -409,7 +409,7 @@ local function generator_rule(args)
 
     section(("Regenerate %s when %s changes"):format(args.output, args.input))
 
-    local bang_cmd= args.gen_cmd or
+    local bang_cmd = args.gen_cmd or
         filterk(function(k)
             return math.type(k) == "integer" and k <= 0
         end, args.cli_args) : values() : unwords()

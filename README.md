@@ -438,7 +438,7 @@ The `clean` function takes a directory name that shall be deleted by `ninja clea
 
 ``` lua
 clean "$builddir"   -- `ninja clean` cleans $builddir
-clean "tmp/foo"     -- `ninja clean` cleans /tmp/foo
+clean "tmp/foo"     -- `ninja clean` cleans tmp/foo
 ```
 
 `clean` defines the target `clean` (run by `ninja clean`)
@@ -469,7 +469,7 @@ Artifacts are added to the list of files to be installed by the function `instal
 This function takes the name of the destination directory, relative to the prefix and the file to be installed.
 
 ``` lua
-install "bin" "$builddir/bang" -- installs bang to $prefix/bin/
+install "bin" "$builddir/bang" -- installs bang to $PREFIX/bin/
 ```
 
 `install` defines the target `install` (run by `ninja install`)
