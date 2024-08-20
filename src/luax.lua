@@ -41,6 +41,7 @@ local rules = setmetatable({}, {
         local new_rule = rule(compiler.name) {
             description = compiler.description or {compiler.name, "$out"},
             command = { compiler.luax, "compile", "-t", compiler.target, "$in -o $out", compiler.flags },
+            implicit_in = compiler.implicit_in,
         }
         self[compiler] = new_rule
         return new_rule
