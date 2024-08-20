@@ -77,6 +77,8 @@ build compile: phony $bin/bang $bin/bang.lua $bin/bang.luax
 
 default compile
 
+build all: phony compile test
+
 ######################################################################
 # Tests
 ######################################################################
