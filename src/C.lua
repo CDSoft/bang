@@ -39,6 +39,13 @@ local default_options = {
     implicit_in = Nil,
 }
 
+local function split_hybrid_table(t)
+    local function is_numeric_key(k)
+        return math.type(k) == "integer"
+    end
+    return F.table_partition_with_key(is_numeric_key, t)
+end
+
 local rules = setmetatable({}, {
     __index = function(self, compiler)
         local cc = F{compiler.name, "cc"}:flatten():str"-"
@@ -76,6 +83,7 @@ local rules = setmetatable({}, {
 local function compile(self, output)
     local cc = rules[self].cc
     return function(inputs)
+        local input_list, input_vars = split_hybrid_table(inputs)
         local validations = F.flatten{self.cvalid}:map(function(valid)
             local valid_output = output.."-"..(valid.name or valid)..".check"
             if valid.name then
@@ -84,19 +92,25 @@ local function compile(self, output)
                 return build(valid_output) { valid, inputs }
             end
         end)
-        return build(output) { cc, inputs,
-            validations = validations,
-        }
+        return build(output) (F.merge{
+            { cc, input_list },
+            input_vars,
+            { validations = validations },
+        })
     end
 end
 
 local function static_lib(self, output)
     local ar = rules[self].ar
     return function(inputs)
+        local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { ar,
             F.flatten(inputs):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
-                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) { input }
+                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
+                        { input },
+                        input_vars,
+                    })
                 else
                     return input
                 end
@@ -108,10 +122,14 @@ end
 local function dynamic_lib(self, output)
     local so = rules[self].so
     return function(inputs)
+        local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { so,
             F.flatten(inputs):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
-                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) { input }
+                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
+                        { input },
+                        input_vars,
+                    })
                 else
                     return input
                 end
@@ -123,10 +141,14 @@ end
 local function executable(self, output)
     local ld = rules[self].ld
     return function(inputs)
+        local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { ld,
             F.flatten(inputs):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
-                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) { input }
+                    return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
+                        { input },
+                        input_vars,
+                    })
                 else
                     return input
                 end

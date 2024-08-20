@@ -29,6 +29,13 @@ local default_options = {
     implicit_in = Nil,
 }
 
+local function split_hybrid_table(t)
+    local function is_numeric_key(k)
+        return math.type(k) == "integer"
+    end
+    return F.table_partition_with_key(is_numeric_key, t)
+end
+
 local rules = setmetatable({}, {
     __index = function(self, compiler)
         local new_rule = rule(compiler.name) {
@@ -45,7 +52,11 @@ local function run(self, output)
         if type(inputs) == "string" then
             inputs = {inputs}
         end
-        return build(output) { rules[self], inputs }
+        local input_list, input_vars = split_hybrid_table(inputs)
+        return build(output) (F.merge{
+            { rules[self], input_list },
+            input_vars,
+        })
     end
 end
 
