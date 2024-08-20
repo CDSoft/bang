@@ -80,6 +80,10 @@ compiler_mt = {
             check_opt(name)
             return function(value) self[name] = {self[name], value}; return self end
         end,
+        insert = function(self, name)
+            check_opt(name)
+            return function(value) self[name] = {self[name], value}; return self end
+        end,
     },
 }
 
@@ -104,6 +108,7 @@ return setmetatable(M, {
         new = function(_, ...) return luax:new(...) end,
         set = function(_, ...) return luax:set(...) end,
         add = function(_, ...) return luax:add(...) end,
+        insert = function(_, ...) return luax:insert(...) end,
         set_global = function(name)
             check_opt(name)
             return function(value)
@@ -114,6 +119,12 @@ return setmetatable(M, {
             check_opt(name)
             return function(value)
                 F.foreacht(M, function(compiler) compiler:add(name)(value) end)
+            end
+        end,
+        insert_global = function(name)
+            check_opt(name)
+            return function(value)
+                F.foreacht(M, function(compiler) compiler:insert(name)(value) end)
             end
         end,
     }

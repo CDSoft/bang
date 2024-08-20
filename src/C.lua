@@ -171,6 +171,10 @@ compiler_mt = {
             check_opt(name)
             return function(value) self[name] = {self[name], value}; return self end
         end,
+        insert = function(self, name)
+            check_opt(name)
+            return function(value) self[name] = {value, self[name]}; return self end
+        end,
     },
 }
 

@@ -96,6 +96,9 @@ builder_mt = {
         add = function(self, name)
             return function(value) self[name] = self[name]==nil and value or {self[name], value}; return self end
         end,
+        insert = function(self, name)
+            return function(value) self[name] = self[name]==nil and value or {value, self[name]}; return self end
+        end,
     },
 }
 

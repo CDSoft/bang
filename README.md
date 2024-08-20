@@ -576,6 +576,7 @@ A compiler has two methods to modify options:
 
 - `set` changes the value of an option
 - `add` adds values to the current value of an option
+- `insert` adds values before the current value of an option
 
 | Option        | Description                               | Default value                     |
 | ------------- | ----------------------------------------- | --------------------------------- |
@@ -664,8 +665,9 @@ A compiler has two methods to modify options:
 
 - `set` changes the value of an option
 - `add` adds values to the current value of an option
+- `insert` adds values before the current value of an option
 
-The module also provides the methods `set_global` and `add_global` to add flags to all builtin LuaX compilers.
+The module also provides the methods `set_global`, `add_global` and `insert_global` to add flags to all builtin LuaX compilers.
 
 | Option        | Description                               | Default value                     |
 | ------------- | ----------------------------------------- | --------------------------------- |
@@ -739,6 +741,7 @@ A builder has two methods to modify options:
 
 - `set` changes the value of an option
 - `add` adds values to the current value of an option
+- `insert` adds values before the current value of an option
 
 | Option        | Description                           |
 | ------------- | ------------------------------------- |
