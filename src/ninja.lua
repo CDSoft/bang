@@ -431,7 +431,9 @@ local function generator_rule(args)
 
     local deps = values(package.modpath)
     if not deps:null() then
-        generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps } : nub()
+        generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps }
+            : nub()
+            : difference { args.input }
     end
 
     acc(command_line_token) {
