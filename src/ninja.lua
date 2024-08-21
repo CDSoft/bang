@@ -106,7 +106,7 @@ local vars = {}
 local function expand(s)
     if type(s) == "string" then
         for _ in pairs(vars) do
-            local s1 = s:gsub("%$(%w+)", vars)
+            local s1 = s:gsub("%$([%w_%-]+)", vars)
             if s1 == s then break end
             s = s1
         end
