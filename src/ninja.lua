@@ -359,10 +359,13 @@ function pool(name)
 end
 
 function default(targets)
-    custom_default_statement = true
-    nl()
-    emit("default "..stringify(targets).."\n")
-    nl()
+    local default_targets = stringify(targets)
+    if default_targets ~= "" then
+        custom_default_statement = true
+        nl()
+        emit("default "..default_targets.."\n")
+        nl()
+    end
 end
 
 local function generate_default()
