@@ -105,7 +105,7 @@ builder_mt = {
 local cat = new(default_options, "cat")
 local cp = new(default_options, "cp")
     : set "cmd" "cp"
-    : set "flags" "-d --preserve=mode"
+    : set "flags" (sys.os=="linux" and "-d --preserve=mode" or {})
     : set "args" "$in $out"
 
 local ypp = new(default_options, "ypp")
