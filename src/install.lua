@@ -19,6 +19,7 @@
 --@LOAD
 
 local F = require "F"
+local sys = require "sys"
 
 local flatten = require "flatten"
 local ident = require "ident"
@@ -72,7 +73,11 @@ function mt.__index:gen(install_token)
         return build(rule_name) { target_group:map(function(target) return target.sources end),
             ["$no_default"] = true,
             description = "INSTALL $in to "..target_name,
-            command = { "install -v -D -t", "$${PREFIX:-$prefix}"/target_name, "$in" },
+            command = case(sys.os) {
+                linux = { "install -v -D -t", "$${PREFIX:-$prefix}"/target_name, "$in" },
+                macos = { "install", "$in", "$${PREFIX:-$prefix}"/target_name },
+                windows = { "copy", "$in", "%PREFIX%"/target_name },
+            },
         }
     end)
 

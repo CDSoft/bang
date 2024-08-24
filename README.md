@@ -32,6 +32,9 @@ or set `$PREFIX` to install `bang` to a custom directory (`$PREFIX/bin`):
 $ PREFIX=/path ninja install # install bang to /path/bin
 ```
 
+> [!WARNING]
+> On Windows, `%PREFIX%` **must** be defined as there is no default installation path.
+
 ## Pure Lua implementation
 
 Bang also comes with a pure Lua implementation for environments where LuaX can not be executed.
