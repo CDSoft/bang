@@ -13,8 +13,8 @@
 # Without any arguments, Ninja will compile and test Bang.
 
 # Files installed in bin
-#   .build/bin/bang
-#   .build/bin/bang.lua
+#   .build/bang
+#   .build/bang.lua
 
 ninja_required_version = 1.11.1
 
@@ -43,7 +43,7 @@ ninja_required_version = 1.11.1
 ######################################################################
 
 builddir = .build
-bin = $builddir/bin
+bin = $builddir
 test = $builddir/test
 
 ######################################################################

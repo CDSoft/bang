@@ -38,7 +38,7 @@ section "Build directories"
 
 var "builddir" (".build"/(target and target.name))
 
-var "bin"  "$builddir/bin"
+var "bin"  "$builddir"
 var "test" "$builddir/test"
 
 clean "$builddir"
