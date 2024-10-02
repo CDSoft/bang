@@ -8,5 +8,5 @@ cd "$(dirname "$0")" || exit 1
 echo ""
 
 echo "Compile the Bang example"
-../.build/bin/bang
+../.build/bang
 ninja #-d explain
