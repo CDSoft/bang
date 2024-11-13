@@ -105,7 +105,7 @@ local function static_lib(self, output)
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { ar,
-            F.flatten(inputs):map(function(input)
+            F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
                     return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
                         { input },
@@ -124,7 +124,7 @@ local function dynamic_lib(self, output)
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { so,
-            F.flatten(inputs):map(function(input)
+            F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
                     return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
                         { input },
@@ -143,7 +143,7 @@ local function executable(self, output)
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
         return build(output) { ld,
-            F.flatten(inputs):map(function(input)
+            F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
                     return self:compile(tmp(self.builddir, output, input)..self.o_ext) (F.merge{
                         { input },
