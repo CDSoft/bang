@@ -44,6 +44,8 @@ function help.epilog(txt)
     epilog[#epilog+1] = i(txt:rtrim())
 end
 
+help.epilogue = help.epilog
+
 function help.target(name)
     return function(txt)
         targets[#targets+1] = F{name=name, txt=i(txt)}

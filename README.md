@@ -490,9 +490,9 @@ The help message is composed of three parts:
 
 - a description of the Ninja file
 - a list of targets with their descriptions
-- an epilog
+- an epilogue
 
-The description and epilog are defined by the `help.description` and `help.epilog` functions.
+The description and epilogue are defined by the `help.description` and `help.epilog` (or `help.epilogue`) functions.
 Targets can be added by the `help` function. It takes the name of a target and its description.
 
 ``` lua
