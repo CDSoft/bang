@@ -50,7 +50,7 @@ function tmp.short(root, ...)
         : nub()
         : reverse()
         : filter(function(p) return F.not_elem(p, root_components) end)
-        path[#path] = path[#path]..".tmp"
+    path[#path] = path[#path]..".tmp"
     local file = F.last{...} : splitext()
     return fs.join(F.flatten { root, path, file })
 end
