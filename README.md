@@ -27,6 +27,7 @@ $ ninja install  # install LuaX to ~/.local/bin
 ``` sh
 $ git clone https://github.com/CDSoft/bang
 $ cd bang
+$ ./boot.lua
 $ ninja install  # build bang with Ninja and install it to ~/.local/bin
 ```
 
