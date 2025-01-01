@@ -26,9 +26,15 @@ local default_options = {
     cmd = "cat",
     flags = {},
     args = "$in > $out",
+    ext = "",
 }
 
 local builder_keys = F.keys(default_options) .. { "name" }
+
+local function set_ext(name, ext)
+    if name:lower():has_suffix(ext:lower()) then return name end
+    return name..ext
+end
 
 local function split_hybrid_table(t)
     local function is_numeric_key(k)
@@ -61,6 +67,7 @@ local function run(self, output)
             inputs = {inputs}
         end
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.ext)
         return build(output) (F.merge{
             { rules[self], input_list },
             input_vars,
@@ -206,110 +213,110 @@ return setmetatable({
     typst = typst,
     graphviz = {
         dot = {
-            svg = dot:new "dot.svg" : add "flags" "-Tsvg",
-            png = dot:new "dot.png" : add "flags" "-Tpng",
-            pdf = dot:new "dot.pdf" : add "flags" "-Tpdf",
+            svg = dot:new "dot.svg" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "dot.png" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "dot.pdf" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         neato = {
-            svg = dot:new "neato.svg" : set "cmd" "neato" : add "flags" "-Tsvg",
-            png = dot:new "neato.png" : set "cmd" "neato" : add "flags" "-Tpng",
-            pdf = dot:new "neato.pdf" : set "cmd" "neato" : add "flags" "-Tpdf",
+            svg = dot:new "neato.svg" : set "cmd" "neato" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "neato.png" : set "cmd" "neato" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "neato.pdf" : set "cmd" "neato" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         twopi = {
-            svg = dot:new "twopi.svg" : set "cmd" "twopi" : add "flags" "-Tsvg",
-            png = dot:new "twopi.png" : set "cmd" "twopi" : add "flags" "-Tpng",
-            pdf = dot:new "twopi.pdf" : set "cmd" "twopi" : add "flags" "-Tpdf",
+            svg = dot:new "twopi.svg" : set "cmd" "twopi" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "twopi.png" : set "cmd" "twopi" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "twopi.pdf" : set "cmd" "twopi" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         circo = {
-            svg = dot:new "circo.svg" : set "cmd" "circo" : add "flags" "-Tsvg",
-            png = dot:new "circo.png" : set "cmd" "circo" : add "flags" "-Tpng",
-            pdf = dot:new "circo.pdf" : set "cmd" "circo" : add "flags" "-Tpdf",
+            svg = dot:new "circo.svg" : set "cmd" "circo" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "circo.png" : set "cmd" "circo" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "circo.pdf" : set "cmd" "circo" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         fdp = {
-            svg = dot:new "fdp.svg" : set "cmd" "fdp" : add "flags" "-Tsvg",
-            png = dot:new "fdp.png" : set "cmd" "fdp" : add "flags" "-Tpng",
-            pdf = dot:new "fdp.pdf" : set "cmd" "fdp" : add "flags" "-Tpdf",
+            svg = dot:new "fdp.svg" : set "cmd" "fdp" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "fdp.png" : set "cmd" "fdp" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "fdp.pdf" : set "cmd" "fdp" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         sfdp = {
-            svg = dot:new "sfdp.svg" : set "cmd" "sfdp" : add "flags" "-Tsvg",
-            png = dot:new "sfdp.png" : set "cmd" "sfdp" : add "flags" "-Tpng",
-            pdf = dot:new "sfdp.pdf" : set "cmd" "sfdp" : add "flags" "-Tpdf",
+            svg = dot:new "sfdp.svg" : set "cmd" "sfdp" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "sfdp.png" : set "cmd" "sfdp" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "sfdp.pdf" : set "cmd" "sfdp" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         patchwork = {
-            svg = dot:new "patchwork.svg" : set "cmd" "patchwork" : add "flags" "-Tsvg",
-            png = dot:new "patchwork.png" : set "cmd" "patchwork" : add "flags" "-Tpng",
-            pdf = dot:new "patchwork.pdf" : set "cmd" "patchwork" : add "flags" "-Tpdf",
+            svg = dot:new "patchwork.svg" : set "cmd" "patchwork" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "patchwork.png" : set "cmd" "patchwork" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "patchwork.pdf" : set "cmd" "patchwork" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         osage = {
-            svg = dot:new "osage.svg" : set "cmd" "osage" : add "flags" "-Tsvg",
-            png = dot:new "osage.png" : set "cmd" "osage" : add "flags" "-Tpng",
-            pdf = dot:new "osage.pdf" : set "cmd" "osage" : add "flags" "-Tpdf",
+            svg = dot:new "osage.svg" : set "cmd" "osage" : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = dot:new "osage.png" : set "cmd" "osage" : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = dot:new "osage.pdf" : set "cmd" "osage" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
     },
     plantum = {
-        svg = plantuml:new "plantuml.svg" : add "flags" "-tsvg",
-        png = plantuml:new "plantuml.png" : add "flags" "-tpng",
-        pdf = plantuml:new "plantuml.pdf" : add "flags" "-tpdf",
+        svg = plantuml:new "plantuml.svg" : add "flags" "-tsvg" : set "ext" ".svg",
+        png = plantuml:new "plantuml.png" : add "flags" "-tpng" : set "ext" ".png",
+        pdf = plantuml:new "plantuml.pdf" : add "flags" "-tpdf" : set "ext" ".pdf",
     },
     ditaa = {
-        svg = ditaa:new "ditaa.svg" : add "flags" "--svg",
-        png = ditaa:new "ditaa.png",
-        pdf = ditaa:new "ditaa.pdf",
+        svg = ditaa:new "ditaa.svg" : add "flags" "--svg" : set "ext" ".svg",
+        png = ditaa:new "ditaa.png" : set "ext" ".png",
+        pdf = ditaa:new "ditaa.pdf" : set "ext" ".pdf",
     },
     asymptote = {
-        svg = asymptote:new "asymptote.svg" : add "flags" "-f svg",
-        png = asymptote:new "asymptote.png" : add "flags" "-f png",
-        pdf = asymptote:new "asymptote.pdf" : add "flags" "-f pdf",
+        svg = asymptote:new "asymptote.svg" : add "flags" "-f svg" : set "ext" ".svg",
+        png = asymptote:new "asymptote.png" : add "flags" "-f png" : set "ext" ".png",
+        pdf = asymptote:new "asymptote.pdf" : add "flags" "-f pdf" : set "ext" ".pdf",
     },
     mermaid = {
-        svg = mermaid:new "mermaid.svg" : add "flags" "-e svg",
-        png = mermaid:new "mermaid.png" : add "flags" "-e png",
-        pdf = mermaid:new "mermaid.pdf" : add "flags" "-e pdf",
+        svg = mermaid:new "mermaid.svg" : add "flags" "-e svg" : set "ext" ".svg",
+        png = mermaid:new "mermaid.png" : add "flags" "-e png" : set "ext" ".png",
+        pdf = mermaid:new "mermaid.pdf" : add "flags" "-e pdf" : set "ext" ".pdf",
     },
     blockdiag = {
-        svg = blockdiag:new "blockdiag.svg" : add "flags" "-Tsvg",
-        png = blockdiag:new "blockdiag.png" : add "flags" "-Tpng",
-        pdf = blockdiag:new "blockdiag.pdf" : add "flags" "-Tpdf",
+        svg = blockdiag:new "blockdiag.svg" : add "flags" "-Tsvg" : set "ext" ".svg",
+        png = blockdiag:new "blockdiag.png" : add "flags" "-Tpng" : set "ext" ".png",
+        pdf = blockdiag:new "blockdiag.pdf" : add "flags" "-Tpdf" : set "ext" ".pdf",
         activity = {
-            svg = blockdiag:new "actdiag.svg" : set "cmd" "actdiag"  : add "flags" "-Tsvg",
-            png = blockdiag:new "actdiag.png" : set "cmd" "actdiag"  : add "flags" "-Tpng",
-            pdf = blockdiag:new "actdiag.pdf" : set "cmd" "actdiag"  : add "flags" "-Tpdf",
+            svg = blockdiag:new "actdiag.svg" : set "cmd" "actdiag"  : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = blockdiag:new "actdiag.png" : set "cmd" "actdiag"  : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = blockdiag:new "actdiag.pdf" : set "cmd" "actdiag"  : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         network = {
-            svg = blockdiag:new "nwdiag.svg" : set "cmd" "nwdiag"  : add "flags" "-Tsvg",
-            png = blockdiag:new "nwdiag.png" : set "cmd" "nwdiag"  : add "flags" "-Tpng",
-            pdf = blockdiag:new "nwdiag.pdf" : set "cmd" "nwdiag"  : add "flags" "-Tpdf",
+            svg = blockdiag:new "nwdiag.svg" : set "cmd" "nwdiag"  : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = blockdiag:new "nwdiag.png" : set "cmd" "nwdiag"  : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = blockdiag:new "nwdiag.pdf" : set "cmd" "nwdiag"  : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         packet = {
-            svg = blockdiag:new "packetdiag.svg" : set "cmd" "packetdiag"  : add "flags" "-Tsvg",
-            png = blockdiag:new "packetdiag.png" : set "cmd" "packetdiag"  : add "flags" "-Tpng",
-            pdf = blockdiag:new "packetdiag.pdf" : set "cmd" "packetdiag"  : add "flags" "-Tpdf",
+            svg = blockdiag:new "packetdiag.svg" : set "cmd" "packetdiag"  : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = blockdiag:new "packetdiag.png" : set "cmd" "packetdiag"  : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = blockdiag:new "packetdiag.pdf" : set "cmd" "packetdiag"  : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         rack = {
-            svg = blockdiag:new "rackdiag.svg" : set "cmd" "rackdiag"  : add "flags" "-Tsvg",
-            png = blockdiag:new "rackdiag.png" : set "cmd" "rackdiag"  : add "flags" "-Tpng",
-            pdf = blockdiag:new "rackdiag.pdf" : set "cmd" "rackdiag"  : add "flags" "-Tpdf",
+            svg = blockdiag:new "rackdiag.svg" : set "cmd" "rackdiag"  : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = blockdiag:new "rackdiag.png" : set "cmd" "rackdiag"  : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = blockdiag:new "rackdiag.pdf" : set "cmd" "rackdiag"  : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         sequence = {
-            svg = blockdiag:new "seqdiag.svg" : set "cmd" "seqdiag"  : add "flags" "-Tsvg",
-            png = blockdiag:new "seqdiag.png" : set "cmd" "seqdiag"  : add "flags" "-Tpng",
-            pdf = blockdiag:new "seqdiag.pdf" : set "cmd" "seqdiag"  : add "flags" "-Tpdf",
+            svg = blockdiag:new "seqdiag.svg" : set "cmd" "seqdiag"  : add "flags" "-Tsvg" : set "ext" ".svg",
+            png = blockdiag:new "seqdiag.png" : set "cmd" "seqdiag"  : add "flags" "-Tpng" : set "ext" ".png",
+            pdf = blockdiag:new "seqdiag.pdf" : set "cmd" "seqdiag"  : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
     },
     gnuplot = {
-        svg = gnuplot:new "gnuplot.svg" : add "flags" { "-e 'set terminal svg'" },
-        png = gnuplot:new "gnuplot.png" : add "flags" { "-e 'set terminal png'" },
-        pdf = gnuplot:new "gnuplot.pdf" : add "flags" { "-e 'set terminal pdf'" },
+        svg = gnuplot:new "gnuplot.svg" : add "flags" { "-e 'set terminal svg'" } : set "ext" ".svg",
+        png = gnuplot:new "gnuplot.png" : add "flags" { "-e 'set terminal png'" } : set "ext" ".png",
+        pdf = gnuplot:new "gnuplot.pdf" : add "flags" { "-e 'set terminal pdf'" } : set "ext" ".pdf",
     },
     lsvg = {
-        svg = lsvg:new "lsvg.svg",
-        png = lsvg:new "lsvg.png",
-        pdf = lsvg:new "lsvg.pdf",
+        svg = lsvg:new "lsvg.svg" : set "ext" ".svg",
+        png = lsvg:new "lsvg.png" : set "ext" ".png",
+        pdf = lsvg:new "lsvg.pdf" : set "ext" ".pdf",
     },
     octave = {
-        svg = octave:new "octave.svg",
-        png = octave:new "octave.png",
-        pdf = octave:new "octave.pdf",
+        svg = octave:new "octave.svg" : set "ext" ".svg",
+        png = octave:new "octave.png" : set "ext" ".png",
+        pdf = octave:new "octave.pdf" : set "ext" ".pdf",
     },
 }, {
     __index = {
