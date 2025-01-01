@@ -575,9 +575,9 @@ A new compiler can be created by calling the `new` method of an existing compile
 and changing some options. E.g.:
 
 ``` lua
-local gcc = build.C:new "gcc"   -- creates a new C compiler named "gcc"
-    : set "cc" "gcc"                        -- compiler command
-    : add "cflags" { "-O2", "-Iinclude" }   -- compilation flags
+local my_compiler = build.C:new "my_compiler"   -- creates a new C compiler named "my_compiler"
+    : set "cc" "gcc"                            -- compiler command
+    : add "cflags" { "-O2", "-Iinclude" }       -- compilation flags
 ```
 
 A compiler has two methods to modify options:
@@ -619,40 +619,68 @@ Examples:
 
 ``` lua
 -- Compilation of a single source file
-local obj_file = gcc:compile "$builddir/file.o" "file.c"
+local obj_file = my_compiler:compile "$builddir/file.o" "file.c"
 
 -- Creation of a static library
-local lib_a = gcc:static_lib "$builddir/lib.a" {
+local lib_a = my_compiler:static_lib "$builddir/lib.a" {
     obj_file,       -- already compiled
     ls "lib/*.c",   -- compile and archive all sources in the lib directory
 }
 
 -- Creation of a dynamic library
-local lib_so = gcc:dynamic_lib "$builddir/lib.so" {
+local lib_so = my_compiler:dynamic_lib "$builddir/lib.so" {
     lib_a,
     ls "dynlib/*.c",
 }
 
 -- Creation of an executable file
-local exe = gcc:executable "$builddir/file.exe" {
+local exe = my_compiler:executable "$builddir/file.exe" {
     lib_a,
     "src/main.c",
 }
 
 -- Same with an all-in-one statement
-local exe = gcc:executable "$builddir/file.exe" {
+local exe = my_compiler:executable "$builddir/file.exe" {
     "file.c",
     ls "lib/*.c",
     "src/main.c",
 }
 
 -- The `__call` metamethod is a shortcut to the `executable` method
-local exe = gcc "$builddir/file.exe" {
+local exe = my_compiler "$builddir/file.exe" {
     "file.c",
     ls "lib/*.c",
     "src/main.c",
 }
 ```
+
+The `C` module predefines some C and C++ compilers (cc, gcc, clang and zig).
+These compilers are also available as `build` metamethods.
+
+| Compiler                              | Language  | Compiler  | Target                |
+|---------------------------------------|-----------|-----------|-----------------------|
+| `build.cc`                            | C         | `cc`      | host                  |
+| `build.gcc`                           | C         | `gcc`     | host                  |
+| `build.clang`                         | C         | `clang`   | host                  |
+| `build.zigcc`                         | C         | `zig cc`  | host                  |
+| `build.zigcc["linux-x86_64"]`         | C         | `zig cc`  | `linux-x86_64`        |
+| `build.zigcc["linux-x86_64-musl"]`    | C         | `zig cc`  | `linux-x86_64-musl`   |
+| `build.zigcc["linux-aarch64"]`        | C         | `zig cc`  | `linux-aarch64`       |
+| `build.zigcc["linux-aarch64-musl"]`   | C         | `zig cc`  | `linux-aarch64-musl`  |
+| `build.zigcc["macos-x86_64"]`         | C         | `zig cc`  | `macos-x86_64`        |
+| `build.zigcc["macos-aarch64"]`        | C         | `zig cc`  | `macos-aarch64`       |
+| `build.zigcc["windows-x86_64"]`       | C         | `zig cc`  | `windows-x86_64`      |
+| `build.cpp`                           | C++       | `c++`     | host                  |
+| `build.gpp`                           | C++       | `gc++`    | host                  |
+| `build.clangpp`                       | C++       | `clang++` | host                  |
+| `build.zigcpp`                        | C++       | `zig c++` | host                  |
+| `build.zigcpp["linux-x86_64"]`        | C++       | `zig c++` | `linux-x86_64`        |
+| `build.zigcpp["linux-x86_64-musl"]`   | C++       | `zig c++` | `linux-x86_64-musl`   |
+| `build.zigcpp["linux-aarch64"]`       | C++       | `zig c++` | `linux-aarch64`       |
+| `build.zigcpp["linux-aarch64-musl"]`  | C++       | `zig c++` | `linux-aarch64-musl`  |
+| `build.zigcpp["macos-x86_64"]`        | C++       | `zig c++` | `macos-x86_64`        |
+| `build.zigcpp["macos-aarch64"]`       | C++       | `zig c++` | `macos-aarch64`       |
+| `build.zigcpp["windows-x86_64"]`      | C++       | `zig c++` | `windows-x86_64`      |
 
 ### LuaX compilers
 

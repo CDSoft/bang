@@ -231,20 +231,20 @@ build $ex0/windows/bin/hi.exe: ld_windows $ex0/windows/lib/hello/hello.a $ex0/wi
 ######################################################################
 
 rule x86_64-linux-musl-cc
-  description = x86_64-linux-musl $out
+  description = zig cc -target x86_64-linux-musl $out
   command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -DTARGET="x86_64-linux-musl" $cflags $cflags_linux $in -o $out
   depfile = $out.d
 
 rule x86_64-linux-musl-ar
-  description = x86_64-linux-musl $out
+  description = zig ar $out
   command = zig ar -crs $out $in
 
 rule x86_64-linux-musl-so
-  description = x86_64-linux-musl $out
+  description = cc $out
   command = cc -shared -o $out $in
 
 rule x86_64-linux-musl-ld
-  description = x86_64-linux-musl $out
+  description = zig cc -target x86_64-linux-musl $out
   command = zig cc -target x86_64-linux-musl $ldflags $ldflags_linux -o $out $in
 
 build $ex1/linux/arch/arch.a.tmp/arch/linux/ask.o-clang-tidy.check: clang-tidy arch/linux/ask.c
@@ -278,20 +278,20 @@ build $ex1/linux/bin/hi: x86_64-linux-musl-ld $ex1/linux/bin/hi.tmp/bin/hi.o $ex
 ######################################################################
 
 rule x86_64-macos-none-cc
-  description = x86_64-macos-none $out
+  description = zig cc -target x86_64-macos-none $out
   command = zig cc -target x86_64-macos-none -c -MD -MF $depfile -DTARGET="x86_64-macos-none" $cflags $cflags_macos $in -o $out
   depfile = $out.d
 
 rule x86_64-macos-none-ar
-  description = x86_64-macos-none $out
+  description = zig ar $out
   command = zig ar -crs $out $in
 
 rule x86_64-macos-none-so
-  description = x86_64-macos-none $out
+  description = cc $out
   command = cc -shared -o $out $in
 
 rule x86_64-macos-none-ld
-  description = x86_64-macos-none $out
+  description = zig cc -target x86_64-macos-none $out
   command = zig cc -target x86_64-macos-none $ldflags $ldflags_macos -o $out $in
 
 build $ex1/macos/arch/arch.a.tmp/arch/macos/ask.o-clang-tidy.check: clang-tidy arch/macos/ask.c
@@ -325,20 +325,20 @@ build $ex1/macos/bin/hi: x86_64-macos-none-ld $ex1/macos/bin/hi.tmp/bin/hi.o $ex
 ######################################################################
 
 rule x86_64-windows-gnu-cc
-  description = x86_64-windows-gnu $out
+  description = zig cc -target x86_64-windows-gnu $out
   command = zig cc -target x86_64-windows-gnu -c -MD -MF $depfile -DTARGET="x86_64-windows-gnu" $cflags $cflags_windows $in -o $out
   depfile = $out.d
 
 rule x86_64-windows-gnu-ar
-  description = x86_64-windows-gnu $out
+  description = zig ar $out
   command = zig ar -crs $out $in
 
 rule x86_64-windows-gnu-so
-  description = x86_64-windows-gnu $out
+  description = cc $out
   command = cc -shared -o $out $in
 
 rule x86_64-windows-gnu-ld
-  description = x86_64-windows-gnu $out
+  description = zig cc -target x86_64-windows-gnu $out
   command = zig cc -target x86_64-windows-gnu $ldflags $ldflags_windows -o $out $in
 
 build $ex1/windows/arch/arch.a.tmp/arch/windows/ask.o-clang-tidy.check: clang-tidy arch/windows/ask.c

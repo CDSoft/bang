@@ -443,30 +443,59 @@ default foo bar
 # C compilers
 ######################################################################
 
-rule zig-cc
-  description = zig $out
+rule my-zig-cc
+  description = zig cc -target x86_64-linux-musl $out
   command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -Og -g -Iinc $in -o $out
   depfile = $out.d
 
-rule zig-ar
-  description = zig $out
+rule my-zig-ar
+  description = zig ar $out
   command = zig ar -crs $out $in
 
-rule zig-so
-  description = zig $out
+rule my-zig-so
+  description = cc $out
   command = cc -shared -o $out $in
 
-rule zig-ld
-  description = zig $out
+rule my-zig-ld
+  description = zig ld -target x86_64-linux-musl $out
   command = zig ld -target x86_64-linux-musl -lm -o $out $in
 
-build f1.o: zig-cc f1.c | $builddir/foo
-build $builddir/tmp/lib.a.tmp/f2.o: zig-cc f2.c | $builddir/foo
-build lib.a: zig-ar f1.o $builddir/tmp/lib.a.tmp/f2.o | $builddir/foo
-build $builddir/tmp/libf3.so.tmp/f3.o: zig-cc f3.c | $builddir/foo
-build libf3.so: zig-so f1.o lib.a $builddir/tmp/libf3.so.tmp/f3.o | $builddir/foo
-build $builddir/tmp/file.exe.tmp/f4.o: zig-cc f4.c | $builddir/foo
-build file.exe: zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o | $builddir/foo
+build f1.o: my-zig-cc f1.c | $builddir/foo
+build $builddir/tmp/lib.a.tmp/f2.o: my-zig-cc f2.c | $builddir/foo
+build lib.a: my-zig-ar f1.o $builddir/tmp/lib.a.tmp/f2.o | $builddir/foo
+build $builddir/tmp/libf3.so.tmp/f3.o: my-zig-cc f3.c | $builddir/foo
+build libf3.so: my-zig-so f1.o lib.a $builddir/tmp/libf3.so.tmp/f3.o | $builddir/foo
+build $builddir/tmp/file.exe.tmp/f4.o: my-zig-cc f4.c | $builddir/foo
+build file.exe: my-zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o | $builddir/foo
+
+######################################################################
+# C++ compilers
+######################################################################
+
+rule Cpp-cc
+  description = c++ $out
+  command = c++ -c -MD -MF $depfile $in -o $out
+  depfile = $out.d
+
+rule Cpp-ar
+  description = ar $out
+  command = ar -crs $out $in
+
+rule Cpp-so
+  description = c++ $out
+  command = c++ -shared -o $out $in
+
+rule Cpp-ld
+  description = c++ $out
+  command = c++ -o $out $in
+
+build f1++.o: Cpp-cc f1.cc
+build $builddir/tmp/lib++.a.tmp/f2.o: Cpp-cc f2.cpp
+build lib++.a: Cpp-ar f1++.o $builddir/tmp/lib++.a.tmp/f2.o
+build $builddir/tmp/libf3++.so.tmp/f3.o: Cpp-cc f3.cc
+build libf3++.so: Cpp-so f1++.o lib++.a $builddir/tmp/libf3++.so.tmp/f3.o
+build $builddir/tmp/file++.exe.tmp/f4.o: Cpp-cc f4.cc
+build file++.exe: Cpp-ld f1++.o lib++.a f3++.o $builddir/tmp/file++.exe.tmp/f4.o
 
 ######################################################################
 # LuaX compiler

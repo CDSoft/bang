@@ -282,7 +282,7 @@ section "C compilers"
 
 local target = "x86_64-linux-musl"
 
-local zig = build.C : new "zig"
+local zig = build.cc : new "my-zig"
     : set "builddir" "$builddir/tmp"
     : set "implicit_in" "$builddir/foo"
     : set "cc" { "zig cc", "-target", target }
@@ -306,6 +306,27 @@ zig:executable "file.exe" {
     "lib.a",
     "f3.o",
     "f4.c",
+}
+
+section "C++ compilers"
+
+local cpp = build.cpp
+
+cpp:compile "f1++.o" { "f1.cc" }
+cpp:static_lib "lib++.a" {
+    "f1++.o",
+    "f2.cpp",
+}
+cpp:dynamic_lib "libf3++.so" {
+    "f1++.o",
+    "lib++.a",
+    "f3.cc",
+}
+cpp:executable "file++.exe" {
+    "f1++.o",
+    "lib++.a",
+    "f3++.o",
+    "f4.cc",
 }
 
 section "LuaX compiler"

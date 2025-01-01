@@ -260,7 +260,9 @@ local function build_decorator(build)
         __call = build,
         __index = {},
     }
-    mt.__index.C = require "C"
+    local C = require "C"
+    mt.__index.C = C
+    F.foreachk(C, function(name, compiler) mt.__index[name] = compiler end)
     mt.__index.luax = require "luax"
     local builders = require "builders"
     F.foreachk(builders, function(name, builder) mt.__index[name] = builder end)

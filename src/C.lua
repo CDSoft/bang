@@ -59,23 +59,23 @@ local rules = setmetatable({}, {
         local ld = F{compiler.name, "ld"}:flatten():str"-"
         local new_rules = {
             cc = rule(cc) {
-                description = {compiler.name, "$out"},
+                description = {compiler.cc, "$out"},
                 command = { compiler.cc, compiler.cflags, compiler.cargs },
                 depfile = compiler.depfile,
                 implicit_in = compiler.implicit_in,
             },
             ar = rule(ar) {
-                description = {compiler.name, "$out"},
+                description = {compiler.ar, "$out"},
                 command = { compiler.ar, compiler.aflags, compiler.aargs },
                 implicit_in = compiler.implicit_in,
             },
             so = rule(so) {
-                description = {compiler.name, "$out"},
+                description = {compiler.so, "$out"},
                 command = { compiler.so, compiler.soflags, compiler.soargs },
                 implicit_in = compiler.implicit_in,
             },
             ld = rule(ld) {
-                description = {compiler.name, "$out"},
+                description = {compiler.ld, "$out"},
                 command = { compiler.ld, compiler.ldflags, compiler.ldargs },
                 implicit_in = compiler.implicit_in,
             },
@@ -209,4 +209,30 @@ compiler_mt = {
     },
 }
 
-return new(default_options, "C")
+local cc      = new(default_options, "C")
+local gcc     = cc  : new "gcc"     : set "cc" "gcc"     : set "so" "gcc"     : set "ld" "gcc"
+local clang   = cc  : new "clang"   : set "cc" "clang"   : set "so" "clang"   : set "ld" "clang"
+local cpp     = cc  : new "Cpp"     : set "cc" "c++"     : set "so" "c++"     : set "ld" "c++"     : set "c_exts" { ".cc", ".cpp" }
+local gpp     = cpp : new "gpp"     : set "cc" "g++"     : set "so" "g++"     : set "ld" "g++"
+local clangpp = cpp : new "clangpp" : set "cc" "clang++" : set "so" "clang++" : set "ld" "clang++"
+
+local zigcc   = cc  : new "zigcc"   : set "cc" "zig cc"  : set "ar" "zig ar" : set "so" "zig cc"  : set "ld" "zig cc"
+local zigcpp  = cpp : new "zigcpp"  : set "cc" "zig c++" : set "ar" "zig ar" : set "so" "zig c++" : set "ld" "zig c++"
+require "targets" : foreach(function(target)
+    local zig_target = {"-target", F{target.arch, target.os, target.libc}:str"-"}
+    local function add_target(compiler)
+        return compiler : add "cc" (zig_target) : add "so" (zig_target) : add "ld" (zig_target) : set "so_ext" (target.so) : set "exe_ext" (target.exe)
+    end
+    zigcc[target.name]  = add_target(zigcc  : new("zigcc-"..target.name))
+    zigcpp[target.name] = add_target(zigcpp : new("zigcpp-"..target.name))
+end)
+
+return setmetatable({
+    cc  = cc,  gcc = gcc, clang   = clang,   zigcc  = zigcc,
+    cpp = cpp, gpp = gpp, clangpp = clangpp, zigcpp = zigcpp,
+}, {
+    __call = function(_, ...) return cc(...) end,
+    __index = {
+        new = function(_, name) return cc:new(name) end,
+    },
+})
