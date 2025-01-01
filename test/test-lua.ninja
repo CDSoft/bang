@@ -537,7 +537,7 @@ rule luax-windows-x86_64
   description = luax-windows-x86_64 $out
   command = /path/to/luax compile -t windows-x86_64 $in -o $out -s -k "a \"super\" key"
 
-build hello-windows-x86_64: luax-windows-x86_64 hello.lua module.lua
+build hello-windows-x86_64.exe: luax-windows-x86_64 hello.lua module.lua
 
 ######################################################################
 # Document generators

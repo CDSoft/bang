@@ -19,6 +19,7 @@
 --@LIB
 
 local F = require "F"
+local sys = require "sys"
 local targets = require "targets"
 
 local default_options = {
@@ -27,7 +28,13 @@ local default_options = {
     target = "luax",
     flags = {},
     implicit_in = Nil,
+    exe_ext = "",
 }
+
+local function set_ext(name, ext)
+    if name:has_suffix(ext) then return name end
+    return name..ext
+end
 
 local function split_hybrid_table(t)
     local function is_numeric_key(k)
@@ -54,6 +61,7 @@ local function run(self, output)
             inputs = {inputs}
         end
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.exe_ext)
         return build(output) (F.merge{
             { rules[self], input_list },
             input_vars,
@@ -102,7 +110,7 @@ compiler_mt = {
 local luax = new(default_options, "luax") : set "target" "luax"
 local lua = luax:new "luax-lua" : set "target" "lua"
 local pandoc = luax:new "luax-pandoc" : set "target" "pandoc"
-local native = luax:new "luax-native" : set "target" "native"
+local native = luax:new "luax-native" : set "target" "native" : set "exe_ext" (sys.exe)
 
 local M = {
     luax = luax,
@@ -111,7 +119,7 @@ local M = {
     native = native,
 }
 targets : foreach(function(target)
-    M[target.name] = native:new("luax-"..target.name) : set "target" (target.name)
+    M[target.name] = native:new("luax-"..target.name) : set "target" (target.name) : set "exe_ext" (target.exe)
 end)
 
 return setmetatable(M, {

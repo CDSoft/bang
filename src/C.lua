@@ -39,6 +39,11 @@ local default_options = {
     implicit_in = Nil,
 }
 
+local function set_ext(name, ext)
+    if name:has_suffix(ext) then return name end
+    return name..ext
+end
+
 local function split_hybrid_table(t)
     local function is_numeric_key(k)
         return math.type(k) == "integer"
@@ -84,6 +89,7 @@ local function compile(self, output)
     local cc = rules[self].cc
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.o_ext)
         local validations = F.flatten{self.cvalid}:map(function(valid)
             local valid_output = output.."-"..(valid.name or valid)..".check"
             if valid.name then
@@ -104,6 +110,7 @@ local function static_lib(self, output)
     local ar = rules[self].ar
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.a_ext)
         return build(output) { ar,
             F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
@@ -123,6 +130,7 @@ local function dynamic_lib(self, output)
     local so = rules[self].so
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.so_ext)
         return build(output) { so,
             F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
@@ -142,6 +150,7 @@ local function executable(self, output)
     local ld = rules[self].ld
     return function(inputs)
         local input_list, input_vars = split_hybrid_table(inputs)
+        output = set_ext(output, self.exe_ext)
         return build(output) { ld,
             F.flatten(input_list):map(function(input)
                 if F.elem(input:ext(), self.c_exts) then
