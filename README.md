@@ -1,7 +1,7 @@
 Bang
 ====
 
-Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://cdelord.fr/luax).
+Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://github.com/cdsoft/luax).
 
 If you like Bang (or LuaX) and are willing to support its development,
 please consider donating via [Github](https://github.com/sponsors/CDSoft?o=esc)
@@ -486,7 +486,7 @@ Targets can be added by the `help` function. It takes the name of a target and i
 
 ``` lua
 help.description "A super useful Ninja file"
-help.epilog "See https://cdelord.fr/bang"
+help.epilog "See https://github.com/cdsoft/bang"
 -- ...
 help "compile" "Compile every thing"
 -- ...
@@ -817,5 +817,5 @@ License
     along with bang.  If not, see <https://www.gnu.org/licenses/>.
 
     For further information about bang you can visit
-    https://cdelord.fr/bang
+    https://github.com/cdsoft/bang
 

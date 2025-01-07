@@ -14,6 +14,6 @@
 -- along with bang.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about bang you can visit
--- https://cdelord.fr/bang
+-- https://github.com/cdsoft/bang
 
 comment "This comment comes from test-module.lua"

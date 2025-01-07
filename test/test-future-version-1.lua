@@ -14,7 +14,7 @@
 -- along with bang.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about bang you can visit
--- https://cdelord.fr/bang
+-- https://github.com/cdsoft/bang
 
 ninja_required_version "999.0.0"
 
