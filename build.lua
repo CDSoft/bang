@@ -19,16 +19,11 @@ https://cdelord.fr/bang
 ]]
 
 local F = require "F"
-local sys = require "sys"
+local sh = require "sh"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
 help.epilog [[Without any arguments, Ninja will compile and test $name.]]
-
-local target, args = target(arg)
-if #args > 0 then
-    F.error_without_stack_trace(args:unwords()..": unexpected arguments")
-end
 
 ---------------------------------------------------------------------
 -- Build directories
@@ -36,10 +31,12 @@ end
 
 section "Build directories"
 
-var "builddir" (".build"/(target and target.name))
+var "builddir" ".build"
 
-var "bin"  "$builddir"
-var "test" "$builddir/test"
+var "bin"     "$builddir"
+var "tmp"     "$builddir/tmp"
+var "release" "$builddir/release"
+var "test"    "$builddir/test"
 
 clean "$builddir"
 
@@ -49,19 +46,27 @@ clean "$builddir"
 
 section "Compilation"
 
+local version = sh "git describe --tags" : trim()
+
 local sources = {
     ls "src/*.lua",
     build "$builddir/version" {
         description = "GIT version",
-        command = "echo -n `git describe --tags` > $out",
-        implicit_in = ".git/refs/tags",
+        command = { "echo -n", version, "> $out" },
     },
+}
+
+generator {
+    implicit_in = {
+        sources,
+        ".git/refs/tags",
+    }
 }
 
 build.luax.add_global "flags" "-q"
 
 local binaries = {
-    build.luax[target and target.name or "native"]("$bin/bang"..(target or sys).exe) { sources },
+    build.luax.native "$bin/bang" { sources },
     build.luax.lua "$bin/bang.lua" { sources },
 }
 
@@ -70,21 +75,34 @@ local bang_luax = build.luax.luax "$bin/bang.luax" { sources }
 
 phony "compile" { binaries, bang_luax }
 default "compile"
-help "compile" ("compile $name"..(target and " for "..target.name or ""))
+help "compile" "compile $name"
 
 install "bin" { binaries }
 
-generator {
-    implicit_in = sources,
+phony "all" { "compile", "test" }
+
+rule "tar" {
+    description = "tar $out",
+    command = "GZIP_OPT=-6 tar -caf $out $in --transform='s#$prefix#$dest#'",
 }
 
-phony "all" { "compile", "test" }
+function build_release(target_name, ext)
+    local name = F{ "bang", version, target_name } : flatten() : str "-"
+    return build("$release"/version/name..".tar.gz") { "tar",
+        build.luax[target_name]("$tmp"/target_name/"bang"..ext) { sources },
+        prefix = "$tmp"/target_name,
+        dest = name/"bin",
+    }
+end
+
+phony "release" {
+    require "targets" : map(function(target) return build_release(target.name, "") end),
+    build_release("lua", ".lua"),
+}
 
 ---------------------------------------------------------------------
 -- Tests
 ---------------------------------------------------------------------
-
-if not target then
 
 section "Tests"
 
@@ -249,5 +267,3 @@ phony "stress" {
 
 default "test"
 help "test" "test $name"
-
-end
