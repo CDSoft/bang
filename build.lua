@@ -34,8 +34,6 @@ section "Build directories"
 var "builddir" ".build"
 
 var "bin"     "$builddir"
-var "tmp"     "$builddir/tmp"
-var "release" "$builddir/release"
 var "test"    "$builddir/test"
 
 clean "$builddir"
@@ -46,21 +44,13 @@ clean "$builddir"
 
 section "Compilation"
 
-local version = sh "git describe --tags" : trim()
-
 local sources = {
     ls "src/*.lua",
     build "$builddir/version" {
         description = "GIT version",
-        command = { "echo -n", version, "> $out" },
+        command = "git describe --tags > $out",
+        implicit_in = { ".git/refs/tags" },
     },
-}
-
-generator {
-    implicit_in = {
-        sources,
-        ".git/refs/tags",
-    }
 }
 
 build.luax.add_global "flags" "-q"
@@ -81,23 +71,9 @@ install "bin" { binaries }
 
 phony "all" { "compile", "test" }
 
-rule "tar" {
-    description = "tar $out",
-    command = "GZIP_OPT=-6 tar -caf $out $in --transform='s#$prefix#$dest#'",
-}
-
-function build_release(target_name, ext)
-    local name = F{ "bang", version, target_name } : flatten() : str "-"
-    return build("$release"/version/name..".tar.gz") { "tar",
-        build.luax[target_name]("$tmp"/target_name/"bang"..ext) { sources },
-        prefix = "$tmp"/target_name,
-        dest = name/"bin",
-    }
-end
-
-phony "release" {
-    require "targets" : map(function(target) return build_release(target.name, "") end),
-    build_release("lua", ".lua"),
+require "build-release" {
+    name = "bang",
+    sources = sources,
 }
 
 ---------------------------------------------------------------------
