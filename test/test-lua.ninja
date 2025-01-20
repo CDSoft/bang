@@ -602,6 +602,13 @@ build $builddir/tmp/bar.md.tmp/bar-2: cat $builddir/tmp/bar.md.tmp/bar-1
 build $builddir/tmp/bar.md.tmp/bar-3: rule_2 $builddir/tmp/bar.md.tmp/bar-2
 build bar.md | z: tac $builddir/tmp/bar.md.tmp/bar-3 | x y
 
+rule myypp
+  description = myypp $out
+  command = ypp --MF $depfile -e 'X="x"' -e 'Y="Hello, World!"' -e 'Z=42' -e 'TABLE=("{\"A complex table\", BAR={42}, FOO=\"foo\"}"):read()' $in -o $out
+  depfile = $out.d
+
+build doc.md: myypp src/doc.md
+
 ######################################################################
 # Installation
 ######################################################################

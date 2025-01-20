@@ -786,6 +786,24 @@ build.pandoc "$builddir/output.html" {
 }
 ```
 
+`build` also provides some helper functions to format arguments:
+
+| Function                          | Description                                                                                   |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `build.ypp_var`                   | Build ypp arguments to pass values from an object to ypp variables (serialized Lua object).   |
+| `build.ypp_vars`                  | Build ypp arguments to pass values from a table to ypp variables (one variable per field).    |
+
+Examples:
+
+``` lua
+build.ypp : add "flags" {
+    -- call ypp with « -e 'VARNAME=(\"serialized object\"):read()' »
+    build.ypp_var "VARNAME" { VERSION="0.0", NAME="example" },
+    -- call ypp with « -e 'VERSION="0.0"' -e 'NAME="example" »
+    build.ypp_vars { VERSION="0.0", NAME="example" },
+}
+```
+
 Examples
 ========
 

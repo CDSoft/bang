@@ -121,6 +121,16 @@ local ypp = new(default_options, "ypp")
     : set "flags" "--MF $depfile"
     : set "depfile" "$out.d"
 
+local function ypp_var(name)
+    return function(val)
+        return ("-e '%s=(%q):read()'"):format(name, F.show(val))
+    end
+end
+
+local function ypp_vars(t)
+    return F.mapk2a(function(k, v) return ("-e '%s=%q'"):format(k, v) end, t)
+end
+
 local pandoc = new(default_options, "pandoc")
     : set "cmd" "pandoc"
     : set "args" "$in -o $out"
@@ -204,7 +214,7 @@ local octave = new(default_options, "octave")
 return setmetatable({
     cat = cat,
     cp = cp,
-    ypp = ypp,
+    ypp = ypp, ypp_var = ypp_var, ypp_vars = ypp_vars,
     ypp_pandoc = ypp:new "ypp_pandoc" : set "cmd" "ypp-pandoc.lua",
     panda = panda,
     panda_gfm = panda:new "panda_gfm" : add "flags" "-t gfm",

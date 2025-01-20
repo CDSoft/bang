@@ -378,3 +378,19 @@ local pipe_with_rules_and_generators = pipe {
 }
 
 pipe_with_rules_and_generators "bar.md" "foo.rst"
+
+local ypp = build.ypp : new "myypp"
+    : add "flags" {
+        build.ypp_vars {
+            X = "x",
+            Y = "Hello, World!",
+            Z = 42,
+        },
+        build.ypp_var "TABLE" {
+            "A complex table",
+            FOO = "foo",
+            BAR = { 42 },
+        },
+    }
+
+ypp "doc.md" "src/doc.md"

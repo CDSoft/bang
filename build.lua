@@ -19,7 +19,6 @@ https://github.com/cdsoft/bang
 ]]
 
 local F = require "F"
-local sh = require "sh"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
