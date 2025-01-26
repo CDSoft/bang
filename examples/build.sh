@@ -8,5 +8,13 @@ cd "$(dirname "$0")" || exit 1
 echo ""
 
 echo "Compile the Bang example"
-../.build/bang
-ninja #-d explain
+( cd multitarget
+  ../../.build/bang
+  ninja #-d explain
+)
+
+echo "Compile Lua"
+( cd lua
+  ../../.build/bang
+  ninja #-d explain
+)
