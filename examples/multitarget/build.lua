@@ -193,13 +193,11 @@ end)
 section "Project structure"
 
 local make_graph = pipe {
-    build.new "graph.dot"        : set "cmd"   "ninja"
-                                 : set "args"  "-f $in -t graph > $out",
-    build.new "render_graph.svg" : set "cmd" "dot"
-                                 : set "flags" "-Tsvg"
-                                 : set "args" "-o$out $in",
-    build.new "svgtidy.svg"      : set "cmd" "doc/svgtidy.lua"
-                                 : set "args" "< $in > $out",
+    build.new "graph.dot"   : set "cmd"   "ninja"
+                            : set "args"  "-f $in -t graph > $out",
+    build.graphviz.dot.svg,
+    build.new "svgtidy.svg" : set "cmd" "doc/svgtidy.lua"
+                            : set "args" "< $in > $out",
 }
 
 make_graph "doc/graph.svg" "build.ninja"

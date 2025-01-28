@@ -1620,7 +1620,7 @@
 <g id="edge218" class="edge">
 <path fill="none" stroke="black" d="M1876.83,-2854.38C1959.05,-2854.38 2069.88,-2854.38 2154.68,-2854.38"/>
 <polygon fill="black" stroke="black" points="2154.43,-2857.88 2164.43,-2854.38 2154.43,-2850.88 2154.43,-2857.88"/>
-<text text-anchor="middle" x="2058.62" y="-2857.62" font-family="Times,serif" font-size="10.00"> render_graph.svg</text>
+<text text-anchor="middle" x="2058.62" y="-2857.62" font-family="Times,serif" font-size="10.00"> dot.svg</text>
 </g>
 <g id="node177" class="node">
 <polygon fill="none" stroke="black" points="1095.75,-2864.75 1025,-2864.75 1025,-2844 1095.75,-2844 1095.75,-2864.75"/>

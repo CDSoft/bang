@@ -375,16 +375,16 @@ rule graph.dot
   description = graph.dot $out
   command = ninja -f $in -t graph > $out
 
-rule render_graph.svg
-  description = render_graph.svg $out
-  command = dot -Tsvg -o$out $in
+rule dot.svg
+  description = dot.svg $out
+  command = dot -Tsvg -o $out $in
 
 rule svgtidy.svg
   description = svgtidy.svg $out
   command = doc/svgtidy.lua < $in > $out
 
 build $builddir/tmp/doc/graph.svg.tmp/graph-1.dot: graph.dot build.ninja
-build $builddir/tmp/doc/graph.svg.tmp/graph-2.svg: render_graph.svg $builddir/tmp/doc/graph.svg.tmp/graph-1.dot
+build $builddir/tmp/doc/graph.svg.tmp/graph-2.svg: dot.svg $builddir/tmp/doc/graph.svg.tmp/graph-1.dot
 build doc/graph.svg: svgtidy.svg $builddir/tmp/doc/graph.svg.tmp/graph-2.svg
 
 ######################################################################
