@@ -118,6 +118,10 @@ vars["foo"] -- same as vars.foo
 vars.expand "$foo/bar" -- "xyz/bar"
 ```
 
+> [!NOTE]
+> A variable can not be defined twice unless both definitions are exactly the same.
+> In this case, only one definition is generated.
+
 ### Ninja required version
 
 The special variable `ninja_required_version` shall be set by the `ninja_required_version` function.
@@ -155,6 +159,10 @@ in the build statements that use this rule.
 
 The `rule` function returns the name of the rule (`"rule_name"`).
 
+> [!NOTE]
+> A rule can not be defined twice unless both definitions are exactly the same.
+> In this case, only one definition is generated.
+
 ### Build statements
 
 `build` adds a new build statement:
@@ -191,6 +199,10 @@ build "outputs" { "rule_name", "inputs",
 The `build` function returns the outputs (`"outputs"`),
 as a string if `outputs` contains a single output
 or a list of string otherwise.
+
+> [!NOTE]
+> A build statement can not be defined twice unless both definitions are exactly the same.
+> In this case, only one definition is generated.
 
 ### Rules embedded in build statements
 
@@ -240,6 +252,10 @@ pool "name" {
 
 The `pool` function returns the name of the pool (`"pool_name"`).
 
+> [!NOTE]
+> A pool can not be defined twice unless both definitions are exactly the same.
+> In this case, only one definition is generated.
+
 ### Default targets
 
 `default` adds targets to the default target:
@@ -262,6 +278,21 @@ phony "all" {"target1", "target2"}
 -- same as
 build "all" {"phony", "target1", "target2"}
 ```
+
+### Multiple definitions
+
+By default multiple definitions are not allowed.
+
+In some cases, multiple definitions with the very same definition, can be
+allowed temporarily with `allow_multiple_definitions`. This can simplify some
+build files but may be slow on large projects.
+
+``` lua
+allow_multiple_definitions(true)
+-- var, rules, build and pool redefinitions allowed here
+
+allow_multiple_definitions(false)
+-- var, rules, build and pool redefinitions not allowed here
 
 ## Bang variables
 

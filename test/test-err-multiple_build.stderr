@@ -1,1 +1,1 @@
-[test/test-err-multiple_build.lua:7] ERROR: build bar: multiple definition
+[test/test-err-multiple_build.lua:9] ERROR: build bar: multiple definition

@@ -30,7 +30,7 @@ local pairs = pairs
 local tostring = tostring
 local type = type
 
-local words = string.words
+local words = string.words ---@diagnostic disable-line: undefined-field
 
 local clone = F.clone
 local difference = F.difference
@@ -100,6 +100,32 @@ local function stringify(value)
     return unwords(map(tostring, flatten{value}))
 end
 
+local multiple_identical_definitions_allowed = false
+
+function allow_multiple_definitions(state)
+    if type(state) ~= "boolean" then
+        log.error("multiple_identical_definitions_allowed expects a boolean value")
+    end
+    multiple_identical_definitions_allowed = state
+end
+
+local function once_curry_2(f)
+    local cache = {}
+    return function(x)
+        return function(y)
+            if not multiple_identical_definitions_allowed then
+                return f(x)(y)
+            end
+            local hash = F.show{x, y}:hash128()
+            local val = cache[hash]
+            if val then return val end
+            val = f(x)(y)
+            cache[hash] = val
+            return val
+        end
+    end
+end
+
 local nbvars = 0
 
 local vars = {}
@@ -120,7 +146,7 @@ end
 
 _G.vars = setmetatable(vars, { __index = {expand = expand} })
 
-function var(name)
+var = once_curry_2(function(name)
     return function(value)
         if vars[name] then
             log.error("var "..name..": multiple definition")
@@ -131,7 +157,7 @@ function var(name)
         nbvars = nbvars + 1
         return "$"..name
     end
-end
+end)
 
 local ninja_required_version_token = { ninja_required_version_for_bang }
 
@@ -190,7 +216,7 @@ new_rule "phony"
 
 local nbrules = 0
 
-function rule(name)
+rule = once_curry_2(function(name)
     return function(opt)
         if rules[name] then
             log.error("rule "..name..": multiple definition")
@@ -229,7 +255,7 @@ function rule(name)
 
         return name
     end
-end
+end)
 
 local function unique_rule_name(name)
     local rule_name = name
@@ -256,7 +282,7 @@ local nbbuilds = 0
 local function build_decorator(build)
     local self = {}
     local mt = {
-        __call = build,
+        __call = function(_, outputs) return build(outputs) end,
         __index = {},
     }
     local C = require "C"
@@ -269,7 +295,7 @@ local function build_decorator(build)
     return setmetatable(self, mt)
 end
 
-build = build_decorator(function(_, outputs)
+build = build_decorator(once_curry_2(function(outputs)
     outputs = stringify(outputs)
     return function(inputs)
         -- variables defined in the current build statement
@@ -332,7 +358,7 @@ build = build_decorator(function(_, outputs)
         end
         return #output_list ~= 1 and output_list or output_list[1]
     end
-end)
+end))
 
 local pool_variables = F{
     "depth",
@@ -340,7 +366,7 @@ local pool_variables = F{
 
 local pools = {}
 
-function pool(name)
+pool = once_curry_2(function(name)
     return function(opt)
         if pools[name] then
             log.error("pool "..name..": multiple definition")
@@ -357,7 +383,7 @@ function pool(name)
         end
         return name
     end
-end
+end)
 
 function default(targets)
     local default_targets = stringify(targets)
@@ -430,7 +456,7 @@ local function generator_rule(args)
         generator = true,
     }
 
-    local deps = values(package.modpath)
+    local deps = values(package.modpath) ---@diagnostic disable-line: undefined-field
     if not deps:null() then
         generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps }
             : nub()
