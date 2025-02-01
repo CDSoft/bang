@@ -113,7 +113,7 @@ local function expand(s)
         return s
     end
     if type(s) == "table" then
-        return F.map(expand, s)
+        return map(expand, s)
     end
     log.error("vars.expand expects a string or a list of strings")
 end
@@ -174,8 +174,7 @@ local build_special_bang_variables = F{
 }
 
 local is_build_special_bang_variable = build_special_bang_variables
-    : map(function(name) return {name, true} end)
-    : from_list()
+    : map2t(function(name) return name, true end)
 
 local rules = {
 --  "rule_name" = {
