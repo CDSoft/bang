@@ -368,6 +368,38 @@ build $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o: x86_64-windows-gnu-cc lib/u
 build $ex1/windows/bin/hi.exe: x86_64-windows-gnu-ld $ex1/windows/bin/hi.exe.tmp/bin/hi.o $ex1/arch/windows/arch.a $ex1/windows/bin/hi.exe.tmp/lib/hello/hello.o $ex1/windows/bin/hi.exe.tmp/lib/utils/fib.o $ex1/windows/bin/hi.exe.tmp/lib/utils/utils.o
 
 ######################################################################
+# Release
+######################################################################
+
+rule cp
+  description = cp $out
+  command = cp -d --preserve=mode $in $out
+
+build $builddir/dist/linux/bin/hi: cp $builddir/ex1/linux/bin/hi
+build $builddir/dist/linux/bin/hi-repl: cp $builddir/ex1/linux/bin/hi-repl
+build $builddir/dist/macos/bin/hi: cp $builddir/ex1/macos/bin/hi
+build $builddir/dist/macos/bin/hi-repl: cp $builddir/ex1/macos/bin/hi-repl
+build $builddir/dist/windows/bin/hi.exe: cp $builddir/ex1/windows/bin/hi.exe
+build $builddir/dist/windows/bin/hi-repl.exe: cp $builddir/ex1/windows/bin/hi-repl.exe
+
+rule tar
+  description = tar $out
+  command = tar -caf $out -C $base $name $transform --sort=name
+
+build $builddir/release/linux.tar.gz: tar | $builddir/dist/linux/bin/hi $builddir/dist/linux/bin/hi-repl
+  base = $builddir/dist
+  name = linux
+build $builddir/release/macos.tar.gz: tar | $builddir/dist/macos/bin/hi $builddir/dist/macos/bin/hi-repl
+  base = $builddir/dist
+  name = macos
+build $builddir/release/windows.tar.gz: tar | $builddir/dist/windows/bin/hi-repl.exe $builddir/dist/windows/bin/hi.exe
+  base = $builddir/dist
+  name = windows
+build $builddir/release/all.tar.gz: tar | $builddir/dist/linux/bin/hi $builddir/dist/linux/bin/hi-repl $builddir/dist/macos/bin/hi $builddir/dist/macos/bin/hi-repl $builddir/dist/windows/bin/hi-repl.exe $builddir/dist/windows/bin/hi.exe
+  base = $builddir/dist
+  name = linux macos windows
+
+######################################################################
 # Project structure
 ######################################################################
 

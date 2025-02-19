@@ -406,3 +406,20 @@ build.files(function(file) return file:has_prefix "$builddir/doc" end) : foreach
 section "List of files in $builddir/doc"
 
 build.files("$builddir/doc") : foreach(comment)
+
+section "Archives"
+
+build.cp "$builddir/release/foo-linux/bin/bar"       "$builddir/tmp/bar"
+build.cp "$builddir/release/foo-linux/lib/bar.so"    "$builddir/tmp/bar.so"
+build.cp "$builddir/release/foo-windows/bin/bar.exe" "$builddir/tmp/bar.exe"
+build.cp "$builddir/release/foo-windows/lib/bar.dll" "$builddir/tmp/bar.dll"
+build.cp "$builddir/release/foo-windows/lib/bar.lib" "$builddir/tmp/bar.lib"
+
+build.tar "$builddir/foo-linux.tar" {
+    base = "$builddir/release",
+    name = "foo-linux",
+}
+
+build.tar "$builddir/foo-windows.tar" {
+    base = "$builddir/release/foo-windows",
+}

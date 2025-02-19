@@ -780,6 +780,35 @@ build.ypp : add "flags" {
 }
 ```
 
+### Archivers
+
+The `archivers` module define rules to archive files.
+These archivers are also available as `build` metamethods.
+
+Currently only [tar](https://en.wikipedia.org/wiki/Tar_(computing)) archives are supported.
+
+#### Tar archives
+
+`build.tar` creates a tar archive from a directory which must be populated by previous build statements.
+It takes three arguments:
+
+- `base`: base directory where tar will start archiving files
+- `name` (optional): name of the subdirectory (in `base`) that will actually be archived.
+  If `name` is not defined, all files and directories below `base` will be archived.
+- `transform` (optional): [`sed`]() expression(s) used to transform file names in the archive.
+
+The tar rule uses the `--auto-compress` option to determine the compression program to use according to the archive name.
+
+Example:
+
+``` lua
+-- archive $builddir/release/foo in $builddir/foo.tar.gz
+build.tar "$builddir/foo.tar.gz" {
+    base = "$builddir/release",
+    name = "foo",
+}
+```
+
 Examples
 ========
 

@@ -19,6 +19,7 @@ https://github.com/cdsoft/bang
 ]]
 
 local F = require "F"
+local sh = require "sh"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -43,12 +44,14 @@ clean "$builddir"
 
 section "Compilation"
 
+var "git_version" { sh "git describe --tags" }
+generator { implicit_in = ".git/refs/tags" }
+
 local sources = {
     ls "src/*.lua",
     build "$builddir/version" {
         description = "GIT version",
-        command = "git describe --tags > $out",
-        implicit_in = { ".git/refs/tags" },
+        command = "echo $git_version > $out",
     },
 }
 
@@ -70,9 +73,19 @@ install "bin" { binaries }
 
 phony "all" { "compile", "test" }
 
-require "build-release" {
-    name = "bang",
-    sources = sources,
+phony "release" {
+    build.tar "$builddir/release/${git_version}/bang-${git_version}-lua.tar.gz" {
+        base = "$builddir/release/.build",
+        name = "bang-${git_version}-lua",
+        build.luax.lua("$builddir/release/.build/bang-${git_version}-lua/bin/bang.lua") { sources },
+    },
+    require "targets" : map(function(target)
+        return build.tar("$builddir/release/${git_version}/bang-${git_version}-"..target.name..".tar.gz") {
+            base = "$builddir/release/.build",
+            name = "bang-${git_version}-"..target.name,
+            build.luax[target.name]("$builddir/release/.build/bang-${git_version}-"..target.name/"bin/bang") { sources },
+        }
+    end),
 }
 
 ---------------------------------------------------------------------

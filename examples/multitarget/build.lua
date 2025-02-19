@@ -190,6 +190,21 @@ ls "arch"
     end)
 end)
 
+section "Release"
+
+build.cp "$builddir/dist/linux/bin/hi"            "$builddir/ex1/linux/bin/hi"
+build.cp "$builddir/dist/linux/bin/hi-repl"       "$builddir/ex1/linux/bin/hi-repl"
+build.cp "$builddir/dist/macos/bin/hi"            "$builddir/ex1/macos/bin/hi"
+build.cp "$builddir/dist/macos/bin/hi-repl"       "$builddir/ex1/macos/bin/hi-repl"
+build.cp "$builddir/dist/windows/bin/hi.exe"      "$builddir/ex1/windows/bin/hi.exe"
+build.cp "$builddir/dist/windows/bin/hi-repl.exe" "$builddir/ex1/windows/bin/hi-repl.exe"
+
+build.tar "$builddir/release/linux.tar.gz"   { base="$builddir/dist", name="linux" }
+build.tar "$builddir/release/macos.tar.gz"   { base="$builddir/dist", name="macos" }
+build.tar "$builddir/release/windows.tar.gz" { base="$builddir/dist", name="windows" }
+
+build.tar "$builddir/release/all.tar.gz"     { base="$builddir/dist" }
+
 section "Project structure"
 
 local make_graph = pipe {

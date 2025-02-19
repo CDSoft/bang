@@ -681,6 +681,27 @@ build doc.md: myypp src/doc.md
 # $builddir/doc/file3.pdf
 
 ######################################################################
+# Archives
+######################################################################
+
+build $builddir/release/foo-linux/bin/bar: cp $builddir/tmp/bar
+build $builddir/release/foo-linux/lib/bar.so: cp $builddir/tmp/bar.so
+build $builddir/release/foo-windows/bin/bar.exe: cp $builddir/tmp/bar.exe
+build $builddir/release/foo-windows/lib/bar.dll: cp $builddir/tmp/bar.dll
+build $builddir/release/foo-windows/lib/bar.lib: cp $builddir/tmp/bar.lib
+
+rule tar
+  description = tar $out
+  command = tar -caf $out -C $base $name $transform --sort=name
+
+build $builddir/foo-linux.tar: tar | $builddir/release/foo-linux/bin/bar $builddir/release/foo-linux/lib/bar.so
+  base = $builddir/release
+  name = foo-linux
+build $builddir/foo-windows.tar: tar | $builddir/release/foo-windows/bin/bar.exe $builddir/release/foo-windows/lib/bar.dll $builddir/release/foo-windows/lib/bar.lib
+  base = $builddir/release/foo-windows
+  name = bin lib
+
+######################################################################
 # Installation
 ######################################################################
 

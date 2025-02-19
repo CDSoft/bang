@@ -259,6 +259,9 @@ local function build_decorator(build)
         __call = build,
         __index = {},
     }
+    local archivers = require "archivers"
+    mt.__index.archivers = archivers
+    F.foreachk(archivers, function(name, archiver) mt.__index[name] = archiver end)
     local C = require "C"
     mt.__index.C = C
     F.foreachk(C, function(name, compiler) mt.__index[name] = compiler end)
