@@ -31,7 +31,7 @@ var "release" "$builddir/release"
 
 rule "release-tar" {
     description = "tar $out",
-    command = "tar -caf $out $prefix --transform='s#$prefix#$dest#' --sort=name",
+    command = "tar -caf $out -C $release/.build $name --sort=name",
 }
 
 return function(t)
@@ -44,9 +44,8 @@ return function(t)
     local function build_release(target_name, ext)
         local name = F{ t.name, version, target_name } : flatten() : str "-"
         return build("$release"/version/name..".tar.gz") { "release-tar",
-            build.luax[target_name]("$release/.build"/target_name/"bin"/t.name..ext) { t.sources },
-            prefix = "$release/.build"/target_name,
-            dest = name,
+            build.luax[target_name]("$release/.build"/name/"bin"/t.name..ext) { t.sources },
+            name = name,
         }
     end
 
