@@ -394,3 +394,15 @@ local ypp = build.ypp : new "myypp"
     }
 
 ypp "doc.md" "src/doc.md"
+
+section "List of all files"
+
+build.files() : foreach(comment)
+
+section "List of files in $builddir/doc"
+
+build.files(function(file) return file:has_prefix "$builddir/doc" end) : foreach(comment)
+
+section "List of files in $builddir/doc"
+
+build.files("$builddir/doc") : foreach(comment)

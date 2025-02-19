@@ -266,6 +266,23 @@ local function build_decorator(build)
     local builders = require "builders"
     F.foreachk(builders, function(name, builder) mt.__index[name] = builder end)
     mt.__index.new = function(...) return builders:new(...) end
+    mt.__index.files = function(predicate)
+        local p
+        if type(predicate) == "string" then
+            p = function(name, rule)
+                return name:has_prefix(predicate) and rule ~= "phony"
+            end
+        elseif type(predicate) == "function" then
+            p = function(name, rule)
+                return predicate(name, rule) and rule ~= "phony"
+            end
+        elseif type(predicate) == "nil" then
+            p = function(_, rule) return rule ~= "phony" end
+        else
+            log.error("build.files expects a string or a function")
+        end
+        return F.filterk(p, builds) : keys()
+    end
     return setmetatable(self, mt)
 end
 
@@ -325,7 +342,7 @@ build = build_decorator(function(_, outputs)
             if builds[output] then
                 log.error("build "..output..": multiple definition")
             end
-            builds[output] = true
+            builds[output] = rule_name
         end)
         if not no_default then
             default_build_statements[#default_build_statements+1] = output_list

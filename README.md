@@ -192,6 +192,13 @@ The `build` function returns the outputs (`"outputs"`),
 as a string if `outputs` contains a single output
 or a list of string otherwise.
 
+The `build.files` function returns the current list of outputs of all previous `build` calls:
+
+- `build.files()`: list of all output files
+- `build.files(dir)`: list of all output files written in the directory `dir`
+- `build.files(predicate)`: list of all output files that match the predicate `predicate`
+  (`predicate` takes two arguments: the name of the file and the name of the rule that generates the file)
+
 ### Rules embedded in build statements
 
 Some rules are specific to a single output and are used once.

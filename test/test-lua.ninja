@@ -610,6 +610,77 @@ rule myypp
 build doc.md: myypp src/doc.md
 
 ######################################################################
+# List of all files
+######################################################################
+
+# $builddir/doc/file1.md
+# $builddir/doc/file2.html
+# $builddir/doc/file3.pdf
+# $builddir/tmp/bar.md.tmp/bar-1
+# $builddir/tmp/bar.md.tmp/bar-2
+# $builddir/tmp/bar.md.tmp/bar-3
+# $builddir/tmp/doc/file2.html.tmp/file2-1.md
+# $builddir/tmp/doc/file3.pdf.tmp/file3-1.md
+# $builddir/tmp/doc/file3.pdf.tmp/file3-2.html
+# $builddir/tmp/file++.exe.tmp/f4.o
+# $builddir/tmp/file.exe.tmp/f4.o
+# $builddir/tmp/lib++.a.tmp/f2.o
+# $builddir/tmp/lib.a.tmp/f2.o
+# $builddir/tmp/libf3++.so.tmp/f3.o
+# $builddir/tmp/libf3.so.tmp/f3.o
+# b1
+# b2
+# bar.md
+# cat.txt
+# copy.txt
+# doc.md
+# f1++.o
+# f1.o
+# file++.exe
+# file.exe
+# foo1.o
+# foo2.o
+# foo3.o
+# foo4.o
+# foo5.o
+# hello-linux-aarch64
+# hello-linux-aarch64-musl
+# hello-linux-x86_64
+# hello-linux-x86_64-musl
+# hello-lua
+# hello-luax-1
+# hello-luax-2
+# hello-macos-aarch64
+# hello-macos-x86_64
+# hello-native
+# hello-pandoc
+# hello-windows-x86_64.exe
+# lib++.a
+# lib.a
+# libf3++.so
+# libf3.so
+# link1
+# link2
+# rev.txt
+# special_target.txt
+
+######################################################################
+# List of files in $builddir/doc
+######################################################################
+
+# $builddir/doc/file1.md
+# $builddir/doc/file2.html
+# $builddir/doc/file3.pdf
+
+######################################################################
+# List of files in $builddir/doc
+######################################################################
+
+# $builddir/doc/file1.md
+# $builddir/doc/file2.html
+# $builddir/doc/file3.pdf
+
+######################################################################
 # Installation
 ######################################################################
 
