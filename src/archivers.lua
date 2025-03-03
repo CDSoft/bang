@@ -21,11 +21,19 @@
 local F = require "F"
 local fs = require "fs"
 local log = require "log"
+local sys = require "sys"
 
 local function tar_rule()
     rule "tar" {
         description = "tar $out",
-        command = "tar -caf $out -C $base $name $transform --sort=name",
+        command = {
+            "tar -caf $out -C $base $name $transform",
+            case(sys.os) {
+                linux   = "--sort=name",
+                macos   = {},
+                windows = {},
+            },
+        },
     }
     tar_rule = F.const() -- generate the tar rule once
 end
