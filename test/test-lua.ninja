@@ -568,6 +568,12 @@ rule luax-windows-x86_64
 
 build hello-windows-x86_64.exe: luax-windows-x86_64 hello.lua module.lua
 
+rule luax-windows-aarch64
+  description = luax-windows-aarch64 $out
+  command = /path/to/luax compile -t windows-aarch64 $in -o $out -s -k "a \"super\" key"
+
+build hello-windows-aarch64.exe: luax-windows-aarch64 hello.lua module.lua
+
 ######################################################################
 # Document generators
 ######################################################################
@@ -654,6 +660,7 @@ build doc.md: myypp src/doc.md
 # hello-macos-x86_64
 # hello-native
 # hello-pandoc
+# hello-windows-aarch64.exe
 # hello-windows-x86_64.exe
 # lib++.a
 # lib.a
