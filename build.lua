@@ -45,7 +45,6 @@ clean "$builddir"
 section "Compilation"
 
 var "git_version" { sh "git describe --tags" }
-generator { implicit_in = ".git/refs/tags" }
 
 local sources = {
     ls "src/*.lua",

@@ -70,4 +70,4 @@ rule bang
   command = .build/bang.lua -q $in -o $out
   generator = true
 
-build .build/test/lua/test-default-2.ninja: bang test/test-default-2.lua
+build .build/test/lua/test-default-2.ninja: bang test/test-default-2.lua | .git/refs/tags

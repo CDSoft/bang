@@ -69,7 +69,7 @@ rule bang
   command = .build/bang -q $in -o $out
   generator = true
 
-build .build/test/luax/test-default-1.ninja: bang test/test-default-1.lua
+build .build/test/luax/test-default-1.ninja: bang test/test-default-1.lua | .git/refs/tags
 
 ######################################################################
 # Default targets

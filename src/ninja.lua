@@ -30,7 +30,7 @@ local pairs = pairs
 local tostring = tostring
 local type = type
 
-local words = string.words
+local words = string.words ---@diagnostic disable-line: undefined-field
 
 local clone = F.clone
 local difference = F.difference
@@ -450,9 +450,20 @@ local function generator_rule(args)
         generator = true,
     }
 
-    local deps = values(package.modpath)
-    if not deps:null() then
-        generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps }
+    local deps = values(package.modpath) ---@diagnostic disable-line: undefined-field
+
+    local gitdeps = (function()
+        local files = F{}
+        local dir = ".git"
+        if fs.is_file(dir) then dir = (fs.read(dir) or "") : match "gitdir:%s*(.*)" end
+        if dir and fs.is_dir(dir) then
+            files = F.filter(fs.stat, { dir/"refs"/"tags" })
+        end
+        return files
+    end)()
+
+    if not deps:null() or not gitdeps:null() then
+        generator_flag.implicit_in = flatten{ generator_flag.implicit_in or {}, deps, gitdeps }
             : nub()
             : difference { args.input }
     end

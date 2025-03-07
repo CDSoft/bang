@@ -777,5 +777,5 @@ rule bang
   command = .build/bang -q $in -o $out -- arg1 arg2 -x=y
   generator = true
 
-build .build/test/luax/test.ninja: bang test/test.lua | foo bar test/test-module.lua
+build .build/test/luax/test.ninja: bang test/test.lua | foo bar test/test-module.lua .git/refs/tags
   another_variable = abc def
