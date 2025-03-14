@@ -9,6 +9,7 @@
 #   .build/lua
 #   .build/luac
 
+builddir = .build
 ninja_required_version = 1.11.1
 
 ######################################################################
@@ -19,8 +20,6 @@ ninja_required_version = 1.11.1
 #
 # This script generates a Ninja file that compiles and optionally install Lua
 ######################################################################
-
-builddir = .build
 
 rule C-cc
   description = cc $out

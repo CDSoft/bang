@@ -50,6 +50,11 @@ local function parse_args()
         : argname "cmd"
         : target "gen_cmd"
 
+    parser : option "-b"
+        : description "Build directory (builddir variable)"
+        : argname "builddir"
+        : target "builddir"
+
     parser : option "-o"
         : description "Output file (default: build.ninja)"
         : argname "output"

@@ -72,7 +72,8 @@ Usage
 
 ```
 $ bang -h
-Usage: bang [-h] [-v] [-q] [-g cmd] [-o output] [<input>]
+Usage: bang [-h] [-v] [-q] [-g cmd] [-b builddir] [-o output]
+       [<input>]
 
 Ninja file generator
 
@@ -86,6 +87,7 @@ Options:
    -v                    Print Bang version
    -q                    Quiet mode (no output on stdout)
    -g cmd                Set a custom command for the generator rule
+   -b builddir           Build directory (builddir variable)
    -o output             Output file (default: build.ninja)
 
 For more information, see https://github.com/CDSoft/bang
@@ -135,6 +137,10 @@ vars.foo    -- "xyz"
 vars["foo"] -- same as vars.foo
 vars.expand "$foo/bar" -- "xyz/bar"
 ```
+
+> [!NOTE]
+> the special variable `builddir` can be redefined by the `-b` option.
+> Its default value is `".build"`.
 
 ### Ninja required version
 

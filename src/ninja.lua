@@ -44,6 +44,8 @@ local unwords = F.unwords
 local values = F.values
 local without_keys = F.without_keys
 
+local default_builddir = ".build"
+local overridden_builddir = nil
 local ninja_required_version_for_bang = F"1.11.1"
 
 local help_token = {}
@@ -100,9 +102,19 @@ local function stringify(value)
     return unwords(map(tostring, flatten{value}))
 end
 
+local builddir_token = { default_builddir }
+
+nl()
+emit { "builddir = ", builddir_token }
+nl()
+
 local nbvars = 0
 
-local vars = {}
+local vars = setmetatable({}, {
+    __index = function(_, k)
+        if k == "builddir" then return builddir_token[1] end
+    end,
+})
 local function expand(s)
     if type(s) == "string" then
         for _ in pairs(vars) do
@@ -122,11 +134,17 @@ _G.vars = setmetatable(vars, { __index = {expand = expand} })
 
 function var(name)
     return function(value)
-        if vars[name] then
+        if rawget(vars, name) then
             log.error("var "..name..": multiple definition")
         end
         value = stringify(value)
-        emit(name.." = "..value.."\n")
+        if name == "builddir" then
+            if not overridden_builddir then
+                builddir_token[1] = value
+            end
+        else
+            emit(name.." = "..value.."\n")
+        end
         vars[name] = value
         nbvars = nbvars + 1
         return "$"..name
@@ -490,6 +508,10 @@ local function size(x)
 end
 
 return function(args)
+    if args.builddir then
+        overridden_builddir = args.builddir
+        builddir_token[1] = args.builddir
+    end
     log.info("load ", args.input)
     if not fs.is_file(args.input) then
         log.error(args.input, ": file not found")

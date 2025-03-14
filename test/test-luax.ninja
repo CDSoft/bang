@@ -22,6 +22,7 @@
 # Files installed in lib
 #   foo1.lib
 
+builddir = .build
 ninja_required_version = 1.11.1
 
 ######################################################################
@@ -166,6 +167,14 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-builddir-1.lua
+# test/test-builddir-1.ninja
+# test/test-builddir-2.lua
+# test/test-builddir-2.ninja
+# test/test-builddir-3.lua
+# test/test-builddir-3.ninja
+# test/test-builddir-4.lua
+# test/test-builddir-4.ninja
 # test/test-default-1-lua.ninja
 # test/test-default-1-luax.ninja
 # test/test-default-1.lua
@@ -222,6 +231,14 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-builddir-1.lua
+# test/test-builddir-1.ninja
+# test/test-builddir-2.lua
+# test/test-builddir-2.ninja
+# test/test-builddir-3.lua
+# test/test-builddir-3.ninja
+# test/test-builddir-4.lua
+# test/test-builddir-4.ninja
 # test/test-default-1-lua.ninja
 # test/test-default-1-luax.ninja
 # test/test-default-1.lua
@@ -277,6 +294,10 @@ default foo bar
 
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-builddir-1.lua
+# test/test-builddir-2.lua
+# test/test-builddir-3.lua
+# test/test-builddir-4.lua
 # test/test-default-1.lua
 # test/test-default-2.lua
 # test/test-default-3.lua
@@ -314,6 +335,14 @@ default foo bar
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-builddir-1.lua
+# test/test-builddir-1.ninja
+# test/test-builddir-2.lua
+# test/test-builddir-2.ninja
+# test/test-builddir-3.lua
+# test/test-builddir-3.ninja
+# test/test-builddir-4.lua
+# test/test-builddir-4.ninja
 # test/test-default-1-lua.ninja
 # test/test-default-1-luax.ninja
 # test/test-default-1.lua
@@ -378,6 +407,10 @@ default foo bar
 # test/foo/sub/f4.lua
 # test/stress-gen.lua
 # test/stress.lua
+# test/test-builddir-1.lua
+# test/test-builddir-2.lua
+# test/test-builddir-3.lua
+# test/test-builddir-4.lua
 # test/test-default-1.lua
 # test/test-default-2.lua
 # test/test-default-3.lua

@@ -106,6 +106,11 @@ rule "run_test" {
     },
 }
 
+rule "run_test-builddir" {
+    description = "BANG $in",
+    command = "$bang -g $bang -q $in -o $out $args",
+}
+
 rule "run_test-future-version" {
     description = "BANG $in",
     command = "$bang -g $bang -q $in -o $out",
@@ -156,6 +161,24 @@ phony "test" {
                     build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
                 },
             },
+
+            -- builddir
+            ls "test/test-builddir-*.lua"
+            : mapi(function(i, src)
+                local ninja     = test_dir/src:basename():chext".ninja"
+                local diff_res  = test_dir/src:basename():chext".diff"
+                local ninja_ref = src:chext".ninja"
+                return build(ninja) { "run_test-builddir", src,
+                    args = case(i) {
+                        [1] = {},
+                        [2] = {},
+                        [Nil] = "-b custom_build",
+                    },
+                    bang = bang,
+                    implicit_in = bang,
+                    validations = build(diff_res) { "diff", ninja, ninja_ref },
+                }
+            end),
 
             -- ninja_required_version
             ls "test/test-future-version-*.lua"
