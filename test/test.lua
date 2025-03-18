@@ -423,3 +423,8 @@ build.tar "$builddir/foo-linux.tar" {
 build.tar "$builddir/foo-windows.tar" {
     base = "$builddir/release/foo-windows",
 }
+
+section "Images"
+
+build.graphviz.dot.png "$builddir/dot.png" { "file.dot" }
+build.asymptote.pdf "$builddir/asy.pdf" { "file.asy" }

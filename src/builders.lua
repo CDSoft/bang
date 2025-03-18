@@ -29,7 +29,7 @@ local default_options = {
     ext = "",
 }
 
-local builder_keys = F.keys(default_options) .. { "name" }
+local builder_keys = F.keys(default_options) .. { "name", "output_prefix" }
 
 local function set_ext(name, ext)
     if vars.expand(name):lower():has_suffix(ext:lower()) then return name end
@@ -70,6 +70,7 @@ local function run(self, output)
         output = set_ext(output, self.ext)
         return build(output) (F.merge{
             { rules[self], input_list },
+            self.output_prefix and { output_prefix = output:splitext() } or {},
             input_vars,
         })
     end
@@ -178,7 +179,8 @@ local ditaa = new(default_options, "ditaa")
 
 local asymptote = new(default_options, "asymptote")
     : set "cmd" "asy"
-    : set "args" "-o $out $in"
+    : set "args" "-o $output_prefix $in"
+    : set "output_prefix" (true)
 
 local mermaid = new(default_options, "mermaid")
     : set "cmd" "mmdc"

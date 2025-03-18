@@ -740,6 +740,23 @@ build $builddir/foo-windows.tar: tar | $builddir/release/foo-windows/bin/bar.exe
   name = bin lib
 
 ######################################################################
+# Images
+######################################################################
+
+rule dot.png
+  description = dot.png $out
+  command = dot -Tpng -o $out $in
+
+build $builddir/dot.png: dot.png file.dot
+
+rule asymptote.pdf
+  description = asymptote.pdf $out
+  command = asy -f pdf -o $output_prefix $in
+
+build $builddir/asy.pdf: asymptote.pdf file.asy
+  output_prefix = $builddir/asy
+
+######################################################################
 # Installation
 ######################################################################
 
