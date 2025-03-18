@@ -227,41 +227,49 @@ return setmetatable({
         dot = {
             svg = dot:new "dot.svg" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "dot.png" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "dot.jpg" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "dot.pdf" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         neato = {
             svg = dot:new "neato.svg" : set "cmd" "neato" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "neato.png" : set "cmd" "neato" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "neato.jpg" : set "cmd" "neato" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "neato.pdf" : set "cmd" "neato" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         twopi = {
             svg = dot:new "twopi.svg" : set "cmd" "twopi" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "twopi.png" : set "cmd" "twopi" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "twopi.jpg" : set "cmd" "twopi" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "twopi.pdf" : set "cmd" "twopi" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         circo = {
             svg = dot:new "circo.svg" : set "cmd" "circo" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "circo.png" : set "cmd" "circo" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "circo.jpg" : set "cmd" "circo" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "circo.pdf" : set "cmd" "circo" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         fdp = {
             svg = dot:new "fdp.svg" : set "cmd" "fdp" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "fdp.png" : set "cmd" "fdp" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "fdp.jpg" : set "cmd" "fdp" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "fdp.pdf" : set "cmd" "fdp" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         sfdp = {
             svg = dot:new "sfdp.svg" : set "cmd" "sfdp" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "sfdp.png" : set "cmd" "sfdp" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "sfdp.jpg" : set "cmd" "sfdp" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "sfdp.pdf" : set "cmd" "sfdp" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         patchwork = {
             svg = dot:new "patchwork.svg" : set "cmd" "patchwork" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "patchwork.png" : set "cmd" "patchwork" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "patchwork.jpg" : set "cmd" "patchwork" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "patchwork.pdf" : set "cmd" "patchwork" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
         osage = {
             svg = dot:new "osage.svg" : set "cmd" "osage" : add "flags" "-Tsvg" : set "ext" ".svg",
             png = dot:new "osage.png" : set "cmd" "osage" : add "flags" "-Tpng" : set "ext" ".png",
+            jpg = dot:new "osage.jpg" : set "cmd" "osage" : add "flags" "-Tjpg" : set "ext" ".jpg",
             pdf = dot:new "osage.pdf" : set "cmd" "osage" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
     },
@@ -278,6 +286,7 @@ return setmetatable({
     asymptote = {
         svg = asymptote:new "asymptote.svg" : add "flags" "-f svg" : set "ext" ".svg",
         png = asymptote:new "asymptote.png" : add "flags" "-f png" : set "ext" ".png",
+        jpg = asymptote:new "asymptote.jpg" : add "flags" "-f jpg" : set "ext" ".jpg",
         pdf = asymptote:new "asymptote.pdf" : add "flags" "-f pdf" : set "ext" ".pdf",
     },
     mermaid = {
@@ -318,16 +327,19 @@ return setmetatable({
     gnuplot = {
         svg = gnuplot:new "gnuplot.svg" : add "flags" { "-e 'set terminal svg'" } : set "ext" ".svg",
         png = gnuplot:new "gnuplot.png" : add "flags" { "-e 'set terminal png'" } : set "ext" ".png",
-        pdf = gnuplot:new "gnuplot.pdf" : add "flags" { "-e 'set terminal pdf'" } : set "ext" ".pdf",
+        jpg = gnuplot:new "gnuplot.jpg" : add "flags" { "-e 'set terminal jpeg'" } : set "ext" ".jpg",
+        pdf = gnuplot:new "gnuplot.pdf" : add "flags" { "-e 'set terminal context'" } : set "ext" ".pdf",
     },
     lsvg = {
         svg = lsvg:new "lsvg.svg" : set "ext" ".svg",
         png = lsvg:new "lsvg.png" : set "ext" ".png",
+        jpg = lsvg:new "lsvg.jpg" : set "ext" ".jpg",
         pdf = lsvg:new "lsvg.pdf" : set "ext" ".pdf",
     },
     octave = {
         svg = octave:new "octave.svg" : set "ext" ".svg",
         png = octave:new "octave.png" : set "ext" ".png",
+        jpg = octave:new "octave.jpg" : set "ext" ".jpg",
         pdf = octave:new "octave.pdf" : set "ext" ".pdf",
     },
 }, {
