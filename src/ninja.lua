@@ -117,12 +117,13 @@ local vars = setmetatable({}, {
 })
 local function expand(s)
     if type(s) == "string" then
-        for _ in pairs(vars) do
-            local s1 = s:gsub("%$([%w_%-]+)", vars)
-            if s1 == s then break end
-            s = s1
+        local s0 = s
+        for _ = 1, nbvars+1 do
+            local s1 = s0:gsub("%$([%w_%-]+)", vars)
+            if s1 == s0 then return s0 end
+            s0 = s1
         end
-        return s
+        log.error("vars.expand can not expand ", string.format("%q", s), " (recursive definition?)")
     end
     if type(s) == "table" then
         return map(expand, s)
@@ -271,43 +272,38 @@ local custom_default_statement = false
 
 local nbbuilds = 0
 
-local function build_decorator(build)
-    local self = {}
-    local mt = {
-        __call = build,
-        __index = {},
+local build = {}
+local build_mt = {}
+
+function build.files(predicate)
+    local p = F.case(type(predicate)) {
+        ["string"]   = function(name, rule) return rule ~= "phony" and name:has_prefix(predicate) end,
+        ["function"] = function(name, rule) return rule ~= "phony" and predicate(name, rule) end,
+        ["nil"]      = function(_, rule)    return rule ~= "phony" end,
+        [F.Nil]      = function() log.error("build.files expects a string or a function") end,
     }
-    local archivers = require "archivers"
-    mt.__index.archivers = archivers
-    F.foreachk(archivers, function(name, archiver) mt.__index[name] = archiver end)
-    local C = require "C"
-    mt.__index.C = C
-    F.foreachk(C, function(name, compiler) mt.__index[name] = compiler end)
-    mt.__index.luax = require "luax"
-    local builders = require "builders"
-    F.foreachk(builders, function(name, builder) mt.__index[name] = builder end)
-    mt.__index.new = function(...) return builders:new(...) end
-    mt.__index.files = function(predicate)
-        local p
-        if type(predicate) == "string" then
-            p = function(name, rule)
-                return name:has_prefix(predicate) and rule ~= "phony"
-            end
-        elseif type(predicate) == "function" then
-            p = function(name, rule)
-                return predicate(name, rule) and rule ~= "phony"
-            end
-        elseif type(predicate) == "nil" then
-            p = function(_, rule) return rule ~= "phony" end
-        else
-            log.error("build.files expects a string or a function")
-        end
-        return F.filterk(p, builds) : keys()
-    end
-    return setmetatable(self, mt)
+    return F.filterk(p, builds) : keys()
 end
 
-build = build_decorator(function(_, outputs)
+function build.new(...)
+    return build.builders:new(...)
+end
+
+local function attach(mod)
+    build[mod] = require(mod)
+end
+
+local function inject(mod)
+    attach(mod)
+    foreachk(build[mod], function(name, func) build[name] = func end)
+end
+
+inject "builders"
+attach "luax"
+inject "C"
+inject "archivers"
+
+function build_mt.__call(_, outputs)
     outputs = stringify(outputs)
     return function(inputs)
         -- variables defined in the current build statement
@@ -370,7 +366,9 @@ build = build_decorator(function(_, outputs)
         end
         return #output_list ~= 1 and output_list or output_list[1]
     end
-end)
+end
+
+_G.build = setmetatable(build, build_mt)
 
 local pool_variables = F{
     "depth",
