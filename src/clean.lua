@@ -19,6 +19,7 @@
 --@LOAD
 
 local F = require "F"
+local sys = require "sys"
 local help = require "help"
 local ident = require "ident"
 
@@ -44,6 +45,16 @@ end
 
 function mt.__index:gen()
 
+    local rm_cmd = F.case(sys.os) {
+        linux   = "rm -rf",
+        macos   = "rm -rf",
+        windows = "del /F /S /Q",
+    }
+
+    local function rm(dir)
+        return { rm_cmd, dir/(dir==builddir and "*" or {}) }
+    end
+
     if #directories_to_clean > 0 then
 
         section("Clean")
@@ -54,7 +65,7 @@ function mt.__index:gen()
             return build("clean-"..ident(dir)) {
                 ["$no_default"] = true,
                 description = {"CLEAN", dir},
-                command = {"rm -rf", dir..(dir==builddir and "/*" or "")},
+                command = rm(dir),
             }
         end)
 
@@ -75,7 +86,7 @@ function mt.__index:gen()
             return build("mrproper-"..ident(dir)) {
                 ["$no_default"] = true,
                 description = {"CLEAN", dir},
-                command = {"rm -rf", dir..(dir==builddir and "/*" or "")},
+                command = rm(dir),
             }
         end)
 
