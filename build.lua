@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with bang.  If not, see <https://www.gnu.org/licenses/>.
 
 For further information about bang you can visit
-https://github.com/cdsoft/bang
+https://codeberg.org/cdsoft/bang
 ]]
 
 local F = require "F"

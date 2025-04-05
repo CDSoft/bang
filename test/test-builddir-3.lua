@@ -14,7 +14,7 @@
 -- along with bang.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about bang you can visit
--- https://github.com/cdsoft/bang
+-- https://codeberg.org/cdsoft/bang
 
 -- use the builddir from the command line
 

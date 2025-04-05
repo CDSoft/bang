@@ -16,7 +16,7 @@
 -- along with bang.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about bang you can visit
--- https://github.com/cdsoft/bang
+-- https://codeberg.org/cdsoft/bang
 
 --@MAIN
 
@@ -35,7 +35,7 @@ local function parse_args()
             "",
             "Arguments after \"--\" are given to the input script",
         } : rtrim())
-        : epilog "For more information, see https://github.com/CDSoft/bang"
+        : epilog "For more information, see https://codeberg.org/cdsoft/bang"
 
     parser : flag "-v"
         : description(('Print Bang version ("%s")'):format(version))

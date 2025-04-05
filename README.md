@@ -1,7 +1,7 @@
 Bang
 ====
 
-Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://github.com/cdsoft/luax).
+Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://codeberg.org/cdsoft/luax).
 
 Pricing
 =======
@@ -22,7 +22,6 @@ These prices are per month and per tools (see [`PRICING`](PRICING)).
 
 <a href='https://liberapay.com/LuaX/donate' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://liberapay.com/assets/widgets/donate.svg' border='0' alt='Donate using Liberapay' /></a>
 <a href='https://ko-fi.com/K3K11CD108' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-<a href='https://github.com/sponsors/CDSoft' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86' border='0' alt='Donate using Github' /></a>
 
 Feel free to promote Bang!
 
@@ -30,12 +29,12 @@ Installation
 ============
 
 Bang is written in LuaX.
-It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://github.com/CDSoft/luax).
+It can be compiled with [Ninja](https://ninja-build.org) and [LuaX](https://codeberg.org/cdsoft/luax).
 
 ## LuaX
 
 ``` sh
-$ git clone https://github.com/CDSoft/luax
+$ git clone https://codeberg.org/cdsoft/luax
 $ cd luax
 $ ./bootstrap.sh
 $ ninja install  # install LuaX to ~/.local/bin
@@ -44,7 +43,7 @@ $ ninja install  # install LuaX to ~/.local/bin
 ## Bang
 
 ``` sh
-$ git clone https://github.com/CDSoft/bang
+$ git clone https://codeberg.org/cdsoft/bang
 $ cd bang
 $ ./boot.lua
 $ ninja install  # build bang with Ninja and install it to ~/.local/bin
@@ -91,7 +90,7 @@ Options:
    -b builddir           Build directory (builddir variable)
    -o output             Output file (default: build.ninja)
 
-For more information, see https://github.com/CDSoft/bang
+For more information, see https://codeberg.org/cdsoft/bang
 ```
 
 * `bang` reads `build.lua` and produces `build.ninja`.
@@ -354,7 +353,7 @@ value) in a list. `Nil` is ignored by bang.
 
 The `ls` function lists files in a directory.
 It returns a list of filenames,
-with the metatable of [LuaX F lists](https://github.com/CDSoft/luax/blob/master/doc/F.md).
+with the metatable of [LuaX F lists](https://codeberg.org/cdsoft/luax/blob/master/doc/F.md).
 
 - `ls "path"`: list of file names in `path`
 - `ls "path/*.c"`: list of file names matching the "`*.c`" pattern in `path`
@@ -518,7 +517,7 @@ Targets can be added by the `help` function. It takes the name of a target and i
 
 ``` lua
 help.description "A super useful Ninja file"
-help.epilog "See https://github.com/cdsoft/bang"
+help.epilog "See https://codeberg.org/cdsoft/bang"
 -- ...
 help "compile" "Compile every thing"
 -- ...
@@ -724,12 +723,12 @@ The `build` metamethods contain some predefined builders:
 | ------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `build.cat`               | File concatenation.                                                                                   |
 | `build.cp`                | Copy a file.                                                                                          |
-| `build.ypp`               | Preprocess a file with [ypp](https://github.com/CDSoft/ypp).                                          |
-| `build.ypp-pandoc`        | Preprocess a file with [ypp](https://github.com/CDSoft/ypp) with the Pandoc Lua interpreter.          |
+| `build.ypp`               | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp).                                          |
+| `build.ypp-pandoc`        | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp) with the Pandoc Lua interpreter.          |
 | `build.pandoc`            | Convert a file with [pandoc](https://pandoc.org).                                                     |
 | `build.pandoc_gfm`        | Convert a file with [pandoc](https://pandoc.org) for Github.                                          |
-| `build.panda`             | Convert a file with [panda](https://github.com/CDSoft/panda).                                         |
-| `build.panda_gfm`         | Convert a file with [panda](https://github.com/CDSoft/panda) for Github.                              |
+| `build.panda`             | Convert a file with [panda](https://codeberg.org/cdsoft/panda).                                         |
+| `build.panda_gfm`         | Convert a file with [panda](https://codeberg.org/cdsoft/panda) for Github.                              |
 | `build.typst`             | Convert a file with [typst](https://typst.app).                                                       |
 | `build.graphviz.prog.img` | [Graphviz](https://graphviz.org/) image rendered with *prog*[^graphviz] as an *img*[^img] image.      |
 | `build.plantuml.img`      | [PlantUML](https://plantuml.com) image rendered as an *img*[^img] image.                              |
@@ -740,7 +739,7 @@ The `build` metamethods contain some predefined builders:
 | `build.blockdiag.prog.img`| [Blockdiag](http://blockdiag.com/en/) image rendered with *prog*[^blockdiag] as an *img*[^img] image. |
 | `build.gnuplot.img`       | [Gnuplot](http://www.gnuplot.info/) image rendered as an *img*[^img] image.                           |
 | `build.octave.img`        | [Octave](https://octave.org/) image rendered as an *img*[^img] image.                                 |
-| `build.lsvg.img`          | [Lsvg](https://github.com/CDSoft/lsvg) image rendered as an *img*[^img] image.                        |
+| `build.lsvg.img`          | [Lsvg](https://codeberg.org/cdsoft/lsvg) image rendered as an *img*[^img] image.                        |
 
 [^img]: The available image formats are: `svg`, `png` and `pdf`.
 [^graphviz]: Graphviz renderers are: `dot`, `neato`, `twopi`, `circo`, `fdp`, `sfdp`, `patchwork` and `osage`.
@@ -873,5 +872,5 @@ License
     along with bang.  If not, see <https://www.gnu.org/licenses/>.
 
     For further information about bang you can visit
-    https://github.com/cdsoft/bang
+    https://codeberg.org/cdsoft/bang
 

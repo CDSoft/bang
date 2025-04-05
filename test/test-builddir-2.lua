@@ -14,7 +14,7 @@
 -- along with bang.  If not, see <https://www.gnu.org/licenses/>.
 --
 -- For further information about bang you can visit
--- https://github.com/cdsoft/bang
+-- https://codeberg.org/cdsoft/bang
 
 -- use this builddir (not overriden by the command line)
 var "builddir" "builddir_defined_in_build.lua"
