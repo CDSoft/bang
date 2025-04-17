@@ -310,6 +310,21 @@ Arguments after "--" are given to the input script in the global `arg` table.
 
 ## Bang functions
 
+### Version
+
+Bang can set a `version` variable and check it matches the latest git tag (when in a git repository).
+The curried function `version` takes a version and optionally a date and sets the `version` and `date` variables.
+
+``` lua
+version "X.Y.Z" -- equivalent to var "version" "X.Y.Z", but also checks the latest git tag
+
+version "X.Y.Z" "Y/M/D" -- also add var "date" "Y/M/D"
+```
+
+The goal of the `version` function is to be able to set/get the version,
+even if the project is not a git repository
+(e.g. to compile a project from a git archive or any other kind of archive).
+
 ### Accumulations
 
 Bang can accumulate names (rules, targets, ...) in a list

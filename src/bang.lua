@@ -25,7 +25,7 @@ local fs = require "fs"
 
 local ninja = require "ninja"
 local log = require "log"
-local version = require "version"
+local version = require "bang-version"
 
 local function parse_args()
     local parser = require "argparse"()

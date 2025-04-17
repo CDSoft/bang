@@ -37,7 +37,7 @@ fs.ls "src/*.lua" : foreach(function(name)
         main = name
     end
 end)
-package.preload.version = function() return "N/A" end
+package.preload["bang-version"] = function() return "N/A" end
 
 -- Execute the main bang Lua script
 dofile(assert(main, "Main script not found"))

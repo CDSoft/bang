@@ -19,7 +19,8 @@ https://codeberg.org/cdsoft/bang
 ]]
 
 local F = require "F"
-local sh = require "sh"
+
+version "2.8"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -44,13 +45,11 @@ clean "$builddir"
 
 section "Compilation"
 
-var "git_version" { sh "git describe --tags" }
-
 local sources = {
     ls "src/*.lua",
-    build "$builddir/version" {
-        description = "GIT version",
-        command = "echo $git_version > $out",
+    build "$builddir/bang-version" {
+        description = "version",
+        command = "echo $version > $out",
     },
 }
 
@@ -73,16 +72,16 @@ install "bin" { binaries }
 phony "all" { "compile", "test" }
 
 phony "release" {
-    build.tar "$builddir/release/${git_version}/bang-${git_version}-lua.tar.gz" {
+    build.tar "$builddir/release/${version}/bang-${version}-lua.tar.gz" {
         base = "$builddir/release/.build",
-        name = "bang-${git_version}-lua",
-        build.luax.lua("$builddir/release/.build/bang-${git_version}-lua/bin/bang.lua") { sources },
+        name = "bang-${version}-lua",
+        build.luax.lua("$builddir/release/.build/bang-${version}-lua/bin/bang.lua") { sources },
     },
     require "targets" : map(function(target)
-        return build.tar("$builddir/release/${git_version}/bang-${git_version}-"..target.name..".tar.gz") {
+        return build.tar("$builddir/release/${version}/bang-${version}-"..target.name..".tar.gz") {
             base = "$builddir/release/.build",
-            name = "bang-${git_version}-"..target.name,
-            build.luax[target.name]("$builddir/release/.build/bang-${git_version}-"..target.name/"bin/bang") { sources },
+            name = "bang-${version}-"..target.name,
+            build.luax[target.name]("$builddir/release/.build/bang-${version}-"..target.name/"bin/bang") { sources },
         }
     end),
 }
