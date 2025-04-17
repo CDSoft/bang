@@ -37,8 +37,8 @@ local function version(tag)
 +---------------------------
 | WARNING: version mismatch
 |
-| Version       : $(tag)
-| Latest Git tag: $(git_tag)
+| Version : $(tag)
+| Git tag : $(git_tag)
 |
 | Please add a new git tag or fix the version before the next release.
 +----------------------------------------------------------------------

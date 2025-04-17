@@ -112,3 +112,4 @@ rule bang
   generator = true
 
 build build.ninja: bang build.lua
+  pool = console

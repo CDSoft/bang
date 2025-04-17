@@ -831,3 +831,4 @@ rule bang
 
 build .build/test/lua/test.ninja: bang test/test.lua | foo bar test/test-module.lua .git/refs/tags
   another_variable = abc def
+  pool = console

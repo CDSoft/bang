@@ -491,6 +491,8 @@ local function generator_rule(args)
         "\n",
     }
 
+    generator_flag.pool = generator_flag.pool or "console"
+
     build(args.output) (F.merge{
         { ["$no_default"] = true },
         { bang, args.input },

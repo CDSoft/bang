@@ -71,6 +71,7 @@ rule bang
   generator = true
 
 build .build/test/luax/test-default-1.ninja: bang test/test-default-1.lua | .git/refs/tags
+  pool = console
 
 ######################################################################
 # Default targets

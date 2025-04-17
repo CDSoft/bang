@@ -72,3 +72,4 @@ rule bang
   generator = true
 
 build .build/test/lua/test-default-2.ninja: bang test/test-default-2.lua | .git/refs/tags
+  pool = console

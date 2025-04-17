@@ -428,3 +428,4 @@ rule bang
   generator = true
 
 build build.ninja: bang build.lua | ./arch/linux/config.lua ./arch/macos/config.lua ./arch/windows/config.lua
+  pool = console
