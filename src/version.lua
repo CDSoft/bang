@@ -23,18 +23,15 @@ local sh = require "sh"
 local term = require "term"
 local fs = require "fs"
 
-local function version(tag)
-    local warning = nil
-    local git_tag = fs.stat ".git" and fs.findpath "git" and sh "git describe --tags" : trim()
-    if git_tag then
-        if tag ~= git_tag then
-            local i = F.I {
-                build_file = bang.input,
-                tag = tag,
-                git_tag = git_tag,
-            }
-            warning = i[[
-+---------------------------
+local function git_warning(tag)
+    if not fs.stat ".git" then return end
+    if not fs.findpath "git" then return end
+    local git_tag = sh "git describe --tags"
+    if not git_tag then return end
+    git_tag = git_tag : trim()
+    if tag == git_tag then return end
+    return F.I { tag=tag, git_tag=git_tag } [[
++----------------------------------------------------------------------
 | WARNING: version mismatch
 |
 | Version : $(tag)
@@ -43,8 +40,10 @@ local function version(tag)
 | Please add a new git tag or fix the version before the next release.
 +----------------------------------------------------------------------
 ]] : trim()
-        end
-    end
+end
+
+local function version(tag)
+    local warning = git_warning(tag)
     if warning then
         comment(warning)
         local red = term.isatty(io.stdout)
