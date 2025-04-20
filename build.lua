@@ -20,7 +20,7 @@ https://codeberg.org/cdsoft/bang
 
 local F = require "F"
 
-version "2.8.1"
+version "3.0"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]

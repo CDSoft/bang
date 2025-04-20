@@ -110,11 +110,8 @@ nl()
 
 local nbvars = 0
 
-local vars = setmetatable({}, {
-    __index = function(_, k)
-        if k == "builddir" then return builddir_token[1] end
-    end,
-})
+local vars = {}
+
 local function expand(s)
     if type(s) == "string" then
         local s0 = s
@@ -123,15 +120,20 @@ local function expand(s)
             if s1 == s0 then return s0 end
             s0 = s1
         end
-        log.error("vars.expand can not expand ", string.format("%q", s), " (recursive definition?)")
+        log.error("vars%... can not expand ", string.format("%q", s), " (recursive definition?)")
     end
     if type(s) == "table" then
         return map(expand, s)
     end
-    log.error("vars.expand expects a string or a list of strings")
+    log.error("vars%... expects a string or a list of strings")
 end
 
-_G.vars = setmetatable(vars, { __index = {expand = expand} })
+_G.vars = setmetatable(vars, {
+    __mod = function(_, s) return expand(s) end,
+    __index = function(_, k)
+        if k == "builddir" then return builddir_token[1] end
+    end,
+})
 
 function var(name)
     return function(value)

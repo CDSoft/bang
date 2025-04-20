@@ -49,14 +49,14 @@ comment("v2        = "..v2)
 comment("vars.var2 = "..vars.var2)
 comment("v3        = "..v3)
 comment("vars.var3 = "..vars.var3)
-comment("vars.expand: "..vars.expand "« var1 = $var1, var2 = $var2, var3 = $var3 »")
+comment("vars%...: "..vars%"« var1 = $var1, var2 = $var2, var3 = $var3 »")
 
 var "foo" "FOO"
 var "bar" "bar is $foo"
 var "baz" "baz is $foo and $bar"
 
-comment("vars expand with recursive definitions: "..vars.expand "« baz = $baz »")
-comment("vars.expand on a list: "..F.show(vars.expand {"$foo", {"$bar", "$baz"}}))
+comment("vars%... with recursive definitions: "..vars%"« baz = $baz »")
+comment("vars%...: "..F.show(vars%{"$foo", {"$bar", "$baz"}}))
 
 section "Compound variables"
 

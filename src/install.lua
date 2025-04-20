@@ -66,7 +66,7 @@ function mt.__index:gen(install_token)
             target_group
                 : map(function(target)
                     local files = flatten{target.sources} : map(tostring) : unwords() : words()
-                    return files:map(function(file) return "#   "..vars.expand(file).."\n" end)
+                    return files:map(function(file) return "#   "..(vars%file).."\n" end)
                 end),
             "\n",
         }

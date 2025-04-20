@@ -32,7 +32,7 @@ local default_options = {
 local builder_keys = F.keys(default_options) .. { "name", "output_prefix" }
 
 local function set_ext(name, ext)
-    if vars.expand(name):lower():has_suffix(ext:lower()) then return name end
+    if (vars%name):lower():has_suffix(ext:lower()) then return name end
     return name..ext
 end
 

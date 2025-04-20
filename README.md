@@ -128,14 +128,14 @@ var "varname" {"word_1", "word_2", ...} -- will produce `varname = word_1 word_2
 `var` returns the name of the variable (prefixed with `"$"`).
 
 The global variable `vars` is a table containing a copy of all the Ninja variables defined by the `var` function.
-`vars` has a function `vars.expand` that takes a string and expands all Ninja variables (i.e. prefixed with `"$"`).
+`vars` redefines the `%` operator. It takes a string and expands all Ninja variables (i.e. prefixed with `"$"`).
 
 ``` lua
 var "foo" "xyz"
 ...
 vars.foo    -- "xyz"
 vars["foo"] -- same as vars.foo
-vars.expand "$foo/bar" -- "xyz/bar"
+vars%"$foo/bar" -- "xyz/bar"
 ```
 
 > [!NOTE]

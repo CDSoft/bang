@@ -40,7 +40,7 @@ local default_options = {
 }
 
 local function set_ext(name, ext)
-    if vars.expand(name):has_suffix(ext) then return name end
+    if (vars%name):has_suffix(ext) then return name end
     return name..ext
 end
 
