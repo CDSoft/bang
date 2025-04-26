@@ -21,12 +21,13 @@
 local F = require "F"
 local sys = require "sys"
 local targets = require "targets"
+local flatten = require "flatten"
 
 local default_options = {
     name = "luax",
     luax = "luax",
     target = "luax",
-    flags = {},
+    flags = { "-c" },
     implicit_in = Nil,
     exe_ext = "",
 }
@@ -104,6 +105,10 @@ compiler_mt = {
             check_opt(name)
             return function(value) self[name] = {value, self[name]}; return self end
         end,
+        nocc = function(self)
+            self.flags = flatten(self.flags) : difference { "-c" }
+            return self
+        end,
     },
 }
 
@@ -129,6 +134,7 @@ return setmetatable(M, {
         set = function(_, ...) return luax:set(...) end,
         add = function(_, ...) return luax:add(...) end,
         insert = function(_, ...) return luax:insert(...) end,
+        nocc = function(_, ...) return luax:nocc(...) end,
         set_global = function(name)
             check_opt(name)
             return function(value)
@@ -146,6 +152,9 @@ return setmetatable(M, {
             return function(value)
                 F.foreacht(M, function(compiler) compiler:insert(name)(value) end)
             end
+        end,
+        nocc_global = function()
+            F.foreacht(M, function(compiler) compiler:nocc() end)
         end,
     }
 })

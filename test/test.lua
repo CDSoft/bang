@@ -329,7 +329,7 @@ cpp:executable "file++.exe" {
     "f4.cc",
 }
 
-section "LuaX compiler"
+section "LuaX compiler (with a C compiler)"
 
 build.luax.set_global "luax" "/path/to/luax"
 build.luax.add_global "flags" { "-s", "-k", ("%q"):format("a \"super\" key") }
@@ -346,6 +346,12 @@ build.luax.native "hello-native" { "hello.lua", "module.lua" }
 F.foreach(require "targets", function(t)
     build.luax[t.name]("hello-"..t.name) { "hello.lua", "module.lua" }
 end)
+
+section "LuaX compiler (without any C compiler)"
+
+local luaxnocc = build.luax : new"luax-nocc" : nocc()
+
+luaxnocc "hello-luax-1-nocc" { "hello.luax", "module.lua" }
 
 section "Document generators"
 

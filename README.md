@@ -700,13 +700,17 @@ local luaxq = build.luax:new "luax-q"   -- creates a new LuaX compiler named "lu
     : add "flags" "-q"                  -- add some compilation flags
 ```
 
-A compiler has two methods to modify options:
+A compiler has four methods to modify options:
 
 - `set` changes the value of an option
 - `add` adds values to the current value of an option
 - `insert` adds values before the current value of an option
+- `nocc` (No C Compiler) disables LuaX compilation with a C compiler.
+  By default, the `-c` option is added to LuaX flags.
+  This method removes this flag.
 
-The module also provides the methods `set_global`, `add_global` and `insert_global` to add flags to all builtin LuaX compilers.
+The module also provides the methods `set_global`, `add_global`, `insert_global` and `nocc`
+to add flags to all builtin LuaX compilers.
 
 | Option        | Description                               | Default value                     |
 | ------------- | ----------------------------------------- | --------------------------------- |
