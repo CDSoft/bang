@@ -308,6 +308,15 @@ zig:executable "file.exe" {
     "f4.c",
 }
 
+build.compile_flags {
+    "-O3",
+    F.map(F.prefix"-I", {
+        "$builddir",
+        "$builddir/inc",
+    }),
+    "-DBAZ='$baz'",
+}
+
 section "C++ compilers"
 
 local cpp = build.cpp

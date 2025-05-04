@@ -20,7 +20,7 @@ https://codeberg.org/cdsoft/bang
 
 local F = require "F"
 
-version "3.1"
+version "3.2"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -154,10 +154,14 @@ phony "test" {
                 bang = bang,
                 test_dir = test_dir,
                 implicit_in = bang,
-                implicit_out = test_dir/"new_file.txt",
+                implicit_out = {
+                    test_dir/"new_file.txt",
+                    test_dir/"compile_flags.txt",
+                },
                 validations = {
                     build(test_dir/"test.diff")     {"diff", {test_dir/"test.ninja",   "test/test-"..interpreter..".ninja"}},
                     build(test_dir/"new_file.diff") {"diff", {test_dir/"new_file.txt", "test/new_file.txt"}},
+                    build(test_dir/"compile_flags.diff") {"diff", {test_dir/"compile_flags.txt", "test/compile_flags.txt"}},
                 },
             },
 

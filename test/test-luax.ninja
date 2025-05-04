@@ -163,6 +163,7 @@ default foo bar
 ######################################################################
 
 # test/bar
+# test/compile_flags.txt
 # test/foo
 # test/new_file.txt
 # test/stress-gen.lua
@@ -228,6 +229,7 @@ default foo bar
 # ls test/*
 ######################################################################
 
+# test/compile_flags.txt
 # test/new_file.txt
 # test/stress-gen.lua
 # test/stress.lua
@@ -326,6 +328,7 @@ default foo bar
 
 # test/bar
 # test/bar/empty
+# test/compile_flags.txt
 # test/foo
 # test/foo/f1.c
 # test/foo/f2.lua

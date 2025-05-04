@@ -21,6 +21,7 @@
 local F = require "F"
 local sys = require "sys"
 
+local flatten = require "flatten"
 local tmp = require "tmp"
 
 local default_options = {
@@ -227,9 +228,21 @@ require "targets" : foreach(function(target)
     zigcpp[target.name] = add_target(zigcpp : new("zigcpp-"..target.name))
 end)
 
+local compile_flags_file = nil
+
+local function compile_flags(...)
+    if not compile_flags_file then
+        compile_flags_file = file(bang.output:dirname()/"compile_flags.txt")
+    end
+    local flags = flatten{...}
+    compile_flags_file((vars%flags) : unlines())
+    return flags
+end
+
 return setmetatable({
     cc  = cc,  gcc = gcc, clang   = clang,   zigcc  = zigcc,
     cpp = cpp, gpp = gpp, clangpp = clangpp, zigcpp = zigcpp,
+    compile_flags = compile_flags,
 }, {
     __call = function(_, ...) return cc(...) end,
     __index = {
