@@ -31,14 +31,14 @@ local function git_warning(tag)
     git_tag = git_tag : trim()
     if tag == git_tag then return end
     return F.I { tag=tag, git_tag=git_tag } [[
-+----------------------------------------------------------------------
-| WARNING: version mismatch
-|
-| Version : $(tag)
-| Git tag : $(git_tag)
-|
-| Please add a new git tag or fix the version before the next release.
-+----------------------------------------------------------------------
++----------------------------------------------------------------------+
+| WARNING: version mismatch                                            |
+|                                                                      |
+| Version : $(tag:ljust(58)                                          ) |
+| Git tag : $(git_tag:ljust(58)                                      ) |
+|                                                                      |
+| Please add a new git tag or fix the version before the next release. |
++----------------------------------------------------------------------+
 ]] : trim()
 end
 
@@ -49,7 +49,7 @@ local function version(tag)
         local red = term.isatty(io.stdout)
             and (term.color.white + term.color.onred + term.color.bright)
             or F.id
-        print(red(warning))
+        print(warning:lines():map(red):unlines())
     end
     var "version" { tag }
     return function(date)
