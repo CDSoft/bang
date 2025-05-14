@@ -458,6 +458,7 @@ local function generator_rule(args)
 
     local command_line = F{
         bang_cmd,
+        "-g", string.format("%q", bang_cmd),
         args.quiet and "-q" or {},
         "$in -o $out",
         #_G.arg > 0 and {"--", _G.arg} or {},
