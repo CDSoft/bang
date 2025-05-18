@@ -3,3 +3,4 @@
 builddir = builddir_defined_in_build.lua
 ninja_required_version = 1.11.1
 
+# custom builddir = builddir_defined_in_build.lua

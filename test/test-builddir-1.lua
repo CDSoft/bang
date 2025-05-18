@@ -19,3 +19,5 @@
 -- use the default builddir (not overridden by the command line)
 
 generator(false)
+
+comment("default builddir = " .. vars%"$builddir")

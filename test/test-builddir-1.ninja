@@ -3,3 +3,4 @@
 builddir = .build
 ninja_required_version = 1.11.1
 
+# default builddir = .build

@@ -20,3 +20,5 @@
 var "builddir" "builddir_defined_in_build.lua"
 
 generator(false)
+
+comment("custom builddir = " .. vars%"$builddir")

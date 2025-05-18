@@ -19,3 +19,5 @@
 -- use the builddir from the command line
 
 generator(false)
+
+comment("command line builddir = " .. vars%"$builddir")
