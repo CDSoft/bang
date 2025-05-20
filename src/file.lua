@@ -27,6 +27,7 @@ local file_mt = {__index = {}}
 
 function file_mt.__call(self, ...)
     self.chunks[#self.chunks+1] = {...}
+    return self.name -- return the filename to easily add it to a filelist in the build file
 end
 
 function file_mt.__index:close()
@@ -42,10 +43,11 @@ end
 local open_files = F{}
 
 local function file(name)
+    name = vars%name
     if open_files[name] then
         error(name..": multiple file creation")
     end
-    local f = setmetatable({name=name, chunks=F{}}, file_mt)
+    local f = setmetatable({name=name, chunks={}}, file_mt)
     open_files[name] = f
     return f
 end

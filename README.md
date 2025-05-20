@@ -406,6 +406,17 @@ f "Line 2\n"
 -- ...
 ```
 
+The `file` function returns the name of the file.
+It can thus be used in a Lua list.
+E.g. to generate a source file containing a version number:
+
+``` lua
+local sources = {
+    ls "src/*.lua",
+    file "src/version" { vars.version },
+}
+```
+
 ### Pipes
 
 It is common in Makefiles to write commands with pipes.

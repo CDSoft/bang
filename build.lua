@@ -20,7 +20,7 @@ https://codeberg.org/cdsoft/bang
 
 local F = require "F"
 
-version "3.2.2"
+version "3.2.3"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -45,10 +45,7 @@ section "Compilation"
 
 local sources = {
     ls "src/*.lua",
-    build "$builddir/bang-version" {
-        description = "version",
-        command = "echo $version > $out",
-    },
+    file "$builddir/bang-version" { vars.version },
 }
 
 build.luax.add_global "flags" "-q"
