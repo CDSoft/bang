@@ -32,8 +32,6 @@ help.epilog [[Without any arguments, Ninja will compile and test $name.]]
 
 section "Build directories"
 
-var "builddir" ".build"
-
 var "bin"     "$builddir"
 var "test"    "$builddir/test"
 

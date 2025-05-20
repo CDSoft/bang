@@ -9,8 +9,6 @@ This script generates a Ninja file that compiles and optionally install Lua
 
 local sys = require "sys"
 
-var "builddir" ".build"
-
 build.cc
 : add "cflags" {
     "-O2",
@@ -35,8 +33,8 @@ local lib = build.cc:static_lib "$builddir/liblua.a" {
 }
 
 local binaries = {
-    build.cc:executable "$builddir/lua"  { "src/lua.c",  lib },
-    build.cc:executable "$builddir/luac" { "src/luac.c", lib },
+    build.cc "$builddir/lua"  { "src/lua.c",  lib },
+    build.cc "$builddir/luac" { "src/luac.c", lib },
 }
 
 install "bin" { binaries }

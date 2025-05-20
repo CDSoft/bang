@@ -13,41 +13,23 @@ and header files defining a common API to all architectures.
 local F = require "F"
 local fs = require "fs"
 
-var "builddir" ".build"
-
 var "ex0" "$builddir/ex0"
 var "ex1" "$builddir/ex1"
 
-local cflags = F{
-    "-O3",
-    "-Wall",
-    "-Werror",
-    "-Ilib", "-Iarch",
-}
-
-local ldflags = F{
-}
-
 local validation = true
-
-local clang_tidy_checks = F{
-    "--checks=*",
-    "-llvmlibc-restrict-system-libc-headers",
-    "-llvm-header-guard",
-    "-modernize-macro-to-enum",
-    "-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling",
-    "-altera-id-dependent-backward-branch",
-    "-altera-unroll-loops",
-    "-readability-identifier-length",
-    "-cppcoreguidelines-macro-to-enum",
-}:str","
-
-file "compile_flags.txt" (cflags:unlines())
 
 section "Common compilation options"
 
-var "cflags" (cflags)
-var "ldflags" (ldflags)
+var "cflags" {
+    build.compile_flags {
+        "-O3",
+        "-Wall",
+        "-Werror",
+        "-Ilib", "-Iarch",
+    },
+}
+var "ldflags" {
+}
 
 rule "clang-tidy" {
     command = {
@@ -56,7 +38,17 @@ rule "clang-tidy" {
         "--use-color",
         "--warnings-as-errors=*",
         "-header-filter=.*",
-        clang_tidy_checks,
+        F{
+            "--checks=*",
+            "-llvmlibc-restrict-system-libc-headers",
+            "-llvm-header-guard",
+            "-modernize-macro-to-enum",
+            "-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling",
+            "-altera-id-dependent-backward-branch",
+            "-altera-unroll-loops",
+            "-readability-identifier-length",
+            "-cppcoreguidelines-macro-to-enum",
+        }:str",",
         "$in",
         "&> $out",
         "|| (cat $out && false)",
