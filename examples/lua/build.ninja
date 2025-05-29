@@ -23,7 +23,7 @@ ninja_required_version = 1.11.1
 
 rule C-cc
   description = cc $out
-  command = cc -c -MD -MF $depfile -O2 -DLUA_USE_LINUX -DLUA_USE_READLINE $in -o $out
+  command = cc -c -MMD -MF $depfile -O2 -DLUA_USE_LINUX -DLUA_USE_READLINE $in -o $out
   depfile = $out.d
 
 rule C-ar

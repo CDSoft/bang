@@ -479,7 +479,7 @@ default foo bar
 
 rule my-zig-cc
   description = zig cc -target x86_64-linux-musl $out
-  command = zig cc -target x86_64-linux-musl -c -MD -MF $depfile -Og -g -Iinc $in -o $out
+  command = zig cc -target x86_64-linux-musl -c -MMD -MF $depfile -Og -g -Iinc $in -o $out
   depfile = $out.d
 
 rule my-zig-ar
@@ -508,7 +508,7 @@ build file.exe: my-zig-ld f1.o lib.a f3.o $builddir/tmp/file.exe.tmp/f4.o | $bui
 
 rule Cpp-cc
   description = c++ $out
-  command = c++ -c -MD -MF $depfile $in -o $out
+  command = c++ -c -MMD -MF $depfile $in -o $out
   depfile = $out.d
 
 rule Cpp-ar
