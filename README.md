@@ -1,3 +1,5 @@
+<img src="bang-banner.svg" style="width:100%" />
+
 Bang
 ====
 
