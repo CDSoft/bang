@@ -200,7 +200,7 @@ local lsvg = new(default_options, "lsvg")
     : set "cmd" "lsvg"
     : set "flags" { "--MF $depfile" }
     : set "depfile" "$out.d"
-    : set "args" "$in -o $out"
+    : set "args" "$in -o $out -- $args"
 
 local octave = new(default_options, "octave")
     : set "cmd" "octave"

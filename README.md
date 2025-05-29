@@ -766,12 +766,12 @@ The `build` metamethods contain some predefined builders:
 | ------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `build.cat`               | File concatenation.                                                                                   |
 | `build.cp`                | Copy a file.                                                                                          |
-| `build.ypp`               | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp).                                          |
-| `build.ypp-pandoc`        | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp) with the Pandoc Lua interpreter.          |
+| `build.ypp`               | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp).                                        |
+| `build.ypp-pandoc`        | Preprocess a file with [ypp](https://codeberg.org/cdsoft/ypp) with the Pandoc Lua interpreter.        |
 | `build.pandoc`            | Convert a file with [pandoc](https://pandoc.org).                                                     |
 | `build.pandoc_gfm`        | Convert a file with [pandoc](https://pandoc.org) for Github.                                          |
-| `build.panda`             | Convert a file with [panda](https://codeberg.org/cdsoft/panda).                                         |
-| `build.panda_gfm`         | Convert a file with [panda](https://codeberg.org/cdsoft/panda) for Github.                              |
+| `build.panda`             | Convert a file with [panda](https://codeberg.org/cdsoft/panda).                                       |
+| `build.panda_gfm`         | Convert a file with [panda](https://codeberg.org/cdsoft/panda) for Github.                            |
 | `build.typst`             | Convert a file with [typst](https://typst.app).                                                       |
 | `build.graphviz.prog.img` | [Graphviz](https://graphviz.org/) image rendered with *prog*[^graphviz] as an *img*[^img] image.      |
 | `build.plantuml.img`      | [PlantUML](https://plantuml.com) image rendered as an *img*[^img] image.                              |
@@ -782,7 +782,7 @@ The `build` metamethods contain some predefined builders:
 | `build.blockdiag.prog.img`| [Blockdiag](http://blockdiag.com/en/) image rendered with *prog*[^blockdiag] as an *img*[^img] image. |
 | `build.gnuplot.img`       | [Gnuplot](http://www.gnuplot.info/) image rendered as an *img*[^img] image.                           |
 | `build.octave.img`        | [Octave](https://octave.org/) image rendered as an *img*[^img] image.                                 |
-| `build.lsvg.img`          | [Lsvg](https://codeberg.org/cdsoft/lsvg) image rendered as an *img*[^img] image.                        |
+| `build.lsvg.img`          | [Lsvg](https://codeberg.org/cdsoft/lsvg) image rendered as an *img*[^img] image.                      |
 
 [^img]: The available image formats are: `svg`, `png` and `pdf`.
 [^graphviz]: Graphviz renderers are: `dot`, `neato`, `twopi`, `circo`, `fdp`, `sfdp`, `patchwork` and `osage`.
@@ -818,6 +818,13 @@ A builder has two methods to modify options:
 | `depfile`     | Dependency file name                  |
 
 Other options are added to the rule definition (note that `name` can not be used as a rule variable).
+
+`build.lsvg.img` adds a `$args` ninja variable in the `args` field to pass additional arguments to the lsvg script.
+E.g.:
+
+> ``` lua
+> build.lsvg.png "image.png" { "image.lua", args="arg given to image.lua" }
+> ```
 
 Examples:
 
