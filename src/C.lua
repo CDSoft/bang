@@ -230,12 +230,12 @@ end)
 
 local compile_flags_file = nil
 
-local function compile_flags(...)
+local function compile_flags(flags)
     if not compile_flags_file then
         compile_flags_file = file(bang.output:dirname()/"compile_flags.txt")
     end
-    local flags = flatten{...}
-    compile_flags_file((vars%flags) : unlines())
+    local flag_list = type(flags) == "string" and {flags} or flatten(flags)
+    compile_flags_file((vars%flag_list) : unlines())
     return flags
 end
 

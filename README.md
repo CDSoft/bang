@@ -670,7 +670,7 @@ local exe = my_compiler "$builddir/file.exe" {
 }
 ```
 
-Bang also defines a function to generate a `compiler_flags.txt` file
+Bang also defines a function to generate a `compile_flags.txt` file
 in the same directory than `build.ninja` which path may be changed by the `-o` option.
 This function works pretty much like the `file` function, saving one option per line.
 It returns the flag list.
