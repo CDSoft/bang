@@ -612,7 +612,7 @@ A compiler has two methods to modify options:
 | `cvalid`      | Validation rule                           | `{}`                              |
 | `ar`          | Archive command (static libraries)        | `"ar"`                            |
 | `aflags`      | Archive flags                             | `"-crs"`                          |
-| `aargs`       | Inputs anf output                         | `"$in -o $out"`                   |
+| `aargs`       | Inputs and output                         | `"$in -o $out"`                   |
 | `so`          | Link command (dynamic libraries)          | `"cc"`                            |
 | `soflags`     | Link options                              | `"-shared"`                       |
 | `soargs`      | Inputs and output                         | `"$in -o $out"`                   |
@@ -699,6 +699,7 @@ These compilers are also available as `build` metamethods.
 | `build.zigcc["macos-x86_64"]`         | C         | `zig cc`  | `macos-x86_64`        |
 | `build.zigcc["macos-aarch64"]`        | C         | `zig cc`  | `macos-aarch64`       |
 | `build.zigcc["windows-x86_64"]`       | C         | `zig cc`  | `windows-x86_64`      |
+| `build.zigcc["windows-aarch64"]`      | C         | `zig cc`  | `windows-aarch64`     |
 | `build.cpp`                           | C++       | `c++`     | host                  |
 | `build.gpp`                           | C++       | `gc++`    | host                  |
 | `build.clangpp`                       | C++       | `clang++` | host                  |
@@ -710,6 +711,7 @@ These compilers are also available as `build` metamethods.
 | `build.zigcpp["macos-x86_64"]`        | C++       | `zig c++` | `macos-x86_64`        |
 | `build.zigcpp["macos-aarch64"]`       | C++       | `zig c++` | `macos-aarch64`       |
 | `build.zigcpp["windows-x86_64"]`      | C++       | `zig c++` | `windows-x86_64`      |
+| `build.zigcpp["windows-aarch64"]`     | C++       | `zig c++` | `windows-aarch64`     |
 
 ### LuaX compilers
 
