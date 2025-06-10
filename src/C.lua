@@ -30,8 +30,8 @@ local default_options = {
     depfile = "$out.d",
     cvalid = {},
     ar = "ar", aflags = "-crs", aargs = "$out $in",
-    so = "cc", soflags = "-shared", soargs = "-o $out $in",
-    ld = "cc", ldflags = {}, ldargs = "-o $out $in",
+    so = "cc", soflags = "-shared", soargs = "-o $out $in", solibs = {},
+    ld = "cc", ldflags = {}, ldargs = "-o $out $in", ldlibs = {},
     c_exts = { ".c" },
     o_ext = ".o",
     a_ext = ".a",
@@ -72,12 +72,12 @@ local rules = setmetatable({}, {
             },
             so = rule(so) {
                 description = {compiler.so, "$out"},
-                command = { compiler.so, compiler.soflags, compiler.soargs },
+                command = { compiler.so, compiler.soflags, compiler.soargs, compiler.solibs },
                 implicit_in = compiler.implicit_in,
             },
             ld = rule(ld) {
                 description = {compiler.ld, "$out"},
-                command = { compiler.ld, compiler.ldflags, compiler.ldargs },
+                command = { compiler.ld, compiler.ldflags, compiler.ldargs, compiler.ldlibs },
                 implicit_in = compiler.implicit_in,
             },
         }

@@ -594,6 +594,7 @@ and changing some options. E.g.:
 local my_compiler = build.C:new "my_compiler"   -- creates a new C compiler named "my_compiler"
     : set "cc" "gcc"                            -- compiler command
     : add "cflags" { "-O2", "-Iinclude" }       -- compilation flags
+    : add "ldlibs" "-lm"                        -- additional libraries
 ```
 
 A compiler has two methods to modify options:
@@ -616,9 +617,11 @@ A compiler has two methods to modify options:
 | `so`          | Link command (dynamic libraries)          | `"cc"`                            |
 | `soflags`     | Link options                              | `"-shared"`                       |
 | `soargs`      | Inputs and output                         | `"$in -o $out"`                   |
+| `solibs`      | Additional libraries (e.g. `"-lm"`)       | `{}`                              |
 | `ld`          | Link command (executables)                | `"cc"`                            |
 | `ldflags`     | Link options                              | `{}`                              |
 | `ldargs`      | Inputs and output                         | `"$in -o $out"`                   |
+| `ldlibs`      | Additional libraries (e.g. `"-lm"`)       | `{}`                              |
 | `c_exts`      | List of C source extensions               | `{ ".c" }`                        |
 | `o_ext`       | Object file extension                     | `".o"`                            |
 | `a_ext`       | Archive file extension                    | `".a"`                            |

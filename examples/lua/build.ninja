@@ -36,7 +36,7 @@ rule C-so
 
 rule C-ld
   description = cc $out
-  command = cc -s -lm -lreadline -o $out $in
+  command = cc -s -o $out $in -lm -lreadline
 
 build $builddir/tmp/liblua.a.tmp/src/lapi.o: C-cc src/lapi.c
 build $builddir/tmp/liblua.a.tmp/src/lauxlib.o: C-cc src/lauxlib.c

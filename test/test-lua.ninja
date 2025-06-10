@@ -490,11 +490,11 @@ rule my-zig-ar
 
 rule my-zig-so
   description = cc $out
-  command = cc -shared -o $out $in
+  command = cc -shared -pipe -o $out $in -lz
 
 rule my-zig-ld
   description = zig ld -target x86_64-linux-musl $out
-  command = zig ld -target x86_64-linux-musl -lm -o $out $in
+  command = zig ld -target x86_64-linux-musl -pipe -s -o $out $in -lm
 
 build f1.o: my-zig-cc f1.c | $builddir/foo
 build $builddir/tmp/lib.a.tmp/f2.o: my-zig-cc f2.c | $builddir/foo

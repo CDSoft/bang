@@ -20,6 +20,8 @@ build.cc
 }
 : add "ldflags" {
     "-s",
+}
+: add "ldlibs" {
     "-lm",
     case(sys.os) {
         linux = "-lreadline",

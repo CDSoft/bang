@@ -289,7 +289,10 @@ local zig = build.cc : new "my-zig"
     : add "cflags" { "-Og", "-g", "-Iinc" }
     : set "ar" "zig ar"
     : set "ld" { "zig ld", "-target", target }
-    : add "ldflags" "-lm"
+    : add "ldflags" { "-pipe", "-s" }
+    : add "ldlibs" "-lm"
+    : add "soflags" { "-pipe" }
+    : add "solibs" "-lz"
 
 zig:compile "f1.o" { "f1.c" }
 zig:static_lib "lib.a" {
