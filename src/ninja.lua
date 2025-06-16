@@ -29,7 +29,7 @@ local flatten = require "flatten"
 local tostring = tostring
 local type = type
 
-local words = string.words ---@diagnostic disable-line: undefined-field
+local words = string.words
 
 local clone = F.clone
 local difference = F.difference
@@ -473,7 +473,7 @@ local function generator_rule(args)
         generator = true,
     }
 
-    local deps = values(package.modpath) ---@diagnostic disable-line: undefined-field
+    local deps = values(package.modpath)
 
     local gitdeps = (function()
         local files = F{}
