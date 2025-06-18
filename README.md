@@ -1,7 +1,7 @@
 <img src="bang-banner.svg" style="width:100%" />
 
-Bang
-====
+BANG - Build Anything, Ninja Gallops!
+=====================================
 
 Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://codeberg.org/cdsoft/luax).
 
@@ -77,9 +77,11 @@ $ bang -h
 Usage: bang [-h] [-v] [-q] [-g cmd] [-b builddir] [-o output]
        [<input>]
 
-Ninja file generator
+BANG -- Build Anything, Ninja Gallops!
 
-Arguments after "--" are given to the input script
+Bang is a Ninja build file generator scriptable in LuaX.
+
+Arguments after "--" are given to the input script.
 
 Arguments:
    input                 Lua script (default: build.lua)

@@ -31,9 +31,11 @@ local function parse_args()
     local parser = require "argparse"()
         : name "bang"
         : description(F.unlines {
-            "Ninja file generator",
+            "BANG -- Build Anything, Ninja Gallops!",
             "",
-            "Arguments after \"--\" are given to the input script",
+            "Bang is a Ninja build file generator scriptable in LuaX.",
+            "",
+            "Arguments after \"--\" are given to the input script.",
         } : rtrim())
         : epilog "For more information, see https://codeberg.org/cdsoft/bang"
 
