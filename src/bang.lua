@@ -31,7 +31,7 @@ local function parse_args()
     local parser = require "argparse"()
         : name "bang"
         : description(F.unlines {
-            "BANG -- Build Anything, Ninja Gallops!",
+            "BANG (Bang Automates Ninja Generation)",
             "",
             "Bang is a Ninja build file generator scriptable in LuaX.",
             "",
