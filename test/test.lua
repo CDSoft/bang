@@ -341,6 +341,14 @@ cpp:executable "file++.exe" {
     "f4.cc",
 }
 
+section "Cross compilation"
+
+build.zigcc["macos-x86_64"]:dynamic_lib "mac_lib" { "x.a", "y.c" }
+build.zigcc["macos-x86_64"]:executable "mac_exe" { "x.a", "y.c" }
+
+build.zigcc["windows-x86_64"]:dynamic_lib "win_lib" { "x.a", "y.c" }
+build.zigcc["windows-x86_64"]:executable "win_exe" { "x.a", "y.c" }
+
 section "LuaX compiler (with a C compiler)"
 
 build.luax.set_global "luax" "/path/to/luax"

@@ -532,6 +532,54 @@ build $builddir/tmp/file++.exe.tmp/f4.o: Cpp-cc f4.cc
 build file++.exe: Cpp-ld f1++.o lib++.a f3++.o $builddir/tmp/file++.exe.tmp/f4.o
 
 ######################################################################
+# Cross compilation
+######################################################################
+
+rule zigcc-macos-x86_64-cc
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -c -MMD -MF $depfile $in -o $out
+  depfile = $out.d
+
+rule zigcc-macos-x86_64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-macos-x86_64-so
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -shared -o $out $in
+
+rule zigcc-macos-x86_64-ld
+  description = zig cc -target x86_64-macos-none $out
+  command = zig cc -target x86_64-macos-none -o $out $in
+
+build $builddir/tmp/mac_lib.dylib.tmp/y.o: zigcc-macos-x86_64-cc y.c
+build mac_lib.dylib: zigcc-macos-x86_64-so x.a $builddir/tmp/mac_lib.dylib.tmp/y.o
+build $builddir/tmp/mac_exe.tmp/y.o: zigcc-macos-x86_64-cc y.c
+build mac_exe: zigcc-macos-x86_64-ld x.a $builddir/tmp/mac_exe.tmp/y.o
+
+rule zigcc-windows-x86_64-cc
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -c -MMD -MF $depfile $in -o $out
+  depfile = $out.d
+
+rule zigcc-windows-x86_64-ar
+  description = zig ar $out
+  command = zig ar -crs $out $in
+
+rule zigcc-windows-x86_64-so
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -shared -o $out $in
+
+rule zigcc-windows-x86_64-ld
+  description = zig cc -target x86_64-windows-gnu $out
+  command = zig cc -target x86_64-windows-gnu -o $out $in
+
+build $builddir/tmp/win_lib.dll.tmp/y.o: zigcc-windows-x86_64-cc y.c
+build win_lib.dll: zigcc-windows-x86_64-so x.a $builddir/tmp/win_lib.dll.tmp/y.o
+build $builddir/tmp/win_exe.exe.tmp/y.o: zigcc-windows-x86_64-cc y.c
+build win_exe.exe: zigcc-windows-x86_64-ld x.a $builddir/tmp/win_exe.exe.tmp/y.o
+
+######################################################################
 # LuaX compiler (with a C compiler)
 ######################################################################
 
@@ -678,6 +726,10 @@ build doc.md: myypp src/doc.md
 # $builddir/tmp/lib.a.tmp/f2.o
 # $builddir/tmp/libf3++.so.tmp/f3.o
 # $builddir/tmp/libf3.so.tmp/f3.o
+# $builddir/tmp/mac_exe.tmp/y.o
+# $builddir/tmp/mac_lib.dylib.tmp/y.o
+# $builddir/tmp/win_exe.exe.tmp/y.o
+# $builddir/tmp/win_lib.dll.tmp/y.o
 # b1
 # b2
 # bar.md
@@ -713,8 +765,12 @@ build doc.md: myypp src/doc.md
 # libf3.so
 # link1
 # link2
+# mac_exe
+# mac_lib.dylib
 # rev.txt
 # special_target.txt
+# win_exe.exe
+# win_lib.dll
 
 ######################################################################
 # List of files in $builddir/doc
