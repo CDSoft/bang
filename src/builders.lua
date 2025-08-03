@@ -273,7 +273,7 @@ return setmetatable({
             pdf = dot:new "osage.pdf" : set "cmd" "osage" : add "flags" "-Tpdf" : set "ext" ".pdf",
         },
     },
-    plantum = {
+    plantuml = {
         svg = plantuml:new "plantuml.svg" : add "flags" "-tsvg" : set "ext" ".svg",
         png = plantuml:new "plantuml.png" : add "flags" "-tpng" : set "ext" ".png",
         pdf = plantuml:new "plantuml.pdf" : add "flags" "-tpdf" : set "ext" ".pdf",
