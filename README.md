@@ -5,6 +5,15 @@ BANG (Bang Automates Ninja Generation)
 
 Bang is a [Ninja](https://ninja-build.org) file generator scriptable in [LuaX](https://codeberg.org/cdsoft/luax).
 
+Releases
+========
+
+It is strongly recommended to build Bang from source,
+as this is the only reliable way to install the exact version you need.
+
+However, if you do require precompiled binaries,
+this page offers a selection for various platforms: <https://cdelord.fr/pub>.
+
 Pricing
 =======
 
