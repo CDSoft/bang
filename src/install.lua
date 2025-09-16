@@ -74,8 +74,8 @@ function mt.__index:gen(install_token)
             ["$no_default"] = true,
             description = "INSTALL $in to "..target_name,
             command = case(sys.os) {
-                linux = { "install -v -D -t", "$${PREFIX:-$prefix}"/target_name, "$in" },
-                macos = { "install", "$in", "$${PREFIX:-$prefix}"/target_name },
+                linux = { "install -v -D -t", "$${DESTDIR}$${PREFIX:-$prefix}"/target_name, "$in" },
+                macos = { "install", "$in", "$${DESTDIR}$${PREFIX:-$prefix}"/target_name },
                 windows = { "copy", "$in", "%PREFIX%"/target_name },
             },
         }
