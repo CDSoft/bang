@@ -541,6 +541,14 @@ install "bin" "$builddir/bang" -- installs bang to $PREFIX/bin/
 `install` defines the target `install` (run by `ninja install`)
 and a line in the help message (see `ninja help`).
 
+Additionally the `DESTDIR` environment variable can be set to do a staged install target (e.g. for packaging).
+`DESTDIR` is supported on Linux and MacOS only.
+Note that the default prefix is not compatible with `DESTDIR` and must be redefined when `DESTDIR` is used.
+
+``` bash
+$ DESTDIR=/foo PREFIX=/opt/xxx ninja install # installs files to `$DESTDIR$PREFIX` (`/foo/opt/xxx`)
+```
+
 ### Help
 
 Bang can generate an help message (stored in a file next to the Ninja file) displayed by `ninja help`.

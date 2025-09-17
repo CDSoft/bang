@@ -86,7 +86,7 @@ prefix = ~/.local
 
 rule install-bin
   description = INSTALL $in to bin
-  command = install -v -D -t $${PREFIX:-$prefix}/bin $in
+  command = install -v -D -t $${DESTDIR}$${PREFIX:-$prefix}/bin $in
 
 build install-bin: install-bin $builddir/lua $builddir/luac
 build install: phony install-bin
