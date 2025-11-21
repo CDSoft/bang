@@ -697,10 +697,26 @@ rule rule_1
 rule rule_2
   command = r2
 
-build $builddir/tmp/bar.md.tmp/bar-1: rule_1 foo.rst
-build $builddir/tmp/bar.md.tmp/bar-2: cat $builddir/tmp/bar.md.tmp/bar-1
-build $builddir/tmp/bar.md.tmp/bar-3: rule_2 $builddir/tmp/bar.md.tmp/bar-2
-build bar.md | z: tac $builddir/tmp/bar.md.tmp/bar-3 | x y
+build $builddir/tmp/bar.md.tmp/bar-1.rst: rule_1 foo.rst
+build $builddir/tmp/bar.md.tmp/bar-2.rst: cat $builddir/tmp/bar.md.tmp/bar-1.rst
+build $builddir/tmp/bar.md.tmp/bar-3.rst: rule_2 $builddir/tmp/bar.md.tmp/bar-2.rst
+build bar.md | z: tac $builddir/tmp/bar.md.tmp/bar-3.rst | x y
+
+rule ypp
+  description = ypp $out
+  command = ypp --MF $depfile $in -o $out
+  depfile = $out.d
+
+rule pandoc
+  description = pandoc $out
+  command = pandoc --fail-if-warnings $in -o $out
+
+build $builddir/tmp/doc-a.html.tmp/doc-a-1.md: ypp doc.md
+build doc-a.html: pandoc $builddir/tmp/doc-a.html.tmp/doc-a-1.md
+build $builddir/tmp/doc-b.html.tmp/doc-b-1.md: ypp doc.md.i
+build doc-b.html: pandoc $builddir/tmp/doc-b.html.tmp/doc-b-1.md
+build $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md: ypp doc.md.i
+build doc-c.pdf: pandoc $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md
 
 rule myypp
   description = myypp $out
@@ -716,9 +732,12 @@ build doc.md: myypp src/doc.md
 # $builddir/doc/file1.md
 # $builddir/doc/file2.html
 # $builddir/doc/file3.pdf
-# $builddir/tmp/bar.md.tmp/bar-1
-# $builddir/tmp/bar.md.tmp/bar-2
-# $builddir/tmp/bar.md.tmp/bar-3
+# $builddir/tmp/bar.md.tmp/bar-1.rst
+# $builddir/tmp/bar.md.tmp/bar-2.rst
+# $builddir/tmp/bar.md.tmp/bar-3.rst
+# $builddir/tmp/doc-a.html.tmp/doc-a-1.md
+# $builddir/tmp/doc-b.html.tmp/doc-b-1.md
+# $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md
 # $builddir/tmp/doc/file2.html.tmp/file2-1.md
 # $builddir/tmp/doc/file3.pdf.tmp/file3-1.md
 # $builddir/tmp/doc/file3.pdf.tmp/file3-2.html
@@ -737,6 +756,9 @@ build doc.md: myypp src/doc.md
 # bar.md
 # cat.txt
 # copy.txt
+# doc-a.html
+# doc-b.html
+# doc-c.pdf
 # doc.md
 # f1++.o
 # f1.o

@@ -405,6 +405,12 @@ local pipe_with_rules_and_generators = pipe {
 
 pipe_with_rules_and_generators "bar.md" "foo.rst"
 
+local pipe_with_implicit_extensions = pipe { build.ypp, build.pandoc }
+
+pipe_with_implicit_extensions "doc-a.html" "doc.md"
+pipe_with_implicit_extensions "doc-b.html" "doc.md.i"
+pipe_with_implicit_extensions "doc-c.pdf"  "doc.md.i"
+
 local ypp = build.ypp : new "myypp"
     : add "flags" {
         build.ypp_vars {
