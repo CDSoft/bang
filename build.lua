@@ -96,6 +96,7 @@ rule "run_test" {
     description = "BANG $in",
     command = {
         "rm -f $test_dir/new_file.txt;",
+        "rm -f $test_dir/compile_flags.txt;", -- ensures the timestamp changes
         "$bang -g $bang -q $in -o $out -- arg1 arg2 -x=y",
     },
 }
