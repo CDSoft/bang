@@ -32,14 +32,26 @@ local unique_index = setmetatable({_=0}, {
     end,
 })
 
+local function clean_path(path)
+    local n = 0
+    return fs.join(fs.splitpath(path)
+        : map(function(dir)
+            if dir == "$builddir" then
+                n = n + 1
+                return n <= 1 and dir or nil
+            end
+            return dir
+        end))
+end
+
 function tmp.index(root, ...)
     local ps = {...}
-    return root / unique_index[fs.join(F.init(ps))] / F.last(ps):splitext()
+    return clean_path(root / unique_index[fs.join(F.init(ps))] / F.last(ps):splitext())
 end
 
 function tmp.hash(root, ...)
     local ps = {...}
-    return root / fs.join(F.init(ps)):hash() / F.last(ps):splitext()
+    return clean_path(root / fs.join(F.init(ps)):hash() / F.last(ps):splitext())
 end
 
 function tmp.short(root, ...)
@@ -52,7 +64,7 @@ function tmp.short(root, ...)
         : filter(function(p) return F.not_elem(p, root_components) end)
     path[#path] = path[#path]..".tmp"
     local file = F.last{...} : splitext()
-    return fs.join(F.flatten { root, path, file })
+    return clean_path(fs.join(F.flatten { root, path, file }))
 end
 
 return setmetatable(tmp, {__call = function(self, ...) return self.short(...) end})
