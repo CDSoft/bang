@@ -132,6 +132,53 @@ build $builddir/doc/file3.pdf | bar.out: wkhtmltopdf.pdf $builddir/tmp/doc/file3
   variable = baz
 
 ######################################################################
+# Source preprocessor
+######################################################################
+
+rule C-cc
+  description = cc $out
+  command = cc -c -MMD -MF $depfile $in -o $out
+  depfile = $out.d
+
+rule C-ar
+  description = ar $out
+  command = ar -crs $out $in
+
+rule C-so
+  description = cc $out
+  command = cc -shared -o $out $in
+
+rule C-ld
+  description = cc $out
+  command = cc -o $out $in
+
+rule ypp
+  description = ypp $out
+  command = ypp --MF $depfile $in -o $out
+  depfile = $out.d
+
+build $builddir/conf.c: ypp conf.c.in
+build $builddir/version.c: ypp version.c.in
+build $builddir/conf.h: ypp conf.h.in
+build $builddir/tmp/foo-0.tmp/src.o: C-cc src.c | $builddir/conf.h
+build $builddir/tmp/foo-0.tmp/conf.o: C-cc $builddir/conf.c | $builddir/conf.h
+build $builddir/tmp/foo-0.tmp/version.o: C-cc $builddir/version.c | $builddir/conf.h
+build $builddir/foo-0: C-ld $builddir/tmp/foo-0.tmp/src.o $builddir/tmp/foo-0.tmp/conf.o $builddir/tmp/foo-0.tmp/version.o
+
+rule ypp-prepro
+  description = ypp-prepro $out
+  command = ypp --MF $depfile -e 'X="x"' -e 'Y="y"' $in -o $out
+  depfile = $out.d
+
+build $builddir/tmp/conf.c: ypp-prepro conf.c.in
+build $builddir/tmp/version.c: ypp-prepro version.c.in
+build $builddir/tmp/conf.h: ypp-prepro conf.h.in
+build $builddir/tmp/foo-1.tmp/src.o: C-cc src.c | $builddir/tmp/conf.h
+build $builddir/tmp/foo-1.tmp/tmp/conf.o: C-cc $builddir/tmp/conf.c | $builddir/tmp/conf.h
+build $builddir/tmp/foo-1.tmp/tmp/version.o: C-cc $builddir/tmp/version.c | $builddir/tmp/conf.h
+build $builddir/foo-1: C-ld $builddir/tmp/foo-1.tmp/src.o $builddir/tmp/foo-1.tmp/tmp/conf.o $builddir/tmp/foo-1.tmp/tmp/version.o
+
+######################################################################
 # Pools
 ######################################################################
 
@@ -700,11 +747,6 @@ build $builddir/tmp/bar.md.tmp/bar-2.rst: cat $builddir/tmp/bar.md.tmp/bar-1.rst
 build $builddir/tmp/bar.md.tmp/bar-3.rst: rule_2 $builddir/tmp/bar.md.tmp/bar-2.rst
 build bar.md | z: tac $builddir/tmp/bar.md.tmp/bar-3.rst | x y
 
-rule ypp
-  description = ypp $out
-  command = ypp --MF $depfile $in -o $out
-  depfile = $out.d
-
 rule pandoc
   description = pandoc $out
   command = pandoc --fail-if-warnings $in -o $out
@@ -727,12 +769,18 @@ build doc.md: myypp src/doc.md
 # List of all files
 ######################################################################
 
+# $builddir/conf.c
+# $builddir/conf.h
 # $builddir/doc/file1.md
 # $builddir/doc/file2.html
 # $builddir/doc/file3.pdf
+# $builddir/foo-0
+# $builddir/foo-1
 # $builddir/tmp/bar.md.tmp/bar-1.rst
 # $builddir/tmp/bar.md.tmp/bar-2.rst
 # $builddir/tmp/bar.md.tmp/bar-3.rst
+# $builddir/tmp/conf.c
+# $builddir/tmp/conf.h
 # $builddir/tmp/doc-a.html.tmp/doc-a-1.md
 # $builddir/tmp/doc-b.html.tmp/doc-b-1.md
 # $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md
@@ -741,14 +789,22 @@ build doc.md: myypp src/doc.md
 # $builddir/tmp/doc/file3.pdf.tmp/file3-2.html
 # $builddir/tmp/file++.exe.tmp/f4.o
 # $builddir/tmp/file.exe.tmp/f4.o
+# $builddir/tmp/foo-0.tmp/conf.o
+# $builddir/tmp/foo-0.tmp/src.o
+# $builddir/tmp/foo-0.tmp/version.o
+# $builddir/tmp/foo-1.tmp/src.o
+# $builddir/tmp/foo-1.tmp/tmp/conf.o
+# $builddir/tmp/foo-1.tmp/tmp/version.o
 # $builddir/tmp/lib++.a.tmp/f2.o
 # $builddir/tmp/lib.a.tmp/f2.o
 # $builddir/tmp/libf3++.so.tmp/f3.o
 # $builddir/tmp/libf3.so.tmp/f3.o
 # $builddir/tmp/mac_exe.tmp/y.o
 # $builddir/tmp/mac_lib.dylib.tmp/y.o
+# $builddir/tmp/version.c
 # $builddir/tmp/win_exe.exe.tmp/y.o
 # $builddir/tmp/win_lib.dll.tmp/y.o
+# $builddir/version.c
 # b1
 # b2
 # bar.md

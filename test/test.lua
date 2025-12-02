@@ -160,6 +160,25 @@ pipe3 "$builddir/doc/file3.pdf"  { "doc/file3.md",
     variable = "baz",
 }
 
+section "Source preprocessor"
+
+build.cc:executable "$builddir/foo-0" {
+    "src.c",
+    prepro { "conf.c.in", "version.c.in" },
+    implicit_in = prepro { "conf.h.in" },
+}
+
+local new_prepro = prepro:new {
+    dir = "$builddir/tmp",
+    pp = build.ypp : new "ypp-prepro" : add "flags" { build.ypp_vars { X="x", Y="y" } }
+}
+
+build.cc:executable "$builddir/foo-1" {
+    "src.c",
+    new_prepro { "conf.c.in", "version.c.in" },
+    implicit_in = new_prepro { "conf.h.in" },
+}
+
 section "Pools"
 
 rule "link" {

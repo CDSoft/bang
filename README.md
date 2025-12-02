@@ -500,6 +500,47 @@ build "out.html" { "panda.html", "$builddir/tmp/doc/out-1.md",
 }
 ```
 
+### Source preprocessor
+
+Sometimes source files must be preprocessed before usage (configuration, compilation, documentation...).
+
+The `prepro` function takes a list of source files and generates a preprocessed file in the build directory.
+It returns the list of preprocessed file names, which can then be used by other builders
+(note that if the input file name extension is `".in"`, it is considered as a file to be preprocessed
+and the `".in"` extension is removed).
+
+E.g.:
+
+``` lua
+build.cc:executable "$builddir/foo" {
+    ls "src/*.c",
+    prepro { ls "src/*.c.in" },
+    implicit_in = prepro { ls "src/*.h.in" },
+}
+```
+
+The default preprocessor writes files in the `"$builddir"` directory and uses `build.ypp` as a preprocessor.
+The `new` method builds a new preprocessor and overloads these parameters using a table with two optional fields:
+
+- `dir`: new destination directory
+- `pp`: new preprocessor
+
+E.g.:
+
+``` lua
+local new_prepro = prepro:new {
+    dir = "$builddir/tmp"
+    pp = build.ypp : new "ypp-prepro"
+        : add "flags" { build.yppvars { X="x", Y="y" } }
+}
+
+build.cc:executable "$builddir/foo" {
+    ls "src/*.c",
+    new_prepro { ls "src/*.c.in" },
+    implicit_in = new_prepro { ls "src/*.h.in" },
+}
+```
+
 ### Clean
 
 Bang can generate targets to clean the generated files.
