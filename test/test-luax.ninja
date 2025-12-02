@@ -711,9 +711,9 @@ rule pandoc
 
 build $builddir/tmp/doc-a.html.tmp/doc-a-1.md: ypp doc.md
 build doc-a.html: pandoc $builddir/tmp/doc-a.html.tmp/doc-a-1.md
-build $builddir/tmp/doc-b.html.tmp/doc-b-1.md: ypp doc.md.i
+build $builddir/tmp/doc-b.html.tmp/doc-b-1.md: ypp doc.md.in
 build doc-b.html: pandoc $builddir/tmp/doc-b.html.tmp/doc-b-1.md
-build $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md: ypp doc.md.i
+build $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md: ypp doc.md.in
 build doc-c.pdf: pandoc $builddir/tmp/doc-c.pdf.tmp/doc-c-1.md
 
 rule myypp

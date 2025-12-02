@@ -46,7 +46,7 @@ local function pipe(rules)
         end, rules)
         local current_names = F.range(1, #rules):scan(function(name, _)
             local prefix, ext = name:splitext()
-            return ext == ".i" and prefix or name
+            return ext == ".in" and prefix or name
         end, input_list:head())
         local tmpfiles = F.range(1, #rules-1):map(function(i)
             local ext = rule_names[i]:ext()

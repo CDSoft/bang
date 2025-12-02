@@ -443,8 +443,8 @@ Intermediate outputs are stored in `$builddir/tmp`
 (this directory can be changed by adding a `builddir` attribute to the rule list).
 If a rule name contains a dot, its « extension » is used to name intermediate outputs.
 Otherwise the extension is that of the input file
-(note that if the extension is `".i"`, it is considered as a file to be preprocessed
-and the `".i"` extension is removed).
+(note that if the extension is `".in"`, it is considered as a file to be preprocessed
+and the `".in"` extension is removed).
 
 E.g.:
 
