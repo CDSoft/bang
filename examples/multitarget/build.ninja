@@ -27,7 +27,7 @@ cflags = -O3 -Wall -Werror -Ilib -Iarch
 ldflags = 
 
 rule clang-tidy
-  command = clang-tidy --quiet --use-color --warnings-as-errors=* -header-filter=.* --checks=*,-llvmlibc-restrict-system-libc-headers,-llvm-header-guard,-modernize-macro-to-enum,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-altera-id-dependent-backward-branch,-altera-unroll-loops,-readability-identifier-length,-cppcoreguidelines-macro-to-enum $in &> $out || (cat $out && false)
+  command = clang-tidy --quiet --use-color --warnings-as-errors=* -header-filter=.* --checks=*,-llvmlibc-restrict-system-libc-headers,-llvm-header-guard,-modernize-macro-to-enum,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-altera-id-dependent-backward-branch,-altera-unroll-loops,-readability-identifier-length,-cppcoreguidelines-macro-to-enum,-portability-avoid-pragma-once $in &> $out || (cat $out && false)
 
 ######################################################################
 # Example 0: compilation with low level ninja primitives

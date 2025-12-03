@@ -48,6 +48,7 @@ rule "clang-tidy" {
             "-altera-unroll-loops",
             "-readability-identifier-length",
             "-cppcoreguidelines-macro-to-enum",
+            "-portability-avoid-pragma-once",
         }:str",",
         "$in",
         "&> $out",
