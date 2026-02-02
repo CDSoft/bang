@@ -344,7 +344,7 @@ my_list = {}
 acc(my_list) "item1"
 acc(my_list) {"item2", "item3"}
 --...
-my_list -- contains {"item1", "item2", "item3"}
+my_list -- contains {"item1", {"item2", "item3"}}
 ```
 
 ### Case expressions
