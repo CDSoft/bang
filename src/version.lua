@@ -23,6 +23,8 @@ local sh = require "sh"
 local term = require "term"
 local fs = require "fs"
 
+local red = term.color.white + term.color.onred + term.color.bright
+
 local function git_warning(tag)
     if not fs.stat ".git" then return end
     if not fs.findpath "git" then return end
@@ -42,15 +44,17 @@ local function git_warning(tag)
 ]] : trim()
 end
 
-local function version(tag)
-    local warning = git_warning(tag)
+local function print_warning(warning_function, tag)
+    local warning = warning_function(tag)
     if warning then
         comment(warning)
-        local red = term.isatty(io.stdout)
-            and (term.color.white + term.color.onred + term.color.bright)
-            or F.id
         print(warning:lines():map(red):unlines())
     end
+end
+
+local function version(tag)
+    term.color.enable(term.isatty(io.stdout))
+    print_warning(git_warning, tag)
     var "version" { tag }
     return function(date)
         var "date" { date }
