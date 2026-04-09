@@ -20,7 +20,7 @@ https://codeberg.org/cdsoft/bang
 
 local F = require "F"
 
-version "3.5.2"
+version "3.6"
 
 help.name "Bang"
 help.description [[Ninja file for building $name]]
@@ -58,7 +58,12 @@ local binaries = {
 -- used by LuaX only
 local bang_luax = build.luax.luax "$bin/bang.luax" { sources }
 
-phony "compile" { binaries, bang_luax }
+local prebuilt = {
+    build.cp "bin/bang.lua"  "$bin/bang.lua",
+    build.cp "bin/bang.luax" "$bin/bang.luax",
+}
+
+phony "compile" { binaries, bang_luax, prebuilt }
 default "compile"
 help "compile" "compile $name"
 
