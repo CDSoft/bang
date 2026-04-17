@@ -1,5 +1,15 @@
 <img src="bang-banner.svg" style="width:100%" />
 
+Disclaimer
+==========
+
+> [!IMPORTANT]
+> **Bang is now part of [LuaX](https://codeberg.org/cdsoft/luax) (<https://codeberg.org/cdsoft/luax>).**
+>
+> This consolidation simplifies maintenance and updates, and makes deploying LuaX, Bang, and ypp more consistent.
+>
+> The legacy Bang repository is now deprecated and will no longer receive updates.
+
 BANG (Bang Automates Ninja Generation)
 ======================================
 
